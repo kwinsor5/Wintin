@@ -17,3 +17,9 @@
 #alias {mine} {gr pickaxe;gr fang;g all;pu all.gem sack}
 
 #action {You have been} {afk} {5}
+
+#nop {=== Hotkeys (imported from JMC) ===}
+
+#nop {TAB attacks the current target, as in JMC; it replaces tab completion.}
+
+#macro {\t} {cas 'lightning bolt' $target}

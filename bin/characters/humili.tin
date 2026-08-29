@@ -19,3 +19,9 @@
 
 #action {attacks Nina!} {resc nina} {5}
 #action {You have been idle} {afk} {5}
+
+#nop {=== Hotkeys (imported from JMC) ===}
+
+#nop {TAB attacks the current target, as in JMC; it replaces tab completion.}
+
+#macro {\t} {cas 'lightning bolt' $target}

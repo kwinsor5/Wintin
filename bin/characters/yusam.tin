@@ -27,3 +27,9 @@
 #action {You attack} {aa} {5}
 #action {attacks YOU!} {aa} {5}
 #action {You turn to face your next enemy.} {aa} {5}
+
+#nop {=== Hotkeys (imported from JMC) ===}
+
+#nop {TAB attacks the current target, as in JMC; it replaces tab completion.}
+
+#macro {\t} {shoot $target}

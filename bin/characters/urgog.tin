@@ -16,3 +16,9 @@
 
 #action {You have been} {afk} {5}
 #action {^Str: %1/%2, Int: %3/%4, Wil: %5/%6, Dex: %7/%8, Con: %9/%10, Lea: %11/%12.} {#math {statsum} {%1 + %3 + %5 + %7 + %9 + %11};#showme {<faa>Stat Sum: $statsum}} {5}
+
+#nop {=== Hotkeys (imported from JMC) ===}
+
+#nop {TAB attacks the current target, as in JMC; it replaces tab completion.}
+
+#macro {\t} {cas 'dark bolt' $target}

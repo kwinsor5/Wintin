@@ -20,3 +20,9 @@
 #alias {z} {cas 'curse' $target}
 
 #action {You leap} {aa} {5}
+
+#nop {=== Hotkeys (imported from JMC) ===}
+
+#nop {TAB attacks the current target, as in JMC; it replaces tab completion.}
+
+#macro {\t} {cas 'dark bolt' $target}

@@ -50,14 +50,14 @@
 #nop {=== Highlights ===}
 
 #nop {JMC black backgrounds are dropped; the terminal background is grey.}
+#nop {The three prompt fields carry the same hex colours as their HUD bars.}
 
-#highlight {HP: %1/%2 } {red}
-#highlight {S: %1/%2 } {light blue}
-#highlight {MV: %1/%2]} {green}
+#highlight {HP: %1/%2 } {<F992222>}
+#highlight {S: %1/%2 } {<F2244AA>}
+#highlight {MV: %1/%2]} {<F1E7A1E>}
 
 #highlight {%1 appears to be confused!} {magenta}
 #highlight {%1 nervously glances around in confusion!} {green}
-#highlight {You gain a rush of momentum!} {light blue}
 #highlight {You stagger %1 with your crushing blow!} {light cyan}
 #highlight {You hunker down behind your shield.} {yellow}
 
@@ -83,20 +83,42 @@
 
 #nop {Channel colouring, replacing the JMC #woutput windows.}
 
-#highlight {You tell %1} {blue}
-#highlight {%1 tells you '%2} {blue}
-#highlight {You narrate '%1} {magenta}
-#highlight {%1 narrates '%2} {magenta}
-#highlight {You chat '%1} {yellow}
-#highlight {%1 chats '%2} {yellow}
-#highlight {You say '%1} {cyan}
-#highlight {%1 says '%2} {cyan}
-#highlight {You group-say '%1} {red}
-#highlight {%1 group-says '%2} {red}
-#highlight {You yell '%1} {blue}
-#highlight {%1 yells '%2} {blue}
+#nop {Dark, muted tones chosen for the light grey background with dark blue}
+#nop {default text: violet tells, teal says, amber chats - each distinct from}
+#nop {the blue body text and dark enough to read without glare. The socials}
+#nop {panel below uses the same values so both views match.}
+
+#highlight {You tell %1} {<F5B2D91>}
+#highlight {%1 tells you '%2} {<F5B2D91>}
+#highlight {You narrate '%1} {<F8B2E8B>}
+#highlight {%1 narrates '%2} {<F8B2E8B>}
+#highlight {You chat '%1} {<F7A4B00>}
+#highlight {%1 chats '%2} {<F7A4B00>}
+#highlight {You say '%1} {<F005F5F>}
+#highlight {%1 says '%2} {<F005F5F>}
+#highlight {You group-say '%1} {<F992222>}
+#highlight {%1 group-says '%2} {<F992222>}
+#highlight {You yell '%1} {<F5B2D91>}
+#highlight {%1 yells '%2} {<F5B2D91>}
 
 #nop {=== Events ===}
+
+#nop {Paced like human typing: the server hides input at the password prompt}
+#nop {(telnet echo off) and unhides it after reading the password. Sending all}
+#nop {three answers at once races that negotiation and can leave the client}
+#nop {stuck with typing invisible, so each answer waits for its prompt.}
+
+#event {SESSION CONNECTED} {
+	#delay {1} {
+		#send {kwinsor5@gmail.com}
+		};
+	#delay {2.5} {
+		#send {***REMOVED***}
+		};
+	#delay {4} {
+		#send {2}
+		}
+	}
 
 #nop {The server pushes MSDP CHARACTER_NAME once the character enters the game.}
 #nop {Killing the class first keeps one character's settings from leaking into another.}
@@ -105,22 +127,79 @@
 
 #event {IAC SB MSDP CHARACTER_NAME} {#showme {<afa>MSDP character: %1};loadchar %1}
 
+#nop {=== In-game colours ===}
+
+#nop {The server supports truecolour per colour slot (src/color.cpp do_color):}
+#nop {color <slot> fg hex RRGGBB. colorsync pushes the client palette into the}
+#nop {game so server-coloured text matches the highlights above. Channel slots}
+#nop {get their exact channel colours; the rest map their stock ANSI family to}
+#nop {a dark equivalent (cyan->teal 005F5F, red->992222, yellow->amber 7A4B00,}
+#nop {magenta->8B2E8B, bright white->charcoal 404040); character gets a brighter}
+#nop {green 228B22 with hit a step dimmer at 1F751F, description the dark green.}
+#nop {Settings persist server-side per character, so run colorsync by hand once}
+#nop {per character (and again after changing the palette). Deliberately not}
+#nop {automated: login/reconnect text triggers also matched logout output.}
+
+#alias {colorsync} {
+	color on;
+	color say fg hex 005F5F;
+	color tell fg hex 5B2D91;
+	color yell fg hex 5B2D91;
+	color narrate fg hex 8B2E8B;
+	color chat fg hex 7A4B00;
+	color group fg hex 992222;
+	color roomname fg hex 005F5F;
+	color hit fg hex 1F751F;
+	color damage fg hex 992222;
+	color character fg hex 228B22;
+	color object fg hex 005F5F;
+	color enemy fg hex 404040;
+	color description fg hex 1E5E1E;
+	color magic fg hex 8B2E8B;
+	color weather fg hex 005F5F
+	}
+
 #nop {=== Panels ===}
 
 #nop {A boxed column down the right hand side, split in half: socials in the top}
 #nop {box, MSDP in the bottom box. Either half can be turned off, in which case the}
 #nop {other takes the whole column.}
 
-#nop {The column is kept still by #screen scrollregion, NOT by #split. #split runs}
-#nop {"#screen fill default" every time it is applied, which erases the right hand}
-#nop {bar; a scroll region confines both the scrolling and the repainting to the}
-#nop {square holding the main feed and never touches anything outside it.}
+#nop {The column is kept still by #screen scrollregion. #split is also applied,}
+#nop {but only to give the input line its own fixed bottom row: without split,}
+#nop {typing happens inline in the output stream, so the server's colour state}
+#nop {bleeds onto individual letters and incoming lines land on top of what is}
+#nop {being typed. #split runs "#screen fill default" every time it is applied,}
+#nop {which would erase the right hand bar - so relayout applies it FIRST and}
+#nop {paints the panels afterwards. The one-line bar #split reserves above the}
+#nop {input acts as the visual border between the feed and the input row.}
 
 #nop {Mouse tracking is on so that the wheel is handled here rather than by mintty.}
 #nop {Scrolling mintty's own scrollback would move the whole screen, panels and all.}
-#nop {Hold shift to select text with the mouse while tracking is on.}
+
+#nop {Tracking also means a plain click-drag goes to tintin, not to mintty's text}
+#nop {selection. To select text: hold SHIFT while dragging (shift+double-click}
+#nop {selects a word), then ctrl+ins copies and shift+ins pastes. When a lot of}
+#nop {copying is needed, copyon turns tracking off so plain drag selects again -}
+#nop {the wheel then scrolls the whole screen instead of the panels - and}
+#nop {copyoff restores panel scrolling.}
+
+#nop {Selecting within ONE panel: the terminal is a single text grid, so a normal}
+#nop {selection sweeps whole rows, panels included. Add ALT for mintty's}
+#nop {rectangular selection - shift+alt+drag (alt+drag after copyon) - and the}
+#nop {highlight stays inside the dragged box: main feed only, or one panel only.}
 
 #config {MOUSE} {ON}
+
+#alias {copyon} {
+	#config {MOUSE} {OFF};
+	#showme {<afa>Mouse tracking off: drag to select, ctrl+ins to copy. copyoff restores panel scrolling.}
+	}
+
+#alias {copyoff} {
+	#config {MOUSE} {ON};
+	#showme {<afa>Mouse tracking on: panels scroll again; hold shift to select.}
+	}
 
 #variable {socpanel} {1}
 #variable {msdppanel} {1}
@@ -128,10 +207,32 @@
 #variable {sochist} {300}
 #variable {panscrolllines} {3}
 
+#nop {Left column: an Info box in the top half and the MSDP-fed HUD below,}
+#nop {mirroring the right column's split. leftcols is in character cells;}
+#nop {50 cells is roughly 400px at a typical mintty font. leftpanelwidth <n>}
+#nop {changes it, lefton/leftoff toggle the whole column. padcols is the}
+#nop {gap between the column and the main feed - a cell is the smallest}
+#nop {unit the terminal has, so 1 is the least padding possible.}
+
+#nop {Terminals cannot show a raster image in a panel - mintty's own sixel}
+#nop {graphics are addressed in pixels and would be wiped by the next panel}
+#nop {repaint - so the combat marker is a single glyph beside the bar. A}
+#nop {glyph cannot be scaled either: every cell is one font size, and cell}
+#nop {art spanning several rows read as an X rather than as swords.}
+
+#variable {hudswords} {⚔}
+
+#variable {leftpanel} {1}
+#variable {leftcols} {50}
+#variable {padcols} {1}
+
 #nop {Geometry, all recomputed by relayout.}
 
 #variable {panleft} {1}
 #variable {pancol} {1}
+#variable {barrow} {1}
+#variable {barline} {}
+#variable {leftbot} {1}
 #variable {panwidth} {1}
 #variable {panfmt} {%-58.58s}
 #variable {pannfmt} {%-22.22s}
@@ -150,10 +251,16 @@
 #variable {soccolor} {}
 
 #nop {msdp must exist as a table before the panel draws, or *msdp[] does not}
-#nop {expand and #foreach iterates the literal text. Re-reading global.tin mid}
-#nop {session therefore clears the cache; it refills on the next server update.}
+#nop {expand and #foreach iterates the literal text. Created only when absent:}
+#nop {the server re-pushes a variable ONLY when its value changes, so wiping the}
+#nop {cache on every re-read left the MSDP panel and HUD empty until something}
+#nop {changed in game. A re-read now keeps the accumulated data.}
 
-#variable {msdp} {}
+#nop {&{msdp} is 0 when the variable is missing; &msdp[] would stay literal.}
+
+#if {&{msdp} == 0} {
+	#variable {msdp} {}
+	}
 
 #variable {msdptop} {2}
 #variable {msdpcap} {1}
@@ -162,21 +269,57 @@
 #variable {msdpval} {}
 #variable {msdpsub} {}
 
-#alias {relayout}
-{
+#variable {leftw} {0}
+#variable {leftcol} {2}
+#variable {leftwidth} {1}
+#variable {leftfmt} {%-36.36s}
+#variable {leftblank} {}
+#variable {hudtop} {2}
+#variable {opptop} {2}
+#variable {hudbase} {2}
+#variable {hudbarw} {1}
+#variable {hudfullbar} {}
+#variable {hudemptybar} {}
+
+#nop {The input region and the border above it start where the main content}
+#nop {does, so the left column can run to the bottom of the screen. NOTE:}
+#nop {inside alias bodies every command needs its own trailing semicolon,}
+#nop {#nop included - a missing one mangles the rest of the body.}
+
+#alias {relayout} {
 	#screen {get} {ROWS} {layrows};
 	#screen {get} {COLS} {laycols};
-	#math {panbot} {$layrows - 1};
+	#split {0} {1};
+	#math {panbot} {$layrows - 2};
+	#math {barrow} {$layrows - 1};
+	#var {leftbot} {$layrows};
 	#math {panleft} {$laycols - $pancols + 1};
-	#if {$socpanel == 1 || $msdppanel == 1}
-	{
-		#math {scrollright} {$panleft - 1};
-		#screen {scrollregion} {1} {1} {$panbot} {$scrollright}
-	}
-	{
-		#screen {scrollregion} {0} {0} {0} {0}
-	};
+	#var {leftw} {0};
+	#if {$leftpanel == 1} {
+		#var {leftw} {$leftcols}
+		};
+	#math {scrollleft} {$leftw + 1 + $padcols};
+	#if {$socpanel == 1 || $msdppanel == 1} {
+		#math {scrollright} {$panleft - 1 - $padcols}
+		} {
+		#var {scrollright} {$laycols}
+		};
+	#screen {inputregion} {$layrows} {$scrollleft} {$layrows} {$scrollright};
+	#math {barlen} {$scrollright - $scrollleft + 1};
+	#var {barline} {};
+	#loop {1} {$barlen} {barloop} {#var {barline} {$barline─}};
+	#screen {scrollregion} {1} {$scrollleft} {$panbot} {$scrollright};
 	#screen {clear} {ALL};
+	#math {leftwidth} {$leftcols - 2};
+	#var {leftfmt} {%-${leftwidth}.${leftwidth}s};
+	#format {leftblank} {$leftfmt} { };
+	#var {hudbarw} {$leftwidth};
+	#var {hudfullbar} {};
+	#var {hudemptybar} {};
+	#loop {1} {$hudbarw} {hudloop} {
+		#var {hudfullbar} {$hudfullbar█};
+		#var {hudemptybar} {$hudemptybar░}
+		};
 	#math {pancol} {$panleft + 1};
 	#math {panwidth} {$pancols - 2};
 	#math {pannw} {$panwidth / 2};
@@ -187,59 +330,377 @@
 	#var {panvfmt} {%-${panvw}.${panvw}s};
 	#format {panblank} {$panfmt} { };
 	#math {panmid} {$layrows / 2};
+	#math {leftmid1} {$layrows * 40 / 100};
+	#math {leftmid2} {$layrows * 60 / 100};
 	#var {socboxtop} {0};
 	#var {socboxbot} {0};
 	#var {msdpboxtop} {0};
 	#var {msdpboxbot} {0};
-	#if {$socpanel == 1 && $msdppanel == 1}
-	{
+	#if {$socpanel == 1 && $msdppanel == 1} {
 		#var {socboxtop} {1};
 		#var {socboxbot} {$panmid};
 		#var {msdpboxtop} {$panmid};
-		#var {msdpboxbot} {$panbot}
-	};
-	#if {$socpanel == 1 && $msdppanel == 0}
-	{
+		#var {msdpboxbot} {$leftbot}
+		};
+	#if {$socpanel == 1 && $msdppanel == 0} {
 		#var {socboxtop} {1};
-		#var {socboxbot} {$panbot}
-	};
-	#if {$socpanel == 0 && $msdppanel == 1}
-	{
+		#var {socboxbot} {$leftbot}
+		};
+	#if {$socpanel == 0 && $msdppanel == 1} {
 		#var {msdpboxtop} {1};
-		#var {msdpboxbot} {$panbot}
-	};
-	#if {$socpanel == 1}
-	{
+		#var {msdpboxbot} {$leftbot}
+		};
+	#if {$socpanel == 1} {
 		#math {soctop} {$socboxtop + 1};
 		#math {soccap} {$socboxbot - $socboxtop - 1}
-	};
-	#if {$msdppanel == 1}
-	{
+		};
+	#if {$msdppanel == 1} {
 		#math {msdptop} {$msdpboxtop + 1};
 		#math {msdpcap} {$msdpboxbot - $msdpboxtop - 1}
-	};
+		};
+	#math {opptop} {$leftmid1 + 2};
+	#math {hudtop} {$leftmid2 + 2};
 	#var {socview} {0};
 	#var {msdpview} {0};
 	pandraw
-}
+	}
+
+#nop {Keystrokes echo on the input row in whatever colour the terminal last had}
+#nop {active - tintin does not paint live typing itself. Every panel draw and}
+#nop {every server line can leave a different colour active, which is why typed}
+#nop {text came out yellow, green or blue depending on timing. inputpaint parks}
+#nop {the colour state on very dark navy by repainting the border's last cell}
+#nop {and leaving the navy tag as the final escape emitted. It runs after every}
+#nop {draw and every received line/prompt, so whatever painted last, typing is}
+#nop {always navy.}
+
+#alias {inputpaint} {#line {ignore} {#showme {<F404040>─<F101040>} {$barrow} {$laycols}}}
 
 #nop {pandraw repaints the borders and both halves without touching geometry.}
+#nop {The full-width line on $barrow (the row #split reserves above the input)}
+#nop {is the border separating the input from the main content; drawing it here}
+#nop {means it is restored within a second if anything overwrites it. It is a}
+#nop {#showme of $barline (built in relayout) rather than #draw, so it can carry}
+#nop {an explicit charcoal colour tag.}
 
-#alias {pandraw}
-{
-	#if {$socpanel == 1}
-	{
-		#draw {box} {$socboxtop} {$panleft} {$socboxbot} {$laycols};
+#alias {pandraw} {
+	#line {ignore} {#showme {<F404040>$barline} {$barrow} {$scrollleft}};
+	leftdraw;
+	#if {$socpanel == 1} {
+		#var {socdrawbot} {$socboxbot};
+		#if {$msdppanel == 0} {
+			#var {socdrawbot} {-1}
+			};
+		#draw {box} {$socboxtop} {$panleft} {$socdrawbot} {$laycols};
 		#line {ignore} {#showme {<ffa>[ Socials ]} {$socboxtop} {$pancol}};
 		socdraw
-	};
-	#if {$msdppanel == 1}
-	{
-		#draw {box} {$msdpboxtop} {$panleft} {$msdpboxbot} {$laycols};
+		};
+	#if {$msdppanel == 1} {
+		#draw {box} {$msdpboxtop} {$panleft} {-1} {$laycols};
 		#line {ignore} {#showme {<ffa>[ MSDP ]} {$msdpboxtop} {$pancol}};
 		msdpdraw
+		};
+	inputpaint
 	}
-}
+
+#nop {=== Left column: Info box + HUD ===}
+
+#nop {Bottom half is the HUD: one progress bar per stat with the current/total}
+#nop {figures beneath it, fed from the $msdp[] cache. Fixed bar colours - HP}
+#nop {red, Stam blue, Moves green - then Tactics, OB/DB/PB and Speed as text}
+#nop {(server names: TACTIC, OFFENSIVE_BONUS, DODGE, PARRY, ATTACK_SPEED).}
+#nop {When fighting, an opponent gauge (dark red, matching the server's own}
+#nop {gauge colour) sits just above the XP bar with the foe's name, level and}
+#nop {health percent underneath and a three row crossed-swords icon at the}
+#nop {right hand end; OPPONENT_HEALTH is already a percentage and}
+#nop {the server clears the name when combat ends, which blanks those rows.}
+#nop {The XP bar is violet, stuck to the bottom of the box, and shows progress}
+#nop {through the current level - the server pushes EXPERIENCE as xp REMAINING}
+#nop {to next level and EXPERIENCE_MAX as the level's full span (comm.cpp}
+#nop {msdp_update), so gained = max - left.}
+#nop {The top half is an empty Info box for future use.}
+
+#nop {Top box: world time (WORLD_TIME, minus its dangling "on"), the weather}
+#nop {sentence (WEATHER) wrapped beneath it, and at the box bottom the room}
+#nop {as "Name    Exits are: N E" with "(#vnum) [ Terrain ]" on the line}
+#nop {beneath it.}
+#nop {Terrain comes from the ROOM table's TERRAIN key; ROOM_EXITS is an}
+#nop {array of lowercase letters, uppercased here. Interior is blanked each}
+#nop {redraw so shrinking text leaves no tails.}
+
+#alias {infodraw} {
+	#if {$leftpanel == 1} {
+		#var {inforow} {2};
+		#while {$inforow < $leftmid1} {
+			#line {ignore} {#showme {$leftblank} {$inforow} {$leftcol}};
+			#math {inforow} {$inforow + 1}
+			};
+		#var {infotime} {};
+		#if {&msdp[WORLD_TIME] > 0} {
+			#var {infotime} {$msdp[WORLD_TIME]};
+			#replace {infotime} { on } {}
+			};
+		#format {infotime} {$leftfmt} {$infotime};
+		#line {ignore} {#showme {<F404040>$infotime} {2} {$leftcol}};
+		#var {infoweather} {};
+		#if {&msdp[WEATHER] > 0} {
+			#var {infoweather} {$msdp[WEATHER]}
+			};
+		#format {infowrap} {%w} {{$infoweather}{$leftwidth}};
+		#var {inforow} {3};
+		#foreach {$infowrap[]} {infopiece} {
+			#if {$inforow < 7} {
+				#format {infopiece} {$leftfmt} {$infopiece};
+				#line {ignore} {#showme {<F005F5F>$infopiece} {$inforow} {$leftcol}};
+				#math {inforow} {$inforow + 1}
+				}
+			};
+		#if {&msdp[ROOM_NAME] > 0} {
+			#var {infoexits} {};
+			#if {&msdp[ROOM_EXITS] > 0} {
+				#foreach {*msdp[ROOM_EXITS][]} {infokey} {
+					#format {infodir} {%u} {$msdp[ROOM_EXITS][$infokey]};
+					#var {infoexits} {$infoexits $infodir}
+					}
+				};
+			#var {infoterr} {};
+			#if {&msdp[ROOM] > 0} {
+				#if {&msdp[ROOM][TERRAIN] > 0} {
+					#var {infoterr} {$msdp[ROOM][TERRAIN]}
+					}
+				};
+			#var {inforoom} {$msdp[ROOM_NAME]    Exits are:$infoexits};
+			#var {inforoom2} {(#$msdp[ROOM_VNUM]) [ $infoterr ]};
+			#format {infowrap} {%w} {{$inforoom}{$leftwidth}};
+			#math {inforows} {&infowrap[] + 1};
+			#math {inforow} {$leftmid1 - $inforows};
+			#foreach {$infowrap[]} {infopiece} {
+				#if {$inforow > 6 && $inforow < $leftmid1} {
+					#format {infopiece} {$leftfmt} {$infopiece};
+					#line {ignore} {#showme {<F005F5F>$infopiece} {$inforow} {$leftcol}}
+					};
+				#math {inforow} {$inforow + 1}
+				};
+			#if {$inforow > 6 && $inforow < $leftmid1} {
+				#format {infopiece} {$leftfmt} {$inforoom2};
+				#line {ignore} {#showme {<F005F5F>$infopiece} {$inforow} {$leftcol}}
+				}
+			};
+		inputpaint
+		}
+	}
+
+#alias {leftdraw} {
+	#if {$leftpanel == 1} {
+		#draw {box} {1} {1} {$leftmid1} {$leftcols};
+		#line {ignore} {#showme {<ffa>[ Info ]} {1} {$leftcol}};
+		infodraw;
+		#draw {box} {$leftmid1} {1} {$leftmid2} {$leftcols};
+		#line {ignore} {#showme {<ffa>[ Opponent ]} {$leftmid1} {$leftcol}};
+		oppdraw;
+		#draw {box} {$leftmid2} {1} {-1} {$leftcols};
+		#line {ignore} {#showme {<ffa>[ HUD ]} {$leftmid2} {$leftcol}};
+		huddraw
+		}
+	}
+
+#nop {hudnum fetches one MSDP number into $hudnum, 0 when absent or empty.}
+
+#alias {hudnum} {
+	#var {hudnum} {0};
+	#if {&msdp[%1] > 0} {
+		#if {"$msdp[%1]" != ""} {
+			#var {hudnum} {$msdp[%1]}
+			}
+		}
+	}
+
+#nop {hudstr fetches one MSDP string into $hudstr, empty when absent.}
+
+#alias {hudstr} {
+	#var {hudstr} {};
+	#if {&msdp[%1] > 0} {
+		#var {hudstr} {$msdp[%1]}
+		}
+	}
+
+#nop {hudgauge draws a bar row on its own, for a stat whose caption is not}
+#nop {"cur/max". %1 percent, %2 row offset, %3 colour, %4 an optional}
+#nop {marker drawn to the right of the bar, which costs the bar two cells.}
+
+#alias {hudgauge} {
+	#var {hudpct} {%1};
+	#if {$hudpct > 100} {
+		#var {hudpct} {100}
+		};
+	#if {$hudpct < 0} {
+		#var {hudpct} {0}
+		};
+	#var {hudgw} {$hudbarw};
+	#if {"%4" != ""} {
+		#math {hudgw} {$hudbarw - 2}
+		};
+	#math {hudfill} {$hudgw * $hudpct / 100};
+	#math {hudrest} {$hudgw - $hudfill};
+	#format {hudf} {%.${hudfill}s} {$hudfullbar};
+	#format {hudr} {%.${hudrest}s} {$hudemptybar};
+	#math {hudline} {$hudbase + %2};
+	#if {$hudline < $leftbot} {
+		#line {ignore} {#showme {%3$hudf<F909090>$hudr %3%4} {$hudline} {$leftcol}}
+		}
+	}
+
+#nop {hudbar draws one stat: the bar row, then "label cur/max" under it.}
+#nop {%1 label, %2 current, %3 max, %4 row offset in the box, %5 colour,}
+#nop {%6 optional regeneration per tick, appended as (+n).}
+#nop {("auto" = green/amber/red by percentage, or an explicit <F......> tag).}
+
+#alias {hudbar} {
+	#var {hudpct} {0};
+	#if {%3 > 0} {
+		#math {hudpct} {%2 * 100 / %3}
+		};
+	#if {$hudpct > 100} {
+		#var {hudpct} {100}
+		};
+	#if {$hudpct < 0} {
+		#var {hudpct} {0}
+		};
+	#var {hudcolor} {%5};
+	#if {"%5" == "auto"} {
+		#var {hudcolor} {<F1E7A1E>};
+		#if {$hudpct < 66} {
+			#var {hudcolor} {<F7A4B00>}
+			};
+		#if {$hudpct < 33} {
+			#var {hudcolor} {<F992222>}
+			}
+		};
+	#math {hudfill} {$hudbarw * $hudpct / 100};
+	#math {hudrest} {$hudbarw - $hudfill};
+	#format {hudf} {%.${hudfill}s} {$hudfullbar};
+	#format {hudr} {%.${hudrest}s} {$hudemptybar};
+	#var {hudcap} {%2/%3};
+	#if {"%6" != ""} {
+		#var {hudcap} {%2/%3 (+%6)}
+		};
+	#format {hudtext} {%-7s%s} {%1} {$hudcap};
+	#format {hudtext} {$leftfmt} {$hudtext};
+	#math {hudline} {$hudbase + %4};
+	#if {$hudline < $leftbot} {
+		#line {ignore} {#showme {$hudcolor$hudf<F909090>$hudr} {$hudline} {$leftcol}}
+		};
+	#math {hudline} {$hudline + 1};
+	#if {$hudline < $leftbot} {
+		#line {ignore} {#showme {<F404040>$hudtext} {$hudline} {$leftcol}}
+		}
+	}
+
+#nop {hudtextrow prints one plain text line in the HUD: %1 row offset, %2 text.}
+
+#alias {hudtextrow} {
+	#format {hudtext} {$leftfmt} {%2};
+	#math {hudline} {$hudbase + %1};
+	#if {$hudline < $leftbot} {
+		#line {ignore} {#showme {<F404040>$hudtext} {$hudline} {$leftcol}}
+		}
+	}
+
+#nop {The middle box holds the opponent gauge. OPPONENT_HEALTH is already a}
+#nop {percentage and the server clears OPPONENT_NAME when combat ends, so the}
+#nop {box simply empties itself. The interior is blanked on every redraw so}
+#nop {nothing is left behind when a fight finishes.}
+
+#alias {oppdraw} {
+	#if {$leftpanel == 1} {
+		#math {opprow} {$leftmid1 + 1};
+		#while {$opprow < $leftmid2} {
+			#line {ignore} {#showme {$leftblank} {$opprow} {$leftcol}};
+			#math {opprow} {$opprow + 1}
+			};
+		hudstr {OPPONENT_NAME};
+		#var {hudoppname} {$hudstr};
+		#if {"$hudoppname" != ""} {
+			hudstr {OPPONENT_LEVEL};
+			#var {hudopplvl} {$hudstr};
+			hudnum {OPPONENT_HEALTH};
+			#var {hudopphp} {$hudnum};
+			#var {hudbase} {$opptop};
+			hudgauge {$hudopphp} {0} {<F6B1111>} {$hudswords};
+			hudtextrow {1} {$hudoppname (lvl $hudopplvl)  $hudopphp%};
+			#var {hudbase} {$hudtop}
+			};
+		inputpaint
+		}
+	}
+
+#alias {huddraw} {
+	#if {$leftpanel == 1} {
+		#var {hudbase} {$hudtop};
+		hudnum {HEALTH};
+		#var {hudhp} {$hudnum};
+		hudnum {HEALTH_MAX};
+		#var {hudhpm} {$hudnum};
+		hudnum {MANA};
+		#var {hudst} {$hudnum};
+		hudnum {MANA_MAX};
+		#var {hudstm} {$hudnum};
+		hudnum {MOVEMENT};
+		#var {hudmv} {$hudnum};
+		hudnum {MOVEMENT_MAX};
+		#var {hudmvm} {$hudnum};
+		hudnum {HEALTH_REGENERATION};
+		#var {hudhpr} {$hudnum};
+		hudnum {STAMINA_REGENERATION};
+		#var {hudstr2} {$hudnum};
+		hudnum {MOVEMENT_REGENERATION};
+		#var {hudmvr} {$hudnum};
+		hudnum {EXPERIENCE_MAX};
+		#var {hudxpm} {$hudnum};
+		hudnum {EXPERIENCE};
+		#math {hudxp} {$hudxpm - $hudnum};
+		#if {$hudxp < 0} {
+			#var {hudxp} {0}
+			};
+		hudnum {TACTIC};
+		#var {hudtac} {$hudnum};
+		hudnum {OFFENSIVE_BONUS};
+		#var {hudob} {$hudnum};
+		hudnum {DODGE};
+		#var {huddb} {$hudnum};
+		hudnum {PARRY};
+		#var {hudpb} {$hudnum};
+		hudnum {ATTACK_SPEED};
+		#var {hudspd} {$hudnum};
+		hudbar {HP} {$hudhp} {$hudhpm} {0} {<F992222>} {$hudhpr};
+		hudbar {Stam} {$hudst} {$hudstm} {3} {<F2244AA>} {$hudstr2};
+		hudbar {Moves} {$hudmv} {$hudmvm} {6} {<F1E7A1E>} {$hudmvr};
+		hudtextrow {9} {OB: $hudob  DB: $huddb  PB: $hudpb};
+		hudtextrow {10} {Speed: $hudspd};
+		hudtextrow {11} {Tactics: $hudtac};
+		#math {hudxpoff} {$leftbot - 2 - $hudtop};
+		#if {$hudxpoff < 13} {
+			#var {hudxpoff} {13}
+			};
+		hudbar {XP} {$hudxp} {$hudxpm} {$hudxpoff} {<F5B2D91>} {};
+		inputpaint
+		}
+	}
+
+#alias {lefton} {
+	#var {leftpanel} {1};
+	relayout
+	}
+
+#alias {leftoff} {
+	#var {leftpanel} {0};
+	relayout
+	}
+
+#alias {leftpanelwidth} {
+	#var {leftcols} {%1};
+	relayout
+	}
 
 #nop {The terminal keeps resizing for a moment after #screen maximize, so settle}
 #nop {first and lay out once rather than fighting each intermediate size.}
@@ -250,14 +711,18 @@
 
 #variable {panpending} {0}
 
-#event {RECEIVED LINE}
-{
-	#if {$panpending == 0}
-	{
+#event {RECEIVED LINE} {
+	inputpaint;
+	#if {$panpending == 0} {
 		#var {panpending} {1};
 		#delay {1.0} {#var {panpending} {0};pandraw}
+		}
 	}
-}
+
+#nop {Prompts are partial lines; RECEIVED LINE never fires for them, and the}
+#nop {prompt is usually the very last thing printed before typing resumes.}
+
+#event {RECEIVED PROMPT} {inputpaint}
 
 #nop {=== Mouse wheel: each region scrolls on its own ===}
 
@@ -271,19 +736,17 @@
 #event {SCROLLED MOUSE WHEEL UP}   {#var {panmrow} {%0};#var {panmcol} {%1};panscrollup}
 #event {SCROLLED MOUSE WHEEL DOWN} {#var {panmrow} {%0};#var {panmcol} {%1};panscrolldown}
 
-#alias {panscrollup}
-{
-	#if {$panmcol < $panleft} {#buffer {up} {$panscrolllines}};
+#alias {panscrollup} {
+	#if {$panmcol > $leftw && $panmcol < $panleft} {#buffer {up} {$panscrolllines}};
 	#if {$panmcol >= $panleft && $socpanel == 1 && $panmrow <= $socboxbot} {socscrollup};
 	#if {$panmcol >= $panleft && $msdppanel == 1 && $panmrow > $socboxbot} {msdpscrollup}
-}
+	}
 
-#alias {panscrolldown}
-{
-	#if {$panmcol < $panleft} {#buffer {down} {$panscrolllines}};
+#alias {panscrolldown} {
+	#if {$panmcol > $leftw && $panmcol < $panleft} {#buffer {down} {$panscrolllines}};
 	#if {$panmcol >= $panleft && $socpanel == 1 && $panmrow <= $socboxbot} {socscrolldown};
 	#if {$panmcol >= $panleft && $msdppanel == 1 && $panmrow > $socboxbot} {msdpscrolldown}
-}
+	}
 
 #nop {Keyboard equivalents for the main feed, in case mouse tracking is unwanted.}
 
@@ -299,7 +762,7 @@
 #nop {*msdp[] is the list of variable NAMES; $msdp[] would return the values.}
 #nop {#line ignore stops the panel's own output from being fed back into triggers.}
 
-#event {IAC SB MSDP} {#var {msdp[%0]} {%1};#if {$msdppanel == 1} {msdpdraw}}
+#event {IAC SB MSDP} {#var {msdp[%0]} {%1};#if {$msdppanel == 1} {msdpdraw};#if {$leftpanel == 1} {huddraw;oppdraw;infodraw}}
 
 #event {IAC WILL MSDP} {#showme {<ffa>MSDP: server offered WILL MSDP}}
 #event {IAC DO MSDP} {#showme {<ffa>MSDP: client replied DO MSDP}}
@@ -310,76 +773,65 @@
 #nop {turns a table into plain "key=value key=value" text and shows any deeper}
 #nop {nesting as (...), so the value handed to #format never contains a brace.}
 
-#alias {msdpflat}
-{
+#alias {msdpflat} {
 	#var {msdpval} {$msdp[$msdpname]};
-	#if {&msdp[$msdpname][] > 0}
-	{
+	#if {&msdp[$msdpname][] > 0} {
 		#var {msdpval} {};
-		#foreach {*msdp[$msdpname][]} {msdpkey}
-		{
+		#foreach {*msdp[$msdpname][]} {msdpkey} {
 			#var {msdpsub} {$msdp[$msdpname][$msdpkey]};
 			#if {&msdp[$msdpname][$msdpkey][] > 0} {#var {msdpsub} {(...)}};
 			#var {msdpval} {$msdpval$msdpkey=$msdpsub }
+			}
 		}
 	}
-}
 
-#alias {msdpdraw}
-{
-	#if {$msdppanel == 1}
-	{
+#alias {msdpdraw} {
+	#if {$msdppanel == 1} {
 		#var {msdprow} {0};
 		#var {msdpidx} {0};
-		#foreach {*msdp[]} {msdpname}
-		{
-			#if {"$msdp[$msdpname]" != ""}
-			{
+		#foreach {*msdp[]} {msdpname} {
+			#if {"$msdp[$msdpname]" != ""} {
 				#math {msdpidx} {$msdpidx + 1};
-				#if {$msdpidx > $msdpview && $msdprow < $msdpcap}
-				{
+				#if {$msdpidx > $msdpview && $msdprow < $msdpcap} {
 					msdpflat;
 					#math {msdprow} {$msdprow + 1};
 					#format {msdpn} {$pannfmt} {$msdpname};
 					#format {msdpv} {$panvfmt} {$msdpval};
 					#math {msdpline} {$msdptop + $msdprow - 1};
 					#line {ignore} {#showme {<fca>$msdpn <afa>$msdpv} {$msdpline} {$pancol}}
+					}
 				}
-			}
-		};
-		#while {$msdprow < $msdpcap}
-		{
+			};
+		#while {$msdprow < $msdpcap} {
 			#math {msdprow} {$msdprow + 1};
 			#math {msdpline} {$msdptop + $msdprow - 1};
 			#line {ignore} {#showme {$panblank} {$msdpline} {$pancol}}
+			};
+		inputpaint
 		}
 	}
-}
 
 #nop {msdpview is how many variables are hidden above the top of the box.}
 
-#alias {msdpcount}
-{
+#alias {msdpcount} {
 	#var {msdptotal} {0};
 	#foreach {*msdp[]} {msdpname} {#if {"$msdp[$msdpname]" != ""} {#math {msdptotal} {$msdptotal + 1}}}
-}
+	}
 
-#alias {msdpscrollup}
-{
+#alias {msdpscrollup} {
 	#math {msdpview} {$msdpview - $panscrolllines};
 	#if {$msdpview < 0} {#var {msdpview} {0}};
 	msdpdraw
-}
+	}
 
-#alias {msdpscrolldown}
-{
+#alias {msdpscrolldown} {
 	msdpcount;
 	#math {msdpmax} {$msdptotal - $msdpcap};
 	#if {$msdpmax < 0} {#var {msdpmax} {0}};
 	#math {msdpview} {$msdpview + $panscrolllines};
 	#if {$msdpview > $msdpmax} {#var {msdpview} {$msdpmax}};
 	msdpdraw
-}
+	}
 
 #alias {msdpon} {#var {msdppanel} {1};relayout}
 #alias {msdpoff} {#var {msdppanel} {0};relayout}
@@ -396,60 +848,53 @@
 #nop {Lines are wrapped and padded to the panel width as they are added, so a}
 #nop {redraw is a straight overwrite of each row with no leftover tails.}
 
-#alias {socadd}
-{
+#alias {socadd} {
 	#format {socwrap} {%w} {{$soctmp}{$panwidth}};
-	#foreach {$socwrap[]} {socpiece}
-	{
+	#foreach {$socwrap[]} {socpiece} {
 		#format {socpad} {$panfmt} {$socpiece};
 		#list {soclog} {add} {$soccolor$socpad};
 		#if {$socview > 0} {#math {socview} {$socview + 1}}
-	};
-	#while {&soclog[] > $sochist}
-	{
+		};
+	#while {&soclog[] > $sochist} {
 		#list {soclog} {delete} {1};
 		#if {$socview > 0} {#math {socview} {$socview - 1}}
-	};
+		};
 	socdraw
-}
+	}
 
 #nop {socview is how many lines are hidden below the bottom of the box, so 0 is}
 #nop {the live view and new socials keep their place when scrolled back.}
 
-#alias {socdraw}
-{
-	#if {$socpanel == 1}
-	{
+#alias {socdraw} {
+	#if {$socpanel == 1} {
 		#math {socfirst} {&soclog[] - $soccap - $socview + 1};
 		#if {$socfirst < 1} {#var {socfirst} {1}};
 		#var {socrow} {0};
-		#while {$socrow < $soccap}
-		{
+		#while {$socrow < $soccap} {
 			#math {socrow} {$socrow + 1};
 			#math {socline} {$soctop + $socrow - 1};
 			#math {socidx} {$socfirst + $socrow - 1};
 			#var {soctext} {$panblank};
 			#if {$socidx <= &soclog[]} {#var {soctext} {$soclog[$socidx]}};
 			#line {ignore} {#showme {$soctext} {$socline} {$pancol}}
+			};
+		inputpaint
 		}
 	}
-}
 
-#alias {socscrollup}
-{
+#alias {socscrollup} {
 	#math {socmax} {&soclog[] - $soccap};
 	#if {$socmax < 0} {#var {socmax} {0}};
 	#math {socview} {$socview + $panscrolllines};
 	#if {$socview > $socmax} {#var {socview} {$socmax}};
 	socdraw
-}
+	}
 
-#alias {socscrolldown}
-{
+#alias {socscrolldown} {
 	#math {socview} {$socview - $panscrolllines};
 	#if {$socview < 0} {#var {socview} {0}};
 	socdraw
-}
+	}
 
 #alias {socon} {#var {socpanel} {1};relayout}
 #alias {socoff} {#var {socpanel} {0};relayout}
@@ -463,33 +908,56 @@
 #nop {Verified against RotS src/act_comm.cpp: do_say, do_gsay, do_tell, do_whisper,}
 #nop {do_ask, do_page and do_gen_com (narrate / chat / yell / sing).}
 
-#action {You say '%1}        {#var {soccolor} {<F66DDDD>};#var {soctmp} {%0};socadd} {5}
-#action {%1 says '%2}        {#var {soccolor} {<F66DDDD>};#var {soctmp} {%0};socadd} {5}
+#action {You say '%1}        {#var {soccolor} {<F005F5F>};#var {soctmp} {%0};socadd} {5}
+#action {%1 says '%2}        {#var {soccolor} {<F005F5F>};#var {soctmp} {%0};socadd} {5}
 
-#action {You tell %1 '%2}    {#var {soccolor} {<F5599FF>};#var {soctmp} {%0};socadd} {5}
-#action {%1 tells you '%2}   {#var {soccolor} {<F5599FF>};#var {soctmp} {%0};socadd} {5}
+#action {You tell %1 '%2}    {#var {soccolor} {<F5B2D91>};#var {soctmp} {%0};socadd} {5}
+#action {%1 tells you '%2}   {#var {soccolor} {<F5B2D91>};#var {soctmp} {%0};socadd} {5}
 
-#action {You group-say '%1}  {#var {soccolor} {<FFF6666>};#var {soctmp} {%0};socadd} {5}
-#action {%1 group-says '%2}  {#var {soccolor} {<FFF6666>};#var {soctmp} {%0};socadd} {5}
+#action {You group-say '%1}  {#var {soccolor} {<F992222>};#var {soctmp} {%0};socadd} {5}
+#action {%1 group-says '%2}  {#var {soccolor} {<F992222>};#var {soctmp} {%0};socadd} {5}
 
-#action {You narrate '%1}    {#var {soccolor} {<FCC66FF>};#var {soctmp} {%0};socadd} {5}
-#action {%1 narrates '%2}    {#var {soccolor} {<FCC66FF>};#var {soctmp} {%0};socadd} {5}
+#action {You narrate '%1}    {#var {soccolor} {<F8B2E8B>};#var {soctmp} {%0};socadd} {5}
+#action {%1 narrates '%2}    {#var {soccolor} {<F8B2E8B>};#var {soctmp} {%0};socadd} {5}
 
-#action {You chat '%1}       {#var {soccolor} {<FFFCC55>};#var {soctmp} {%0};socadd} {5}
-#action {%1 chats '%2}       {#var {soccolor} {<FFFCC55>};#var {soctmp} {%0};socadd} {5}
+#action {You chat '%1}       {#var {soccolor} {<F7A4B00>};#var {soctmp} {%0};socadd} {5}
+#action {%1 chats '%2}       {#var {soccolor} {<F7A4B00>};#var {soctmp} {%0};socadd} {5}
 
-#action {You yell '%1}       {#var {soccolor} {<F5599FF>};#var {soctmp} {%0};socadd} {5}
-#action {%1 yells '%2}       {#var {soccolor} {<F5599FF>};#var {soctmp} {%0};socadd} {5}
+#action {You yell '%1}       {#var {soccolor} {<F5B2D91>};#var {soctmp} {%0};socadd} {5}
+#action {%1 yells '%2}       {#var {soccolor} {<F5B2D91>};#var {soctmp} {%0};socadd} {5}
 
-#action {You sing '%1}       {#var {soccolor} {<FFFCC55>};#var {soctmp} {%0};socadd} {5}
-#action {%1 sings '%2}       {#var {soccolor} {<FFFCC55>};#var {soctmp} {%0};socadd} {5}
+#action {You sing '%1}       {#var {soccolor} {<F7A4B00>};#var {soctmp} {%0};socadd} {5}
+#action {%1 sings '%2}       {#var {soccolor} {<F7A4B00>};#var {soctmp} {%0};socadd} {5}
 
-#action {%1 whispers to you, '%2} {#var {soccolor} {<F99DD99>};#var {soctmp} {%0};socadd} {5}
-#action {%1 asks you '%2}         {#var {soccolor} {<F99DD99>};#var {soctmp} {%0};socadd} {5}
+#action {%1 whispers to you, '%2} {#var {soccolor} {<F1E5E1E>};#var {soctmp} {%0};socadd} {5}
+#action {%1 asks you '%2}         {#var {soccolor} {<F1E5E1E>};#var {soctmp} {%0};socadd} {5}
 
-#action {You page %1 with '%2}    {#var {soccolor} {<FFF99FF>};#var {soctmp} {%0};socadd} {5}
-#action {*%1* pages, '%2}         {#var {soccolor} {<FFF99FF>};#var {soctmp} {%0};socadd} {5}
-#action {*%1* beeps you!}         {#var {soccolor} {<FFF99FF>};#var {soctmp} {%0};socadd} {5}
+#action {You page %1 with '%2}    {#var {soccolor} {<F993366>};#var {soctmp} {%0};socadd} {5}
+#action {*%1* pages, '%2}         {#var {soccolor} {<F993366>};#var {soctmp} {%0};socadd} {5}
+#action {*%1* beeps you!}         {#var {soccolor} {<F993366>};#var {soctmp} {%0};socadd} {5}
+
+#nop {=== Socials ===}
+
+#nop {socials.tin is generated from the server's own lib/misc/socials file}
+#nop {and carries an action for every social in the game, in both the form}
+#nop {you see when you perform one and the form you see when someone else}
+#nop {does. It is ~900 actions, which measured at roughly a third of a}
+#nop {millisecond per line of output - a few percent of one core even during}
+#nop {heavy combat spam - but socialsoff unloads the class if it ever gets}
+#nop {in the way, and socialson brings it back.}
+
+#read {socials.tin}
+
+#alias {socialson} {
+	#class {socials} {kill};
+	#read {socials.tin};
+	#showme {<afa>Social capture on}
+	}
+
+#alias {socialsoff} {
+	#class {socials} {kill};
+	#showme {<afa>Social capture off}
+	}
 
 #nop {Telnet debug prints raw negotiation to the main screen; keep it opt-in.}
 
@@ -498,11 +966,37 @@
 
 #nop {=== Input line keys ===}
 
+#nop {The input line is redrawn by tintin in COMMAND COLOR, which defaults to}
+#nop {bright green. Set twice on purpose: plain "blue" first as a safe fallback,}
+#nop {then the very dark navy truecolour value - if a tintin build rejects the}
+#nop {truecolour form, the input stays a sane dark blue instead of green.}
+
+#config {COMMAND COLOR} {blue}
+#config {COMMAND COLOR} {<F101040>}
+
+#nop {COLOR PATCH repairs server lines that do not reset their colour. It is}
+#nop {not sufficient on its own - the panel repaints also leave colours active -}
+#nop {so the inputpaint alias (defined with the panels) is what actually keeps}
+#nop {typed text navy.}
+
+#config {COLOR PATCH} {ON}
+
+#nop {The skill/spell spinner (comm.cpp wait_wheel) is sent as bare \r|\r}
+#nop {with no newline. Tintin holds unfinished lines, and while a scroll}
+#nop {region or split side bar is active it REDRAWS the growing buffer}
+#nop {rather than emitting each tick, so the wheel smears instead of}
+#nop {animating. Measured: with no bounded region each tick draws as sent;}
+#nop {with either a scroll region or #split side bars it accumulates, and}
+#nop {PACKET PATCH does not change that. The side panels and the server's}
+#nop {own spinner are therefore mutually exclusive - turn the spinner off}
+#nop {in game with "set spinner" to keep the feed clean.}
+
 #nop {TinTin's command line is a readline style editor with no concept of a text}
 #nop {selection - there is no select/mark operation in #cursor for a macro to drive,}
 #nop {so shift+arrow cannot highlight text. What these macros do is stop those keys}
 #nop {injecting raw escape text into the input and make them move the cursor the way}
-#nop {they would in a normal field.}
+#nop {they would in a normal field. To select text, hold shift and drag with the}
+#nop {mouse (mintty's selection, needed while mouse tracking is on).}
 
 #nop {shift+Home and shift+End only reach tintin if mintty's ScrollMod is changed;}
 #nop {by default mintty keeps shift+Home/End/arrows for its own scrollback.}
@@ -522,14 +1016,26 @@
 #nop {In place of selecting: ctrl+u clears the line, ctrl+w deletes the word to the}
 #nop {left, ctrl+k clears to the right of the cursor.}
 
+#nop {=== Hotkeys (imported from JMC) ===}
+
+#nop {Every JMC profile bound F2 to #connect, so it lives here rather than in}
+#nop {each character file. mintty sends \eOQ for F2. Character-specific TAB}
+#nop {hotkeys are in the character files.}
+
+#macro {\eOQ} {#session {ReturnOfTheShadow} {rotsmud.org} {3791} {global.tin}}
+
 #nop {=== Command echo ===}
 
 #nop {SENT OUTPUT fires for every command sent to the server, whatever triggered it.}
 #nop {The regexp skips telnet negotiation, which is binary and starts with IAC (0xFF).}
+#nop {main.tin sets COMMAND ECHO off: in split mode tintin would echo typed commands}
+#nop {itself, and this event would then print every one of them a second time.}
+#nop {Dark charcoal for the echo - readable on the light grey background, and}
+#nop {visually "mine" against the blue server text.}
 
 #variable {cmdecho} {1}
 
-#event {SENT OUTPUT} {#if {$cmdecho == 1} {#regexp {%0} {^\w} {#showme {<FEBED6B>%0}}}}
+#event {SENT OUTPUT} {#if {$cmdecho == 1} {#regexp {%0} {^\w} {#showme {<F404040>%0}}};inputpaint}
 
 #alias {echoon} {#var {cmdecho} {1};#showme {<afa>Command echo on}}
 #alias {echooff} {#var {cmdecho} {0};#showme {<afa>Command echo off}}

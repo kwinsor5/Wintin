@@ -1,4 +1,8 @@
-#config {COMMAND ECHO} {ON}
+#nop {COMMAND ECHO off: in split mode tintin would echo typed commands into the}
+#nop {feed itself, duplicating the SENT OUTPUT echo in global.tin, which covers}
+#nop {every sent command (typed or triggered) in one colour.}
+
+#config {COMMAND ECHO} {OFF}
 #config {INHERITANCE} {ON}
 
 #nop {Maximise to whichever screen the window opened on. The terminal resizes}
@@ -7,7 +11,8 @@
 
 #screen {maximize}
 
-#nop {No #split here - global.tin's relayout owns the screen layout.}
+#nop {No #split here - global.tin's relayout owns the screen layout, including}
+#nop {the #split that pins the input line to the bottom row.}
 
 #nop {Read into the startup session so aliases exist before login, and again into}
 #nop {the game session so telnet/MSDP events register where the data arrives.}

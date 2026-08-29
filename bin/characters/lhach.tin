@@ -12,3 +12,9 @@
 #alias {cotton} {wear all.cotton;wear all.shiny;wear garland}
 #alias {metal} {wear all.chain}
 #alias {v} {bash $target}
+
+#nop {=== Hotkeys (imported from JMC) ===}
+
+#nop {TAB attacks the current target, as in JMC; it replaces tab completion.}
+
+#macro {\t} {cas 'lightning bolt' $target}

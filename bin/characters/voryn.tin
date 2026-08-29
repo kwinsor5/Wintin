@@ -13,3 +13,9 @@
 #alias {cotton} {rem all.chain;wear all.cotton;wear fillet;wear 2.boots}
 #alias {metal} {rem all.cotton;rem fillet;rem boots;wear all.chain}
 #alias {mine} {gr axe;gr sceptre;g all}
+
+#nop {=== Hotkeys (imported from JMC) ===}
+
+#nop {TAB attacks the current target, as in JMC; it replaces tab completion.}
+
+#macro {\t} {cas 'curing saturation' $target}

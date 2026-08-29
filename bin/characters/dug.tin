@@ -11,3 +11,9 @@
 #alias {k2} {k 2.$target}
 #alias {v} {bash $target}
 #alias {z} {cas 'curse' $target}
+
+#nop {=== Hotkeys (imported from JMC) ===}
+
+#nop {TAB attacks the current target, as in JMC; it replaces tab completion.}
+
+#macro {\t} {cas 'dark bolt' $target}

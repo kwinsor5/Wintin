@@ -9,3 +9,9 @@
 #alias {aa} {cas 'chill ray' $target}
 #alias {cotton} {rem all.chain;rem winged;wear all.cotton;wear all.shiny;wear garland}
 #alias {metal} {rem all.cotton;rem garland;rem all.shiny;wear all.chain;wear winged}
+
+#nop {=== Hotkeys (imported from JMC) ===}
+
+#nop {TAB attacks the current target, as in JMC; it replaces tab completion.}
+
+#macro {\t} {cas 'lightning bolt' $target}

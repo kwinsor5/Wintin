@@ -1,0 +1,920 @@
+#nop {Generated from the server's own socials file, lib/misc/socials in the}
+#nop {RotS source: every social in the game, in both the form you see when}
+#nop {you perform one and the form you see when somebody else does.}
+
+#nop {Each pattern is anchored with ^ so it can only match at the start of a}
+#nop {line, and the actor is captured as %1 rather than dropped - %0 is the}
+#nop {matched text, so without that capture the panel would lose the name.}
+#nop {The remaining $-tokens (his/her, him/her, the target) become wildcards.}
+
+#nop {Kept in the socials class so socialsoff can unload the lot.}
+
+#class {socials} {open}
+
+#nop {=== Socials you perform ===}
+
+#action {^You flutter yuor eyelashes.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You flutter your eyelashes at %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You flutter your eyelashes at the thought of yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You begin to babble like an idiot.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You look around for someone to adore.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You look at %1 with adoring eyes.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You look at your shoes and blush shyly.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You act shyly towards %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You hail everyone in the room.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You hail %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You hail yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You wish everyone the best of luck!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You wish %1 the best of luck.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You cross your fingers and wish yourself luck.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You twitch uncontrollably.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You snicker at %1's inability to type.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You scream a piercing warcry!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You seem puzzled.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You puzzle over %1's actions.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You puzzle over what you have done.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You smile happily.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You smile at %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You smile at yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You grab %1 close and start dancing with %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You skip and dance around by yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You smirk.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You smirk at %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You smirk to yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You watch as your smoke rings chase one another skyward.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You offer %1 your pipe and a pinch of your best pipeweed.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You take a deep draw on your pipe.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You pull a single coin out of your pocket.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You flip a coin to %1, who deftly catches it out of the air.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You flip a coin high in the air and catch it before it hits the ground.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You hum softly to yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You scold everyone around you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You scold %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You scold yourself severely.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You shudder at the thought.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You shudder at what %1 said.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You shudder to yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You threaten everyone around you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You threaten %1 with %2 life.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You threaten yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You stick your tounge out.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You stick your tounge out at %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You stick your tounge out and touch the tip of your nose with it.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You grin happily.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You grin happily at %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You grin happily to yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You tightly clutch %1 in an overwhelming bearhug.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You pant heavily.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You salute.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You salute %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You are loyal to yourself, aren't you?} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You scratch your head in confusion.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You scratch %1's back.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You scratch yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You cower in fear.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You cower in fear of %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You cower in fear of yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You bark at %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You bark at yourself. Strange.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You grunt.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You nod and smile cause you have no idea what the heck is going on.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You suddenly have an idea!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You slip and fall on your back.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You gulp in anticipation.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You pop your neck loudly. Crack!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You look around for someone to pick on.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You begin picking on %1 like the big bully you are.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You dip too low to the ground and fall over.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You dip %1 low to the ground, kissing %2 deeply.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You fall on your face as you attempt to dip yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You pucker up your lips.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You softly trace the outline of %1 lips with your tongue.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You slowly run your tounge along your lips in a suggestive manner.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You glance around the room looking for someone to seduce.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You gaze at %1 trying to get %2 to notice you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You bend down and tie your shoes.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You tie %1's shoelaces together when %2 isn't looking.. (snicker).} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You caress %1 with soft, loving touches.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You give everyone the evil eye.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You give %1 the evil eye.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You check yourself, making sure you are all in one piece.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You look around the room for someone's eye to poke.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You poke %1 in the eye..} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You poke yourself in the eye.. Ouch!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You shove the thin air.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You shove %1 to the ground!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You suddenly find yourself on the ground after attempting to shove yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You stomp around angrily.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You stomp on %1's head!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You stomp on your toes...ouch!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You scare %1 senseless.  BOO!!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You cringe when %1 scares you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You scream in terror!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You pucker up your lips and start smacking your lips together.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You blow a kiss to %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You melt into %1 arms.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You flex your muscles.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You flex your muscles for %1 trying to impress %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You flex for yourself to see if you have gained any muscle.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You grin as you pick up some snow and form it into a snowball.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You throw a snowball at %1's face.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You smash a snowball into your face. Ouch!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You roar with laughter.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You roar with laughter at %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You think your that funny, eh?} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You mutter under you breath.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You mutter something about %1 under your breath.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You mutter to yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You howl triumphantly.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You howl at %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You howl at yourself. You ok?} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You blink your eyes innocently.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You blink in %1's direction.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You blink at yourself. You're thinking something.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You hop around with %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You hope around by yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You give a blank look at nothing.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You give %1 a blank look.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You tap %1 on %2 shoulder.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You tap yourself on the temple.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You apologize to the world for your very existence!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You apologize profusedly to %1, and beg for forgiveness.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You apologize to yourself for everything you have done wrong.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You beckon for everyone to follow you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You beckon for %1 to follow you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You raise your hand.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You raise your eyebrow questioningly at %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You raise an eyebrow questioningly.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You pass out cold!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You faint into %1's arms.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You try to faint into your arms but hit the ground instead.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You shake your hand vigorously through the air.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You shake %1 hand.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You run about the room kissing the back of everyone's hand.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You kneel and take the fair hand of %1 and lightly kiss it.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You kiss the back of your own hand. That's just sad.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You skip and dance around merrily.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You skip around with %1, thinking of happy things.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You frolic about by yourself...that's sad.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You bounce around.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You bounce around the room with %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You curl into a ball and bounce yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You cackle gleefully.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You cackle in %1's face scaring %2 senseless.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You cackle madly to yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You laugh out loud.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You roll on the floor laughing.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You point your finger at %1 and laugh hysterically.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You laugh at yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You giggle.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You giggle at %1's silliness.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You giggle at your own silliness.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You shake your head.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You shake your head at %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You puke.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You puke on %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You puke on yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You growl at %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You growl at yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You scream at %1 loudly. ARGH!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You scream loudly at yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You tip your hat to everyone.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You tip your hat at %1, and wish %2 a good day.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You tip your hat to yourself...you must be lonely.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You stretch out your sore muscles. Ahhh} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You try to comfort everyone.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You comfort %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You make a vain attempt to comfort yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You nod solemnly.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You nod your head at %1 in agreement.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You nod at yourself, reassuringly.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You nod frantically.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You sigh.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You look at %1 and sigh.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You sigh to yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You sulk in the corner.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You look around for someone to hug.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You hug %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You hug yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You look around for someone to snuggle with.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You snuggle with %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You snuggle with yourself...how pathetic.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You look around for someone to cuddle with.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You cuddle with %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You must feel very cuddly indeed..   :)} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You nuzzle %1 neck softly.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You cry on %1 shoulder.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You cry to yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You poke %1 in the ribs.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You can't poke someone who's not here!.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You accuse everyone.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You look accusingly at %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You accuse yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You grin evilly.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You grin evilly at %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You grin evilly to yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You grumble.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You grumble at %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You grumble to yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You gothmoggle.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You gothmoggle at %1's foolishness.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You gothmoggle at your own foolishness.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You bow deeply.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You bow before %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You applaude for %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You applaude for yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You turn your face from %1 and blush.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You blush to yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You burp loudly.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You burp in %1's face!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You burp to yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You chuckle politely.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You chuckle at %1 politely.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You chuckle at yourself politely.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You clap your small hands together.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You clap for %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You clap for your own achievements.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You cough on %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You cough to yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You curtsey to your audience.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You curtsey to %1 gracefully.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You can't do that!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You turn your bottom and aim a fart at %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You fart to yourself and hope no one notices.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You flip head over heels.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You flip %1 over your head making %2 dizzy.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You try to flip over yourself but fall flat on the ground.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You fondly fondle %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You fondly try to fondle someone not in the room, but who cares.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You frown at %1 in disapproval.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You frown to yourself in silent contemplation.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You gasp in astonishment.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You gasp in amazement of %1 accomplishment.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You glare at nothing in particular.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You glare icily at %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You glare icily at your feet, they are suddenly very cold.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You groan loudly.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You groan at %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You groan loudly at yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You grope %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You lick your mouth and smile.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You lick %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You lick yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You tell your true feelings to %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You start to moan.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You moan at %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You nibble on %1's ear.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You look at %1 with your big sad eyes and POUT!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You pout to yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You purr contentedly.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You rub up against %1 and purr softly.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You purr softly to yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You ruffle %1's hair playfully.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You shrug.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You shrug at %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You shrug at yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You wave your hands around wildly looking for someone to slap!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You slap %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You are slapped by %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You slap yourself, silly you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You snap your fingers at %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You snap to the beat!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You sneeze in %1's face!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You sneeze on yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You snicker softly.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You snicker at %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You snicker to yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You sniff sadly.  *SNIFF*} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You sniff %1.  Does %2 smell good?} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You sniff yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You make a snoring sound to %1.  You are tired of %2 mindless prattle.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You snore loudly to yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You spit over your left shoulder.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You spit on %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You start to spit, but suck it back in.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You squeeze %1 fondly.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You stare at the sky.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You stare dreamily at %1, completely lost in %2 eyes..} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You stare dreamily at yourself - enough narcissism for now.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You thank %1 heartily.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You patiently twiddle your thumbs.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You wave.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You wave goodbye to %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You wiggle your bottom at %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You wink suggestively at %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You wink at yourself?? -- what are you up to?} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You give a thumbs up!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You give %1 the thumbs up!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You give a thumbs to yourself. Umm, what?} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You give %1 a long and passionate kiss, it seems to take forever...} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You comb your hair -- perfect.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You patiently untangle %1's hair -- what a mess!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You pull your hair, but it will not be combed.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You gently massage %1's shoulders.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You can only massage someone in the same room as you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You tickle %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You pat %1 on %2 head.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You swear loudly for a long time.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You swear at %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You swear at yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You get down on your hands and knees and pray.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You beg the gods for mercy.  (No way you're gonna get it! :-))} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You desperately beg %1 for assistance.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You bleed profusely, making an awful mess...} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You bleed all over yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You cringe in terror.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You cringe away from %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You dream of better times.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You daydream about %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You daydream for awhile about yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You stare at %1, fuming.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You grovel in the dirt.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You grovel before %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You nudge %1 with your elbow.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You peer around yourself, uncertain of the things around you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You peer at %1, trying to figure %2 out.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You peer into your own mind...scary.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You welcome ????} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You welcome %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You point at %1!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You point at yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You ponder over matters as they appear to you at this moment.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You ponder what %1 might be thinking at this moment.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You begin pondering about your life.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You punch %1 in %2 arm.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You punch yourself...that hurt!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You snarl like a vicious animal.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You spank WHO?  Eh?  How?  Naaah, you'd never.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You spank %1 hard on the rear end.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You let out some steam, much to the others' relief (and your own!)} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You tackle the air.  It stands not a chance.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You ruthlessly tackle %1 to the ground.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You taunt something that seems to be in front of you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You taunt %1, to your own delight.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You taunt yourself, bringing yourself to tears...:(} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You think so hard, you forgot what you were thinking about.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You think about what purpose %1 has in relation to your part of life.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You think about yourself (for once).} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You whine about life.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You whine at %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You whine to yourself silently.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You fall to your knees and start to worship the ground.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You fall to your knees and worship %1 deeply.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You seem sure to have found a true deity.....} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You start yodelling loudly and rather beautifully in your own ears.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You roll your eyes in disgust.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You look at %1 and roll your eyes in disgust.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You roll your eyes, disgusted with your own incompetence.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You flirt outrageously.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You flirt outrageously with %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You flirt with yourself.  You must look stupid.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You reach but come away empty.  :(} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You embrace %1 warmly.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You embrace yourself??} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You gently stroke %1 inner thigh.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You greet %1 with a light kiss on %2 cheek.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You start to drool.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You drool all over %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You cheer.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You cheer for %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You cheer for yourself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You blow kisses in the wind.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^You kiss %1.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+
+#nop {=== Socials performed by others ===}
+
+#action {^%1 flutters %2 eyelashes.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 flutters %2 eyelashes at %3.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 flutters %2 eyelashes at you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 flutters %2 eyelashes at no one in particular.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 begins babbling like an idiot.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 looks around for someone to adore.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 looks at %2 with adoring eyes.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 looks at you with adoring eyes.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 adores %2 so much.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 looks at %2 shoes and blushes shyly.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 acts shyly towards %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 acts shyly towards you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 hails everyone in the room.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 hails %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 hails you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 wishes everyone the best of luck!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 wishes %2 the best of luck.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 wishes you the best of luck.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 crosses %2 fingers and wishes himself luck.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 twitches uncontrollably.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 snickers at %2 inability to type.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 snickers at your inability to type.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 loudly curses %2 inability to type.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 screams a piercing warcry!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 seems puzzled.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 puzzles over %2's actions.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 puzzles over your actions.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 puzzles over what %2 has done.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 smiles happily.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 beams a smile at %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 smiles at you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 smiles at %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 dances around happily.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 grabs %2 close and dances with %3.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 grabs you tight and starts dancing with you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 skips a light Fandango.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 smirks.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 smirks at %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 smirks at you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 smirks to %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 sends smoke rings skyward and watches as they chase one another.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 offers %2 %3 pipe and a pinch of pipeweed.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 offers you %2 pipe and a pinch of %3 best pipeweed.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 takes a deep draw on %2 pipe.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 pulls a single coin out of %2 pocket.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 flips a coin to %2, who deftly catches it out of the air.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 flips a coin to you and you deftly catch it out of the air.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 flips a coin high in the air and catches it before it hits the ground.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 hums softly to %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 scolds everyone around %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 scolds %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 scolds you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 scolds %2 severely.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 shudders at the thought.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 shudders at what %2 said.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 shudders at what you said.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 shudders to %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 threatens everyone around %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 threatens %2 with %3 life.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 threatens your life! Ack!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 threatens %2...Strange.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 sticks %2 tounge out.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 sticks %2 tounge out at %3.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 sticks %2 tounge out at you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 sticks %2 tounge out and touches the tip of %3 nose with it.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 grins happily.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 grins happily at %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 grins happily at you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 grins happily to %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 clutches %2 tightly in an overwhelming bearhug.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 clutches you tightly in an overwhelming bearhug.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 pants heavily.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 salutes.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 salutes %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 salutes you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 scratches %2 head in confusion.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 scratches %2's back.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 scratches your back. Ahh! That feels nice.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 scratches %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 cowers in fear.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 cowers in fear of %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 cowers in fear of you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 barks.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 barks at %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 barks at you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 grunts.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 nods and smiles cause %2 has no idea what the heck is going on.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 suddenly has an idea...} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 slips and falls on %2 back.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 gulps in anticipation.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 pops %2 neck loudly. Crack!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 looks around for someone to pick on.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 begins picking on poor little %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 begins picking on you.  The big bully!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 dips too low to the ground and falls over.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 dips %2 low to the ground, kissing %3 deeply.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 dips you low to the ground, kissing you deeply.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 falls over backwards attempting to dip %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 puckers up %2 lips.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 softly traces the outline of %2's lips with %3 tongue.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 softly traces the outline of your lips with %2 tongue.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 slowly runs %2 tounge along %3 lips in a suggestive manner.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 glances around the room with a seductive gleam in %2 eyes.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 gazes at %2 in a seductive manner.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 gazes at you with a strange look in %2 eyes.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 bends down to tie %2 shoes.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 ties %2's shoelaces together when %3 isn't looking.. Funny isn't it? :)} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 ties your shoelaces together while you aren't looking.. doh.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 caresses %2 with soft, loving touches.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 caresses you with soft, loving touches.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 gives everyone the evil eye.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 gives %2 the evil eye.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 gives you the evil eye.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 checks %2, making sure %3 is all in one piece.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 looks around for someone's eye to poke.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 pokes %2 in the eye..} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 pokes you in the eye.. Ouch!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 pokes %2 in the eye.. Ouch!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 shoves nothing at all.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 shoves %2 to the ground! Thud!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 shoves you to the ground! Ouch, that hurt!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 throws %2 on the ground trying to shove %3.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 stomps around angrily.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 stomps on %2's head while %3's on the ground!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 stomps on your head!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 stomps on %2 own toes...that's gotta hurt!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 scares everything around %2 even YOU! Cringe!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 scares %2 senseless as %3 cringes away.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 screeches in terror, 'AHHH!'} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 smacks %2 lips together.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 blows a kiss to %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 blows a kiss to you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 blows a kiss to %2. %3 must be lonely indeed.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 melts down to the ground into a big pile of moosh.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 melts into %2's arms.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 melts into your arms.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 sinks into a pool of water.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 flexes %2 big muscles. Show-off.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 flexes %2 muscles for %3.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 flexes %2 big muscles for you. WOW!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 flexes for %2 to see if %3 has gained any muscle.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 picks up some snow and makes a snowball.  Uh-oh! Duck!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 throws a snowball at %2's face.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 throws a snowball in your face.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 smashes a snowball into %2 face!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 roars with laughter.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 roars with laughter at %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 roars with laughter at you. You must be really funny!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 mutters under %2 breath.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 mutters something about %2 under %3 breath.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 mutters something about you under %2 breath.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 howls triumphantly.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 howls at %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 howls at you. What a moron.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 howls at %2. Strange.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 blinks %2 eyes innocently.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 blinks innocently at %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 blinks innocently in your direction.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 blinks at %2 strangely.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 hops around like a little bunny.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 hops around with %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 hops around with you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 hops around by %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 has a blank look on %2 face.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 gives %2 a blank look.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 gives you a blank look.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 looks like a vegetable.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 taps %2 foot impatiently.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 taps %2 on %3 shoulder.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 taps you on your shoulder.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 taps %2 on the temple.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 apologizes to everyone for %2 very existence!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 apologizes profusedly to %2, and begs for forgiveness.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 apologizes profusedly, begging for forgiveness.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 apologizes to %2 for everything %3 has done wrong.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 beckons for everyone to follow %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 beckons for %2 to follow %3.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 beckons for you to follow %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 attempts to follow %2 but realizes that is impossible.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 raises %2 hand.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 raises %2 eyebrow questioningly at %3.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 raises %2 eyebrow questioningly at you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 raises an eyebrow questioningly.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 faints and falls to the ground. THUD!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 faints into %2's arms.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 faints into your arms.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 tries to faint into %2 arms, but only falls on %3 face.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 shakes %2 hand vigorously through the air.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 shakes %2's hand.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 shakes your hand.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 grabs %2 other hand and starts shaking it. Did they just meet?} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 runs about the room kissing everyone's hand.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 kneels and takes the fair hand of %2 and lightly kisses it.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 kneels and lightly kisses your hand.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 kisses the back of %2 own hand. Sad, eh?} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 skips and dance around merrily.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 skips around with %2 merrily.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 skips around with you, thinking of happy things.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 frolics about by %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 bounces around.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 bounces around the room with %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 bounces around the room with you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 curls into a ball and bounces %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 throws back %2 head and cackles with insane glee!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 cackles in %2's face scaring %3 senseless.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 cackles in your face scaring you senseless.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 cackles madly to %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 laughs out loud.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 rolls on the floor laughing.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 points %2 finger at %3 and laughs hysterically.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 points %2 finger at you and laughs hysterically.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 gets a wierd look on %2 face and laughs.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 giggles.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 giggles at %2's silliness.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 giggles at your silliness.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 giggles at %2 own silliness.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 shakes %2 head.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 shakes %2 head at %3.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 shakes %2 head at you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 starts shaking strangely.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 pukes.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 pukes on %2. Gross!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 pukes on your clothes! Gross!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 pukes on %2 clothes. Strange..} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 growls.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 growls at %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 growls at you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 screams loudly!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 screams at %2 loudly.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 screams at you loudly. Aaaahhh!!!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 screams loudly at %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 tips %2 hat to everyone.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 tips %2 hat at %3, and wishes %4 a good day.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 tips %2 hat at you, and wishes you a good day.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 tips %2 hat to %3...%4 must be lonely.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 stretches out %2 sore muscles.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 tries to comfort everyone.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 comforts %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 comforts you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 tries comforting %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 nods solemnly.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 nods %2 head at %3 in agreement.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 nods %2 head at you in agreement.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 nods at %2, reassuringly.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 nods frantically.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 sighs loudly.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 looks at %2 and sighs.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 looks at you and sighs.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 sighs to %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 sulks in the corner.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 looks around for someone to hug.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 hugs %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 hugs you tightly.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 looks around for someone to snuggle with.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 snuggles up to %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 snuggles up to you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 snuggles with %2...how pathetic.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 looks around for someone to cuddle with.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 cuddles with %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 cuddles with you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 softly nuzzles %2's neck.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 softly nuzzles your neck.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 bursts into tears.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 cries on %2's shoulder.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 cries on your shoulder.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 sobs quietly to %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 pokes %2 in the ribs.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 pokes you in the ribs.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 pokes %2 in the ribs, looking very sheepish.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 accuses everyone.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 looks accusingly at %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 looks accusingly at you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 seems to have a bad conscience.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 grins evilly.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 grins evilly at %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 grins evilly at you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 grins evilly to %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 grumbles something. Did you do something?} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 grumbles at %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 grumbles at you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 grumbles to %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 gothmoggles.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 gothmoggles at %2's foolishness.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 gothmoggles at your foolishness.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 gothmoggles at %2 own foolishness.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 bows deeply.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 bows before %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 bows before you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 gives a round of applause.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 gives a round of applause for %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 gives a round of applause for you!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 applaudes for himself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 blushes.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 turns %2 face from %3 and blushes.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 turns %2 face from you and blushes.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 burps loudly.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 burps in %2's face as %3 withers away.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 burps in your face, you wither from the smell.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 burps to himself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 chuckles politely.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 chuckles at %2 politely.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 chuckles at you politely.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 shows %2 approval by clapping %3 small hands together.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 claps for %2's achievements.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 claps for you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 claps for %2 own achievements.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 coughs loudly.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 coughs on %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 coughs on you. Yuck!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 coughs to %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 curtseys gracefully.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 curtseys gracefully to %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 curtseys gracefully to you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 farts rudely.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 turns %2 bottom and aims a fart at %3. OH! The smell! ARGH!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 turns %2 bottom and aims a fart at you. PU!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 flips head over heels.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 flips %2 over %3 head making %4 dizzy.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 flips you over %2 head making you dizzy.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 fondly fondles %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 fondly fondles you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 fondly fondles %2 -- this is going too far!!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 frowns.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 frowns at %2 in disapproval.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 frowns at you in disapproval.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 frowns, contemplating the problem at hand...} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 gasps in astonishment.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 gasps in amazement of %2's accomplishment.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 gasps in amazement of your accomplishment.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 gasps in amazement of %2 accomplishment.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 glares around %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 glares at %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 glares icily at you, you feel cold to your bones.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 glares at %2 feet, what is bothering %3?} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 groans loudly.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 groans at %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 groans at you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 groans loudly at %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 gropes %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 gropes you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 gropes %2, making sure of what sex %3 is.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 hiccups.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 licks %2 mouth and smiles.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 licks %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 licks you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 licks %2 -- YUCK.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 loves everyone.  Love is in the air! :)} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 whispers softly to %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 whispers to you sweet words of love.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 loves %2, can you believe it?} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 starts moaning.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 starts moaning at %2} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 starts moaning at you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 nibbles on %2's ear.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 nibbles on your ear.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 tries to nibble on %2 own ear, but comes up looking rather dumb.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 pouts.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 looks at %2 with %3 big sad eyes and POUTS!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 looks at you with %2 big sad eyes and POUTS!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 pouts to %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 purrs contentedly.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 rubs up against %2 and purrs softly.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 rubs up against you and purrs softly.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 purrs softly to %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 ruffles %2's hair playfully.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 ruffles your hair playfully.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 ruffles %2 hair -- weirdo!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 shivers uncomfortably.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 shrugs.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 shrugs at %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 shrugs at you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 starts waving %2 hands around wildly looking for someone to slap!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 slaps %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 slaps %2, really strange...} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 snaps %2 fingers.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 snaps %2 fingers at %3.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 snaps %2 fingers at you... HURRY!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 snaps %2 fingers to the beat!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 sneezes.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 sneezes in %2's face! Yuck!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 sneezes in your face! Yuck!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 sneezes on %2! Yuck!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 snickers softly.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 snickers at %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 snickers at you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 snickers to %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 sniffs sadly.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 sniffs %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 sniffs you.  How rude!!!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 sniffs %2! Eww!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 snores loudly.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 makes a snoring noise to %2, letting %3 know that %4 talk is tiresome.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 makes a snoring noise to you.  Maybe you should get to the point?!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 spits over %2 left shoulder.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 spits on %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 spits on you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 starts to spit, but sucks it back in. SLLUURRP!!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 squeezes %2 fondly.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 squeezes you fondly.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 squeezes %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 stares at the sky.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 stares dreamily at %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 stares dreamily at you, completely lost in your eyes.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 stares dreamily at %2 - NARCISSIST!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 struts proudly.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 thanks %2 heartily.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 thanks you heartily.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 thanks %2 since you won't.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 patiently twiddles %2 thumbs.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 waves.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 waves goodbye to %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 waves goodbye to you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 wiggles %2 bottom.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 wiggles %2 bottom at %3.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 wiggles %2 bottom at you.  Not bad! :)} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 wiggles %2 bottom as %3 impresses %4.  Hope it dosen't go far! :)} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 winks suggestively.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 winks at %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 winks suggestively at you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 winks at %2 -- something strange is going on...} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 gives a thumbs up!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 gives %2 the thumbs up!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 gives you the thumbs up!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 yawns.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 kisses %2 passionately.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 gives you a long and passionate kiss, it seems to take forever...} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 makes an attempt at kissing %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 combs %2 hair, what a dashing specimen!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 tries patiently to untangle %2's hair.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 pulls your hair in an attempt to comb it.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 tries to comb %2 tangled hair.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 massages %2's shoulders.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 gently massages your shoulders...ahhhhhhhhhh...} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 gives a show on yoga-positions, trying to massage %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 tickles %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 tickles you - hee hee hee.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 pats %2 on %3 head.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 pats you on your head.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 pats %2 on the head.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 swears: #@*"*&^$$%@*&!!!!!!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 swears at %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 swears at you, what did you do?} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 swears at himself.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 gets down on %2 hands and knees and starts to pray.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 begs %2 for assistance.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 begs you for assistance.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 bleeds profusely.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 bleeds all over %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 cringes in terror!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 cringes away from %2 in mortal terror.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 cringes away from you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 looks absent-minded, his eyes staring into space.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 drifts off as %2 daydreams about %3.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 appears to be gazing into the air, daydreaming about you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 grits %2 teeth and fumes with rage.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 stares at %2, fuming with rage.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 stares at you, fuming with rage!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 clenches %2 fists and stomps his feet, fuming with anger.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 grovels in the dirt.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 grovels in the dirt before %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 grovels in the dirt before you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 nudges %2 suggestively with %3 elbow.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 nudges you suggestively.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 nudges %2 with %3 elbows, making %4 look like a large chicken.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 peers around %2, uncertain of the things around %3.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 peers at %2, trying to figure %3 out.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 peers at you, trying to figure you out.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 welcomes %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 welcomes you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 points in all directions, seemingly confused.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 points at %2. Rude isn't %3?} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 points at you... how rude!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 points at %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 sinks deeply into %2 own thoughts.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 appears to be pondering what %2 might be thinking.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 appears to be pondering what you are thinking.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 starts shadow-boxing.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 punches %2 in the arm.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 punches you in the arm. OOOW!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 snarls viciously like a crazed beast.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 tries to spank the thin air with a flat hand.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 spanks %2 hard on the rear end.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 spanks you hard on the rear end.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 lets out a lot of steam, much to your relief.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 starts running around %2 in a desparate attempt to tackle the air.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 ruthlessly tackles %2, pinning %3 to the ground.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 suddenly lunges at you and tackles you to the ground!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 makes a dextrous move and kicks %2 left leg away with %3 right.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 taunts something that seems to be right in front of %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 taunts %2 rather insultingly.  %3 seems to enjoy it tremendously.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 taunts you.  It really hurts your feelings.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 taunts %2 to tears.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 sinks deeply into thought, but seems to be a little lost.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 stops and thinks about %2, completely lost in thought.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 thinks about %2 for a change.....(?)} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 whines about life.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 whines at %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 whines at you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 seems to be whining to %2 silently..} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 falls to %2 knees and worships the ground before %3.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 falls to %2 knees, worshipping %3 with uncanny dedication.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 kneels before you, worshipping the ground you walk on.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 falls to %2 knees and humbly worships %3.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 starts a yodelling session that goes right to the bone.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 will be right back!} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 rolls %2 eyes in disgust.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 looks at %2 and rolls %3 eyes with disgust.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 looks at you and rolls %2 eyes in disgust.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 rolls %2 eyes, disgusted with %3.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 flirts outragously.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 flirts outrageously with %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 flirts outrageously with you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 thinks %2 is the most wonderful person in the world.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 reaches out for an embrace, but no one is there.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 embraces %2 warmly.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 embraces you warmly.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 wraps %2 arms around %3 for a warm self-embrace.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 gently strokes %2's inner thigh... hmm...} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 gently strokes your inner thigh with feathery touches.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 starts to do something disgusting and then stops.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 greets %2 with a light kiss on %3 cheek.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 greets you with a light kiss on your cheek.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 greets %2.. %3 always was a strange one.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 starts to drool.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 drools all over %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 drools all over you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 drools on %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 cheers.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 cheers for %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 cheers for you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 blows kisses in the wind.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 kisses %2.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+#action {^%1 kisses you.} {#var {soccolor} {<F4A5A6B>};#var {soctmp} {%0};socadd} {6}
+
+#class {socials} {close}
