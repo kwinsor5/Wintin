@@ -1,0 +1,19 @@
+#nop {Fuzzy - converted from jmc3714/fuzzy.set}
+
+#variable {food} {way}
+#variable {foodsource} {all}
+#variable {drink} {flask}
+#variable {leader} {Lori}
+#variable {target} {troll}
+
+#alias {at} {ambush troll}
+#alias {aw} {ambush wolf}
+#alias {qq} {un heavydoor;op heavydoor}
+#alias {buff} {rem spear;wie sword;wea shield;rem all.ivory;wear all.medallion;rem all.bracelet;wear all.bracer;rem belt;wear 2.belt;rem crown;wear cowl;rem fur;wear sash}
+#alias {hit} {rem sword;rem shield;wie spear;rem all.medallion;wear all.ivory;rem all.bracer;wear all.bracelet;rem sash;wear fur;rem belt;wear 2.belt;rem cowl;wear crown}
+#alias {cotton} {rem all.mail;wear all.cotton;wear 2.boots;wear shiny}
+#alias {metal} {rem all.cotton;rem crown;rem boots;rem sleeves;wear all.mail}
+#alias {v} {bash $target}
+#alias {vv} {bash 2.$target}
+
+#action {You have been} {afk} {5}

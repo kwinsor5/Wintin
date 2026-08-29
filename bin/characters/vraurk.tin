@@ -1,0 +1,70 @@
+#nop {Vraurk - converted from jmc3714/vraurk.set}
+
+#variable {food} {meat}
+#variable {foodsource} {all}
+#variable {drink} {flask}
+#variable {leader} {Skagrat}
+#variable {target} {troll}
+
+#alias {aa} {cl heavydoor;lock heavydoor}
+#alias {qq} {un heavydoor;op heavydoor}
+#alias {cotton} {wear crown;wear boots;rem all.obsidian}
+#alias {metal} {wear all.obsidian}
+#alias {stab} {rem hammer;wie dragon}
+#alias {rs} {rem shield}
+#alias {wsh} {wear shield}
+#alias {kt} {k troll}
+#alias {kw} {k wolf}
+#alias {k2} {k 2.$target}
+#alias {v} {bash $target}
+#alias {vv} {bash 2.$target}
+#alias {z} {cas 'curse' $target}
+
+#alias {autobashon} {#action {has recovered from a bash!} {bash}}
+#alias {autobashoff} {#unaction {has recovered from a bash!}}
+
+#alias {autoattackon}
+{
+    #action {A hunched forest troll moves around here, arms dragging on the ground.} {k troll};
+    #action {A cave troll is standing here, pounding his two huge fists together.} {k troll};
+    #action {A large grey troll grumbles ominously here.} {k troll};
+    #action {A ferocious-looking troll stands vigil here.} {k troll};
+    #action {A massive mirkwolf stares at you through blood red eyes.} {k wolf};
+    #action {A huge mirkwolf tenses its massive frame in readiness.} {k wolf};
+    #action {A large white wolf stands here.} {k wolf};
+    #action {A thin warg crouches here cautiously.} {k warg};
+    #action {An evil, black warg paces around the clearing.} {k warg};
+    #action {A ferocious warg stands here, snarling maliciously.} {k warg};
+    #action {A trained warg waits here for an order from its masters.} {k warg};
+    #action {A large grizzly bear with golden fur stands here.} {k bear};
+    #action {A gigantic crystalline worm emerges from the dark soil.} {k worm};
+    #action {A massive crystalline crawler stalks around in search of food.} {k crawler};
+    #action {A huge tiger beetle stands here drooling at the mouth.} {k tiger};
+    #action {A large black snake is coiled up here, gazing at you intently.} {k snake};
+    #action {A large white scorpion carefully searches the area as it tracks its prey.} {k scorpion};
+    #action {A massive silvery toad stares at you with hunger in its eyes.} {k toad}
+}
+
+#alias {autoattackoff}
+{
+    #unaction {A hunched forest troll moves around here, arms dragging on the ground.};
+    #unaction {A cave troll is standing here, pounding his two huge fists together.};
+    #unaction {A large grey troll grumbles ominously here.};
+    #unaction {A ferocious-looking troll stands vigil here.};
+    #unaction {A massive mirkwolf stares at you through blood red eyes.};
+    #unaction {A huge mirkwolf tenses its massive frame in readiness.};
+    #unaction {A large white wolf stands here.};
+    #unaction {A thin warg crouches here cautiously.};
+    #unaction {An evil, black warg paces around the clearing.};
+    #unaction {A ferocious warg stands here, snarling maliciously.};
+    #unaction {A trained warg waits here for an order from its masters.};
+    #unaction {A large grizzly bear with golden fur stands here.};
+    #unaction {A gigantic crystalline worm emerges from the dark soil.};
+    #unaction {A massive crystalline crawler stalks around in search of food.};
+    #unaction {A huge tiger beetle stands here drooling at the mouth.};
+    #unaction {A large black snake is coiled up here, gazing at you intently.};
+    #unaction {A large white scorpion carefully searches the area as it tracks its prey.};
+    #unaction {A massive silvery toad stares at you with hunger in its eyes.}
+}
+
+#action {Ufdirg says 'bash'} {bash} {5}

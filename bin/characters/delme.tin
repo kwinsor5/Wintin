@@ -1,0 +1,12 @@
+#nop {Delme - converted from jmc3714/delme.set}
+
+#variable {food} {loaf}
+#variable {foodsource} {all}
+#variable {drink} {skin}
+#variable {leader} {statue}
+#variable {target} {naerling}
+
+#alias {a} {cas 'cone of cold' $target}
+#alias {aa} {cas 'chill ray' $target}
+#alias {h} {cas 'hallucinate' $target}
+#alias {z} {cas 'curse' $target}

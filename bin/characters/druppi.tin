@@ -1,0 +1,18 @@
+#nop {Druppi - converted from jmc3714/druppi.set}
+
+#variable {food} {way}
+#variable {foodsource} {all}
+#variable {drink} {skin}
+#variable {leader} {hardy}
+#variable {target} {olog}
+
+#alias {aa} {cl heavydoor;lock heavydoor}
+#alias {qq} {un heavydoor;op heavydoor}
+#alias {buff} {rem spear;wie sword;wea shield;rem all.ivory;wear all.medallion;rem all.bracelet;wear all.bracer;rem belt;wear 2.belt;rem crown;wear cowl;rem fur;wear sash}
+#alias {hit} {rem sword;rem shield;wie spear;rem all.medallion;wear all.ivory;rem all.bracer;wear all.bracelet;rem sash;wear fur;rem belt;wear 2.belt;rem cowl;wear crown}
+#alias {cotton} {rem all.obsidian;wear crown;wear 2.boots;wear spiked}
+#alias {metal} {rem crown;rem boots;rem spiked;wear all.obsidian}
+#alias {v} {bash $target}
+#alias {vv} {bash 2.$target}
+
+#action {You have been} {afk} {5}

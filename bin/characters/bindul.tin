@@ -1,0 +1,22 @@
+#nop {Bindul - converted from jmc3714/bindul.set}
+
+#variable {food} {way}
+#variable {foodsource} {all}
+#variable {drink} {water}
+#variable {leader} {Cirion}
+#variable {target} {troll}
+
+#alias {cotton} {wear all.cotton;wear crown;wear boots}
+#alias {metal} {wear all.chain}
+#alias {h} {cas 'hallucinate' $target}
+#alias {hh} {cas 'hallucinate' 2.$target}
+#alias {qq} {cas 'poison' $target}
+#alias {z} {cas 'curse' $target}
+#alias {v} {bash $target}
+#alias {kw} {k wolf}
+
+#alias {autobashon} {#action {has recovered from a bash!} {bash}}
+#alias {autobashoff} {#unaction {has recovered from a bash!}}
+
+#action {has recovered from a bash!} {bash} {5}
+#action {To your relief a tall, hardy bear has rescued you.} {q} {5}

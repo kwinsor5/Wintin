@@ -1,0 +1,10 @@
+#nop {Renion - converted from jmc3714/renion.set}
+
+#variable {food} {way}
+#variable {foodsource} {all}
+#variable {drink} {skin}
+#variable {target} {uruk}
+
+#alias {aa} {cas 'chill ray' $target}
+#alias {cotton} {rem all.chain;rem winged;wear all.cotton;wear all.shiny;wear garland}
+#alias {metal} {rem all.cotton;rem garland;rem all.shiny;wear all.chain;wear winged}

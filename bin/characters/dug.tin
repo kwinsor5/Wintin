@@ -1,0 +1,13 @@
+#nop {Dug - converted from jmc3714/dug.set}
+
+#variable {food} {meat}
+#variable {foodsource} {all}
+#variable {drink} {flask}
+#variable {leader} {statue}
+#variable {target} {dwarf}
+
+#alias {cotton} {wear all.cotton;wear boots;wear cap}
+#alias {metal} {wear all.metal}
+#alias {k2} {k 2.$target}
+#alias {v} {bash $target}
+#alias {z} {cas 'curse' $target}

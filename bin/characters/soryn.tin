@@ -1,0 +1,5 @@
+#nop {Soryn - jmc3714/soryn.set held only JMC client settings, no profile content.}
+
+#variable {food} {way}
+#variable {foodsource} {all}
+#variable {drink} {skin}

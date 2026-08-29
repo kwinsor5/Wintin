@@ -1,0 +1,22 @@
+#nop {Thrak - converted from jmc3714/thrak.set}
+
+#variable {food} {meat}
+#variable {foodsource} {all}
+#variable {drink} {flask}
+#variable {leader} {Des}
+#variable {target} {zog}
+
+#alias {a} {cas 'searing darkness' $target}
+#alias {aa} {cas 'chill ray' $target}
+#alias {z} {cas 'curse' $target}
+#alias {at} {ambush troll}
+#alias {aw} {ambush wolf}
+#alias {qq} {un stonedoor;op stonedoor}
+#alias {cotton} {rem all.chain;wear padded}
+#alias {metal} {wear all.chain}
+#alias {stab} {wie pale;wear banner}
+#alias {wb} {rem shield;wie bow;wear quiver}
+#alias {reload} {rem quiver;g all.arrow pack;pu all.arrow quiver;wear quiver}
+#alias {k2} {k 2.$target}
+#alias {v} {bash $target}
+#alias {vv} {bash 2.$target}

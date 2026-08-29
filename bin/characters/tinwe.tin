@@ -1,0 +1,16 @@
+#nop {Tinwe - converted from jmc3714/tinwe.set}
+
+#variable {food} {way}
+#variable {foodsource} {all}
+#variable {drink} {flask}
+#variable {leader} {Chiller}
+#variable {target} {drake}
+
+#alias {a} {cas 'chill ray' $target}
+#alias {aa} {cas 'chill ray' $target}
+#alias {m} {cas 'magic missile' $target}
+#alias {cotton} {rem all.obs;wear grey}
+#alias {metal} {wear all.obs}
+#alias {kb} {k bear}
+#alias {kw} {k wolf}
+#alias {v} {bash $target}

@@ -1,0 +1,19 @@
+#nop {Samaf - converted from jmc3714/samaf.set}
+
+#variable {food} {meat}
+#variable {foodsource} {all}
+#variable {drink} {flask}
+#variable {leader} {statue}
+#variable {target} {uruk}
+
+#alias {a} {cas 'spear of darkness' $target}
+#alias {aa} {cas 'word of agony' $target}
+#alias {b} {cas 'black arrow' $target}
+#alias {m} {cas 'word of pain' $target}
+#alias {z} {cas 'curse' $target}
+#alias {qq} {un stonedoor;op stonedoor}
+#alias {cotton} {rem all.chain;wear all.cotton;wear 2.boots;wear mask;wear shiny}
+#alias {metal} {rem all.cotton;rem shiny;rem mask;rem boots;wear all.chain}
+#alias {stab} {rem hammer;wie dragon}
+#alias {k2} {k 2.$target}
+#alias {v} {bash $target}

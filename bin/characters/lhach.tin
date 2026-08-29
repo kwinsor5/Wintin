@@ -1,0 +1,14 @@
+#nop {Lhach - converted from jmc3714/lhach.set}
+
+#variable {food} {way}
+#variable {foodsource} {all}
+#variable {drink} {skin}
+#variable {leader} {Baiken}
+#variable {target} {olog}
+
+#alias {a} {cas 'fireball' $target}
+#alias {aa} {cas 'chill ray' $target}
+#alias {m} {cas 'magic missile' $target}
+#alias {cotton} {wear all.cotton;wear all.shiny;wear garland}
+#alias {metal} {wear all.chain}
+#alias {v} {bash $target}

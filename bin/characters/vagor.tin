@@ -1,0 +1,23 @@
+#nop {Vagor - converted from jmc3714/vagor.set}
+
+#variable {food} {meat}
+#variable {foodsource} {all}
+#variable {drink} {flask}
+#variable {leader} {outcast}
+#variable {target} {haradrim}
+
+#alias {aa} {cl heavydoor;lock heavydoor}
+#alias {qq} {un heavydoor;op heavydoor}
+#alias {at} {ambush troll}
+#alias {kb} {k bear}
+#alias {cotton} {rem all.chain;rem all.mithril;wear all.cotton;wear 2.boots;wear mask;wear shiny}
+#alias {metal} {rem all.cotton;rem shiny;rem mask;rem boots;wear all.chain;wear all.mithril}
+#alias {stab} {rem hammer;wie dragon}
+#alias {butch} {wie lancet;rs;but;wie pale}
+#alias {mine} {gr pickaxe;gr eye;g all;pu all.gem sac;pu all.nug sac}
+#alias {rs} {rem shield}
+#alias {wsh} {wear shield}
+#alias {k2} {k 2.$target}
+#alias {v} {bash $target}
+#alias {vv} {bash 2.$target}
+#alias {z} {cas 'curse' $target}

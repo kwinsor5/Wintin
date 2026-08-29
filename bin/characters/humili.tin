@@ -1,0 +1,21 @@
+#nop {Humili - converted from jmc3714/humili.set}
+
+#variable {food} {way}
+#variable {foodsource} {all}
+#variable {drink} {flask}
+#variable {leader} {Harald}
+#variable {target} {goblin}
+
+#alias {a} {cas 'lightning strike' $target}
+#alias {aa} {cas 'chill ray' $target}
+#alias {jj} {cas 'cone of cold' $target}
+#alias {m} {cas 'magic missile' $target}
+#alias {v} {bash $target}
+
+#alias {11} {un heavydoor;op heavydoor}
+#alias {22} {cl heavydoor;lock heavydoor}
+#alias {cotton} {wear all.cotton;wear boots}
+#alias {metal} {wear all.obs;wear helm}
+
+#action {attacks Nina!} {resc nina} {5}
+#action {You have been idle} {afk} {5}

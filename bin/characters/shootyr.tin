@@ -1,0 +1,33 @@
+#nop {Shootyr - converted from jmc3714/shotyr.set}
+
+#variable {food} {way}
+#variable {foodsource} {all}
+#variable {drink} {skin}
+#variable {leader} {Kurgen}
+#variable {target} {man}
+
+#alias {ab} {ambush bear}
+#alias {ag} {ambush goblin}
+#alias {at} {ambush troll}
+#alias {aw} {ambush wolf}
+#alias {qq} {cl twistedgate;lock twistedgate}
+#alias {buff} {rem spear;wie sword;wea shield;rem all.ivory;wear all.medallion;rem all.bracelet;wear all.bracer;rem belt;wear 2.belt;rem crown;wear cowl;rem fur;wear sash}
+#alias {hit} {rem sword;rem shield;wie spear;rem all.medallion;wear all.ivory;rem all.bracer;wear all.bracelet;rem sash;wear fur;rem belt;wear 2.belt;rem cowl;wear crown}
+#alias {cotton} {rem all.chain;rem all.mithril;wear all.cotton;wear 2.boots;wear shiny}
+#alias {metal} {rem all.cotton;rem crown;rem boots;rem sleeves;wear all.chain;wear all.mithril}
+#alias {bow} {rem shield;wie bow;wear quiver}
+#alias {dagger} {wie dragon;wear sash}
+#alias {rs} {rem shield}
+#alias {wsh} {wear shield}
+#alias {v} {bash $target}
+#alias {vv} {bash 2.$target}
+
+#action {You have been} {afk} {5}
+#action {You attack} {aa} {5}
+#action {You leap} {aa} {5}
+#action {You turn to face your next enemy.} {aa} {5}
+#action {attacks Elmer!} {resc elmer} {5}
+#action {attacks Momo!} {resc momo} {5}
+#action {attacks Gwildor!} {resc gwildor} {5}
+
+#action {^Str: %1/%2, Int: %3/%4, Wil: %5/%6, Dex: %7/%8, Con: %9/%10, Lea: %11/%12.} {#math {statsum} {%1 + %3 + %5 + %7 + %9 + %11};#showme {<faa>Stat Sum: $statsum}} {5}

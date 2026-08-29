@@ -1,0 +1,17 @@
+#config {COMMAND ECHO} {ON}
+#config {INHERITANCE} {ON}
+
+#nop {Maximise to whichever screen the window opened on. The terminal resizes}
+#nop {asynchronously, so relayout runs again from the SCREEN RESIZE event that}
+#nop {follows; global.tin also schedules one as insurance.}
+
+#screen {maximize}
+
+#nop {No #split here - global.tin's relayout owns the screen layout.}
+
+#nop {Read into the startup session so aliases exist before login, and again into}
+#nop {the game session so telnet/MSDP events register where the data arrives.}
+
+#read {global.tin}
+
+#session {ReturnOfTheShadow} {rotsmud.org} {3791} {global.tin}

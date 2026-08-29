@@ -1,0 +1,542 @@
+#nop {Global configuration. Loaded for every session, before any character file.}
+#nop {Character files are loaded after login and override the variables below.}
+
+#nop {=== Variables (fallbacks; character files should override) ===}
+
+#variable {food} {way}
+#variable {foodsource} {all}
+#variable {drink} {skin}
+
+#nop {=== Triggers ===}
+
+#action {You are hungry.} {get $food $foodsource;eat $food} {5}
+#action {You are thirsty.} {#2 {drink $drink}} {5}
+
+#nop {No default leader: an empty value would make these patterns match any line.}
+
+#action {$leader attacks} {assist $leader} {5}
+#action {$leader leaps} {assist $leader} {5}
+#action {$leader mounts} {ride} {5}
+#action {$leader stops riding} {dism} {5}
+
+#nop {=== Aliases ===}
+
+#nop {Parameterised target selection replaces the per-mob aliases used in JMC.}
+#alias {targ} {#var {target} {%1}}
+
+#alias {j} {k $target}
+#alias {jj} {k 2.$target}
+#alias {jjj} {k 3.$target}
+#alias {q} {assist $leader}
+
+#alias {autofleeon} {#action {PANIC!} {flee}}
+#alias {autofleeoff} {#unaction {PANIC!}}
+
+#alias {rescueon} {#action {turns to fight %1!} {rescue %1}}
+#alias {rescueoff} {#unaction {turns to fight %1!}}
+#alias {rescon} {rescueon}
+#alias {rescoff} {rescueoff}
+
+#nop {=== Substitutions ===}
+
+#nop {Room-exit annotations, toggled on demand.}
+
+#alias {farothon} {#substitute {Taur-en-Faroth} {Taur-en-Faroth: en M:swwnnwnw C:nwnwnnnn}}
+#alias {farothoff} {#unsubstitute {Taur-en-Faroth}}
+
+#alias {valeon} {#substitute {Accursed Vale} {Accursed Vale    Exits are: N E - Entrance: nwsew};#substitute {Dim Vale} {Dim Vale    Exits are: S W - Entrance: snnw};#substitute {Entrance to the Hidden Vale} {Entrance to the Hidden Vale    Exits are: E W - Entrance: };#substitute {Leaving the Hidden Vale} {Leaving the Hidden Vale    Exits are: E W - Entrance: wnnnnww}}
+#alias {valeoff} {#unsubstitute {Accursed Vale};#unsubstitute {Dim Vale};#unsubstitute {Entrance to the Hidden Vale};#unsubstitute {Leaving the Hidden Vale}}
+
+#nop {=== Highlights ===}
+
+#nop {JMC black backgrounds are dropped; the terminal background is grey.}
+
+#highlight {HP: %1/%2 } {red}
+#highlight {S: %1/%2 } {light blue}
+#highlight {MV: %1/%2]} {green}
+
+#highlight {%1 appears to be confused!} {magenta}
+#highlight {%1 nervously glances around in confusion!} {green}
+#highlight {You gain a rush of momentum!} {light blue}
+#highlight {You stagger %1 with your crushing blow!} {light cyan}
+#highlight {You hunker down behind your shield.} {yellow}
+
+#highlight {%1 attacks a war orc!} {magenta}
+#highlight {%1 attacks an orcish lieutenant!} {magenta}
+#highlight {A heavily built and tattooed war orc sneers at you.} {Ebony}
+#highlight {An orcish lieutenant stands at attention here.} {Ebony}
+
+#highlight {A %1 looks healthy.} {magenta}
+#highlight {A %1 has some scratches.} {magenta}
+#highlight {A %1 has some bruises.} {magenta}
+#highlight {A %1 has a lot of wounds.} {magenta}
+#highlight {A %1 is almost dead.} {magenta}
+#highlight {An %1 looks healthy.} {magenta}
+#highlight {An %1 has some scratches.} {magenta}
+#highlight {An %1 has some bruises.} {magenta}
+#highlight {An %1 is somewhat hurt.} {magenta}
+#highlight {An %1 has a lot of wounds.} {magenta}
+#highlight {An %1 is almost dead.} {magenta}
+
+#highlight {A huge boulder looks as though it could fall at any moment.} {light red}
+#highlight {A huge boulder leans dangerously close to the edge and will fall any second.} {light red}
+
+#nop {Channel colouring, replacing the JMC #woutput windows.}
+
+#highlight {You tell %1} {blue}
+#highlight {%1 tells you '%2} {blue}
+#highlight {You narrate '%1} {magenta}
+#highlight {%1 narrates '%2} {magenta}
+#highlight {You chat '%1} {yellow}
+#highlight {%1 chats '%2} {yellow}
+#highlight {You say '%1} {cyan}
+#highlight {%1 says '%2} {cyan}
+#highlight {You group-say '%1} {red}
+#highlight {%1 group-says '%2} {red}
+#highlight {You yell '%1} {blue}
+#highlight {%1 yells '%2} {blue}
+
+#nop {=== Events ===}
+
+#nop {The server pushes MSDP CHARACTER_NAME once the character enters the game.}
+#nop {Killing the class first keeps one character's settings from leaking into another.}
+
+#alias {loadchar} {#class {character} {kill};#class {character} {read} {characters/%1.tin};#showme {<afa>Loaded profile: %1}}
+
+#event {IAC SB MSDP CHARACTER_NAME} {#showme {<afa>MSDP character: %1};loadchar %1}
+
+#nop {=== Panels ===}
+
+#nop {A boxed column down the right hand side, split in half: socials in the top}
+#nop {box, MSDP in the bottom box. Either half can be turned off, in which case the}
+#nop {other takes the whole column.}
+
+#nop {The column is kept still by #screen scrollregion, NOT by #split. #split runs}
+#nop {"#screen fill default" every time it is applied, which erases the right hand}
+#nop {bar; a scroll region confines both the scrolling and the repainting to the}
+#nop {square holding the main feed and never touches anything outside it.}
+
+#nop {Mouse tracking is on so that the wheel is handled here rather than by mintty.}
+#nop {Scrolling mintty's own scrollback would move the whole screen, panels and all.}
+#nop {Hold shift to select text with the mouse while tracking is on.}
+
+#config {MOUSE} {ON}
+
+#variable {socpanel} {1}
+#variable {msdppanel} {1}
+#variable {pancols} {60}
+#variable {sochist} {300}
+#variable {panscrolllines} {3}
+
+#nop {Geometry, all recomputed by relayout.}
+
+#variable {panleft} {1}
+#variable {pancol} {1}
+#variable {panwidth} {1}
+#variable {panfmt} {%-58.58s}
+#variable {pannfmt} {%-22.22s}
+#variable {panvfmt} {%-35.35s}
+#variable {panblank} {}
+#variable {socboxtop} {0}
+#variable {socboxbot} {0}
+#variable {msdpboxtop} {0}
+#variable {msdpboxbot} {0}
+
+#variable {soctop} {2}
+#variable {soccap} {1}
+#variable {socview} {0}
+#variable {soclog} {}
+#variable {soctmp} {}
+#variable {soccolor} {}
+
+#nop {msdp must exist as a table before the panel draws, or *msdp[] does not}
+#nop {expand and #foreach iterates the literal text. Re-reading global.tin mid}
+#nop {session therefore clears the cache; it refills on the next server update.}
+
+#variable {msdp} {}
+
+#variable {msdptop} {2}
+#variable {msdpcap} {1}
+#variable {msdpview} {0}
+#variable {msdprow} {1}
+#variable {msdpval} {}
+#variable {msdpsub} {}
+
+#alias {relayout}
+{
+	#screen {get} {ROWS} {layrows};
+	#screen {get} {COLS} {laycols};
+	#math {panbot} {$layrows - 1};
+	#math {panleft} {$laycols - $pancols + 1};
+	#if {$socpanel == 1 || $msdppanel == 1}
+	{
+		#math {scrollright} {$panleft - 1};
+		#screen {scrollregion} {1} {1} {$panbot} {$scrollright}
+	}
+	{
+		#screen {scrollregion} {0} {0} {0} {0}
+	};
+	#screen {clear} {ALL};
+	#math {pancol} {$panleft + 1};
+	#math {panwidth} {$pancols - 2};
+	#math {pannw} {$panwidth / 2};
+	#if {$pannw > 22} {#var {pannw} {22}};
+	#math {panvw} {$panwidth - $pannw - 1};
+	#var {panfmt} {%-${panwidth}.${panwidth}s};
+	#var {pannfmt} {%-${pannw}.${pannw}s};
+	#var {panvfmt} {%-${panvw}.${panvw}s};
+	#format {panblank} {$panfmt} { };
+	#math {panmid} {$layrows / 2};
+	#var {socboxtop} {0};
+	#var {socboxbot} {0};
+	#var {msdpboxtop} {0};
+	#var {msdpboxbot} {0};
+	#if {$socpanel == 1 && $msdppanel == 1}
+	{
+		#var {socboxtop} {1};
+		#var {socboxbot} {$panmid};
+		#var {msdpboxtop} {$panmid};
+		#var {msdpboxbot} {$panbot}
+	};
+	#if {$socpanel == 1 && $msdppanel == 0}
+	{
+		#var {socboxtop} {1};
+		#var {socboxbot} {$panbot}
+	};
+	#if {$socpanel == 0 && $msdppanel == 1}
+	{
+		#var {msdpboxtop} {1};
+		#var {msdpboxbot} {$panbot}
+	};
+	#if {$socpanel == 1}
+	{
+		#math {soctop} {$socboxtop + 1};
+		#math {soccap} {$socboxbot - $socboxtop - 1}
+	};
+	#if {$msdppanel == 1}
+	{
+		#math {msdptop} {$msdpboxtop + 1};
+		#math {msdpcap} {$msdpboxbot - $msdpboxtop - 1}
+	};
+	#var {socview} {0};
+	#var {msdpview} {0};
+	pandraw
+}
+
+#nop {pandraw repaints the borders and both halves without touching geometry.}
+
+#alias {pandraw}
+{
+	#if {$socpanel == 1}
+	{
+		#draw {box} {$socboxtop} {$panleft} {$socboxbot} {$laycols};
+		#line {ignore} {#showme {<ffa>[ Socials ]} {$socboxtop} {$pancol}};
+		socdraw
+	};
+	#if {$msdppanel == 1}
+	{
+		#draw {box} {$msdpboxtop} {$panleft} {$msdpboxbot} {$laycols};
+		#line {ignore} {#showme {<ffa>[ MSDP ]} {$msdpboxtop} {$pancol}};
+		msdpdraw
+	}
+}
+
+#nop {The terminal keeps resizing for a moment after #screen maximize, so settle}
+#nop {first and lay out once rather than fighting each intermediate size.}
+
+#event {SCREEN RESIZE} {#delay {panresize} {relayout} {0.4}}
+
+#nop {A cheap safety net: at most one repaint per second while output is arriving.}
+
+#variable {panpending} {0}
+
+#event {RECEIVED LINE}
+{
+	#if {$panpending == 0}
+	{
+		#var {panpending} {1};
+		#delay {1.0} {#var {panpending} {0};pandraw}
+	}
+}
+
+#nop {=== Mouse wheel: each region scrolls on its own ===}
+
+#nop {%0 is the row and %1 the column the pointer was over. Left of the column is}
+#nop {the main feed, which uses tintin's own scrollback - that repaints inside the}
+#nop {scroll region only, so the panels do not move with it.}
+
+#variable {panmrow} {1}
+#variable {panmcol} {1}
+
+#event {SCROLLED MOUSE WHEEL UP}   {#var {panmrow} {%0};#var {panmcol} {%1};panscrollup}
+#event {SCROLLED MOUSE WHEEL DOWN} {#var {panmrow} {%0};#var {panmcol} {%1};panscrolldown}
+
+#alias {panscrollup}
+{
+	#if {$panmcol < $panleft} {#buffer {up} {$panscrolllines}};
+	#if {$panmcol >= $panleft && $socpanel == 1 && $panmrow <= $socboxbot} {socscrollup};
+	#if {$panmcol >= $panleft && $msdppanel == 1 && $panmrow > $socboxbot} {msdpscrollup}
+}
+
+#alias {panscrolldown}
+{
+	#if {$panmcol < $panleft} {#buffer {down} {$panscrolllines}};
+	#if {$panmcol >= $panleft && $socpanel == 1 && $panmrow <= $socboxbot} {socscrolldown};
+	#if {$panmcol >= $panleft && $msdppanel == 1 && $panmrow > $socboxbot} {msdpscrolldown}
+}
+
+#nop {Keyboard equivalents for the main feed, in case mouse tracking is unwanted.}
+
+#alias {feedtop} {#buffer {home}}
+#alias {feedend} {#buffer {end}}
+
+#nop {=== MSDP: bottom half of the right column ===}
+
+#nop {The server only pushes variables whose value changed, so the panel cannot be}
+#nop {a log of the last thing that arrived. Every variable is stored in $msdp[NAME]}
+#nop {and the panel is a full redraw of that table: every variable that has a value}
+#nop {keeps its own row, and an update only repaints the row it changed.}
+#nop {*msdp[] is the list of variable NAMES; $msdp[] would return the values.}
+#nop {#line ignore stops the panel's own output from being fed back into triggers.}
+
+#event {IAC SB MSDP} {#var {msdp[%0]} {%1};#if {$msdppanel == 1} {msdpdraw}}
+
+#event {IAC WILL MSDP} {#showme {<ffa>MSDP: server offered WILL MSDP}}
+#event {IAC DO MSDP} {#showme {<ffa>MSDP: client replied DO MSDP}}
+
+#nop {MSDP tables arrive as nested tables, so $msdp[NAME] renders with braces.}
+#nop {Truncating that with #format can cut between a { and its }, which tintin}
+#nop {reports as "GET BRACED ARGUMENT: UNMATCHED BRACE" once per redraw. msdpflat}
+#nop {turns a table into plain "key=value key=value" text and shows any deeper}
+#nop {nesting as (...), so the value handed to #format never contains a brace.}
+
+#alias {msdpflat}
+{
+	#var {msdpval} {$msdp[$msdpname]};
+	#if {&msdp[$msdpname][] > 0}
+	{
+		#var {msdpval} {};
+		#foreach {*msdp[$msdpname][]} {msdpkey}
+		{
+			#var {msdpsub} {$msdp[$msdpname][$msdpkey]};
+			#if {&msdp[$msdpname][$msdpkey][] > 0} {#var {msdpsub} {(...)}};
+			#var {msdpval} {$msdpval$msdpkey=$msdpsub }
+		}
+	}
+}
+
+#alias {msdpdraw}
+{
+	#if {$msdppanel == 1}
+	{
+		#var {msdprow} {0};
+		#var {msdpidx} {0};
+		#foreach {*msdp[]} {msdpname}
+		{
+			#if {"$msdp[$msdpname]" != ""}
+			{
+				#math {msdpidx} {$msdpidx + 1};
+				#if {$msdpidx > $msdpview && $msdprow < $msdpcap}
+				{
+					msdpflat;
+					#math {msdprow} {$msdprow + 1};
+					#format {msdpn} {$pannfmt} {$msdpname};
+					#format {msdpv} {$panvfmt} {$msdpval};
+					#math {msdpline} {$msdptop + $msdprow - 1};
+					#line {ignore} {#showme {<fca>$msdpn <afa>$msdpv} {$msdpline} {$pancol}}
+				}
+			}
+		};
+		#while {$msdprow < $msdpcap}
+		{
+			#math {msdprow} {$msdprow + 1};
+			#math {msdpline} {$msdptop + $msdprow - 1};
+			#line {ignore} {#showme {$panblank} {$msdpline} {$pancol}}
+		}
+	}
+}
+
+#nop {msdpview is how many variables are hidden above the top of the box.}
+
+#alias {msdpcount}
+{
+	#var {msdptotal} {0};
+	#foreach {*msdp[]} {msdpname} {#if {"$msdp[$msdpname]" != ""} {#math {msdptotal} {$msdptotal + 1}}}
+}
+
+#alias {msdpscrollup}
+{
+	#math {msdpview} {$msdpview - $panscrolllines};
+	#if {$msdpview < 0} {#var {msdpview} {0}};
+	msdpdraw
+}
+
+#alias {msdpscrolldown}
+{
+	msdpcount;
+	#math {msdpmax} {$msdptotal - $msdpcap};
+	#if {$msdpmax < 0} {#var {msdpmax} {0}};
+	#math {msdpview} {$msdpview + $panscrolllines};
+	#if {$msdpview > $msdpmax} {#var {msdpview} {$msdpmax}};
+	msdpdraw
+}
+
+#alias {msdpon} {#var {msdppanel} {1};relayout}
+#alias {msdpoff} {#var {msdppanel} {0};relayout}
+
+#alias {msdpvars} {#showme {<ffa>Captured MSDP variables:};#showme {*msdp[]}}
+
+#nop {=== Socials: top half of the right column ===}
+
+#nop {A rolling log of every social - mine and other players' - oldest at the top,}
+#nop {keeping $sochist lines of history that the wheel scrolls back through. The}
+#nop {lines still print in the main window with their usual highlight colours.}
+#nop {socadd takes its input from $soccolor and $soctmp rather than from arguments,}
+#nop {so player text containing braces or semicolons can never be reparsed.}
+#nop {Lines are wrapped and padded to the panel width as they are added, so a}
+#nop {redraw is a straight overwrite of each row with no leftover tails.}
+
+#alias {socadd}
+{
+	#format {socwrap} {%w} {{$soctmp}{$panwidth}};
+	#foreach {$socwrap[]} {socpiece}
+	{
+		#format {socpad} {$panfmt} {$socpiece};
+		#list {soclog} {add} {$soccolor$socpad};
+		#if {$socview > 0} {#math {socview} {$socview + 1}}
+	};
+	#while {&soclog[] > $sochist}
+	{
+		#list {soclog} {delete} {1};
+		#if {$socview > 0} {#math {socview} {$socview - 1}}
+	};
+	socdraw
+}
+
+#nop {socview is how many lines are hidden below the bottom of the box, so 0 is}
+#nop {the live view and new socials keep their place when scrolled back.}
+
+#alias {socdraw}
+{
+	#if {$socpanel == 1}
+	{
+		#math {socfirst} {&soclog[] - $soccap - $socview + 1};
+		#if {$socfirst < 1} {#var {socfirst} {1}};
+		#var {socrow} {0};
+		#while {$socrow < $soccap}
+		{
+			#math {socrow} {$socrow + 1};
+			#math {socline} {$soctop + $socrow - 1};
+			#math {socidx} {$socfirst + $socrow - 1};
+			#var {soctext} {$panblank};
+			#if {$socidx <= &soclog[]} {#var {soctext} {$soclog[$socidx]}};
+			#line {ignore} {#showme {$soctext} {$socline} {$pancol}}
+		}
+	}
+}
+
+#alias {socscrollup}
+{
+	#math {socmax} {&soclog[] - $soccap};
+	#if {$socmax < 0} {#var {socmax} {0}};
+	#math {socview} {$socview + $panscrolllines};
+	#if {$socview > $socmax} {#var {socview} {$socmax}};
+	socdraw
+}
+
+#alias {socscrolldown}
+{
+	#math {socview} {$socview - $panscrolllines};
+	#if {$socview < 0} {#var {socview} {0}};
+	socdraw
+}
+
+#alias {socon} {#var {socpanel} {1};relayout}
+#alias {socoff} {#var {socpanel} {0};relayout}
+#alias {socclear} {#var {soclog} {};#var {socview} {0};socdraw}
+#alias {socend} {#var {socview} {0};socdraw}
+
+#alias {panelwidth} {#var {pancols} {%1};#var {soclog} {};relayout}
+
+#nop {Channel triggers. %0 is the whole line with colour codes already stripped,}
+#nop {so the panel keeps the game's own wording and adds its own channel colour.}
+#nop {Verified against RotS src/act_comm.cpp: do_say, do_gsay, do_tell, do_whisper,}
+#nop {do_ask, do_page and do_gen_com (narrate / chat / yell / sing).}
+
+#action {You say '%1}        {#var {soccolor} {<F66DDDD>};#var {soctmp} {%0};socadd} {5}
+#action {%1 says '%2}        {#var {soccolor} {<F66DDDD>};#var {soctmp} {%0};socadd} {5}
+
+#action {You tell %1 '%2}    {#var {soccolor} {<F5599FF>};#var {soctmp} {%0};socadd} {5}
+#action {%1 tells you '%2}   {#var {soccolor} {<F5599FF>};#var {soctmp} {%0};socadd} {5}
+
+#action {You group-say '%1}  {#var {soccolor} {<FFF6666>};#var {soctmp} {%0};socadd} {5}
+#action {%1 group-says '%2}  {#var {soccolor} {<FFF6666>};#var {soctmp} {%0};socadd} {5}
+
+#action {You narrate '%1}    {#var {soccolor} {<FCC66FF>};#var {soctmp} {%0};socadd} {5}
+#action {%1 narrates '%2}    {#var {soccolor} {<FCC66FF>};#var {soctmp} {%0};socadd} {5}
+
+#action {You chat '%1}       {#var {soccolor} {<FFFCC55>};#var {soctmp} {%0};socadd} {5}
+#action {%1 chats '%2}       {#var {soccolor} {<FFFCC55>};#var {soctmp} {%0};socadd} {5}
+
+#action {You yell '%1}       {#var {soccolor} {<F5599FF>};#var {soctmp} {%0};socadd} {5}
+#action {%1 yells '%2}       {#var {soccolor} {<F5599FF>};#var {soctmp} {%0};socadd} {5}
+
+#action {You sing '%1}       {#var {soccolor} {<FFFCC55>};#var {soctmp} {%0};socadd} {5}
+#action {%1 sings '%2}       {#var {soccolor} {<FFFCC55>};#var {soctmp} {%0};socadd} {5}
+
+#action {%1 whispers to you, '%2} {#var {soccolor} {<F99DD99>};#var {soctmp} {%0};socadd} {5}
+#action {%1 asks you '%2}         {#var {soccolor} {<F99DD99>};#var {soctmp} {%0};socadd} {5}
+
+#action {You page %1 with '%2}    {#var {soccolor} {<FFF99FF>};#var {soctmp} {%0};socadd} {5}
+#action {*%1* pages, '%2}         {#var {soccolor} {<FFF99FF>};#var {soctmp} {%0};socadd} {5}
+#action {*%1* beeps you!}         {#var {soccolor} {<FFF99FF>};#var {soctmp} {%0};socadd} {5}
+
+#nop {Telnet debug prints raw negotiation to the main screen; keep it opt-in.}
+
+#alias {telnetdebugon} {#config {DEBUG TELNET} {ON}}
+#alias {telnetdebugoff} {#config {DEBUG TELNET} {OFF}}
+
+#nop {=== Input line keys ===}
+
+#nop {TinTin's command line is a readline style editor with no concept of a text}
+#nop {selection - there is no select/mark operation in #cursor for a macro to drive,}
+#nop {so shift+arrow cannot highlight text. What these macros do is stop those keys}
+#nop {injecting raw escape text into the input and make them move the cursor the way}
+#nop {they would in a normal field.}
+
+#nop {shift+Home and shift+End only reach tintin if mintty's ScrollMod is changed;}
+#nop {by default mintty keeps shift+Home/End/arrows for its own scrollback.}
+
+#macro {\e[1;2D} {#cursor backward}
+#macro {\e[1;2C} {#cursor forward}
+#macro {\e[1;2H} {#cursor home}
+#macro {\e[1;2F} {#cursor end}
+
+#nop {Word-wise movement, ctrl and ctrl+shift, as in most editors.}
+
+#macro {\e[1;5D} {#cursor prev word}
+#macro {\e[1;5C} {#cursor next word}
+#macro {\e[1;6D} {#cursor prev word}
+#macro {\e[1;6C} {#cursor next word}
+
+#nop {In place of selecting: ctrl+u clears the line, ctrl+w deletes the word to the}
+#nop {left, ctrl+k clears to the right of the cursor.}
+
+#nop {=== Command echo ===}
+
+#nop {SENT OUTPUT fires for every command sent to the server, whatever triggered it.}
+#nop {The regexp skips telnet negotiation, which is binary and starts with IAC (0xFF).}
+
+#variable {cmdecho} {1}
+
+#event {SENT OUTPUT} {#if {$cmdecho == 1} {#regexp {%0} {^\w} {#showme {<FEBED6B>%0}}}}
+
+#alias {echoon} {#var {cmdecho} {1};#showme {<afa>Command echo on}}
+#alias {echooff} {#var {cmdecho} {0};#showme {<afa>Command echo off}}
+
+#nop {Apply the panel layout once everything above is defined. The delayed second}
+#nop {pass catches the resize that follows #screen maximize in main.tin.}
+
+relayout
+
+#delay {0.5} {relayout}

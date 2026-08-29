@@ -1,0 +1,29 @@
+#nop {Yusam - converted from jmc3714/yusam.set}
+
+#variable {food} {meat}
+#variable {foodsource} {all}
+#variable {drink} {flask}
+#variable {leader} {Bughuul}
+#variable {target} {uruk}
+
+#alias {at} {ambush troll}
+#alias {aw} {ambush wolf}
+#alias {kb} {k bear}
+#alias {kt} {k troll}
+#alias {kw} {k wolf}
+#alias {qq} {un stonedoor;op stonedoor}
+#alias {cotton} {rem all.chain;rem all.mithril;wear all.cotton;wear 2.boots;wear mask;wear shiny}
+#alias {metal} {rem all.cotton;rem shiny;rem mask;rem boots;wear all.chain;wear all.mithril}
+#alias {stab} {rem hammer;wie dragon}
+#alias {reload} {rem quiver;g all.arrow pack;pu all.arrow quiver;wear quiver}
+#alias {rs} {rem shield}
+#alias {wsh} {wear shield}
+#alias {m} {mark $target}
+#alias {k2} {k 2.$target}
+#alias {v} {bash $target}
+#alias {vv} {bash 2.$target}
+
+#action {You leap} {aa} {5}
+#action {You attack} {aa} {5}
+#action {attacks YOU!} {aa} {5}
+#action {You turn to face your next enemy.} {aa} {5}

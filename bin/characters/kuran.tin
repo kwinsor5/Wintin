@@ -1,0 +1,30 @@
+#nop {Kuran - converted from jmc3714/kuran.set}
+
+#variable {food} {meat}
+#variable {foodsource} {all}
+#variable {drink} {flask}
+#variable {leader} {outcast}
+#variable {self} {quran}
+#variable {target} {statue}
+
+#alias {5} {un greatgates;op greatgates}
+#alias {aa} {cl heavydoor;lock heavydoor}
+#alias {qq} {un heavydoor;op heavydoor}
+#alias {buff} {rem spear;wie sword;wea shield;rem all.ivory;wear all.medallion;rem all.bracelet;wear all.bracer;rem belt;wear 2.belt;rem crown;wear cowl;rem fur;wear sash}
+#alias {hit} {rem sword;rem shield;wie spear;rem all.medallion;wear all.ivory;rem all.bracer;wear all.bracelet;rem sash;wear fur;rem belt;wear 2.belt;rem cowl;wear crown}
+#alias {cotton} {rem all.chain;rem all.mithril;wear all.cotton;wear 2.boots;wear shiny}
+#alias {metal} {rem all.cotton;rem crown;rem boots;rem sleeves;wear all.chain;wear all.mithril}
+
+#alias {h} {cas 'hallucinate' $target}
+#alias {ii} {cas 'insight' $target}
+#alias {itt} {cas 'insight' $target}
+#alias {itl} {cas 'insight' $leader}
+#alias {cul} {cas 'curing saturation' $leader}
+#alias {rgl} {cas 'regeneration' $leader}
+#alias {vl} {cas 'vitality' $leader}
+#alias {rvs} {cas 'revive' $self}
+#alias {z} {cas 'curse' $target}
+#alias {v} {bash $target}
+#alias {vv} {bash 2.$target}
+
+#action {You have been} {afk} {5}
