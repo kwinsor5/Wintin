@@ -6,12 +6,13 @@
 #variable {leader} {Nina}
 #variable {target} {olog}
 
+#read {classes/mystic.tin}
+#read {classes/whitie-mage.tin}
+
 #alias {a} {cas 'fireball' $target}
 #alias {aa} {cas 'chill ray' $target}
-#alias {h} {cas 'hallucinate' $target}
 #alias {itt} {cas 'insight' $target}
 #alias {pp} {cas 'poison' $target}
-#alias {z} {cas 'curse' $target}
 #alias {cotton} {wear all.cotton;wear sleeves;wear boots}
 #alias {metal} {wear all.chain}
 #alias {mine} {gr pickaxe;gr fang;g all;pu all.gem sack}

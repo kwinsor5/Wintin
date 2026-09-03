@@ -1,0 +1,477 @@
+#nop {Mapper: tintin's built-in #map driven by the server's MSDP ROOM table.}
+#nop {Rooms are keyed by the server VNUM, so the map never has to guess where}
+#nop {a movement command ended up - every ROOM update re-syncs the position.}
+
+#nop {Loaded with map-on / unloaded with map-off (global.tin), same shape as}
+#nop {auto-attack: everything here lives in the mapper class, so map-off is a}
+#nop {single class kill and map-on kills-then-reads so it is safe to run twice.}
+#nop {The map itself is saved to $mapfile (bin/rots.map) by mapsave, by the}
+#nop {60 s autosave whenever something changed, and on map-off / disconnect.}
+
+#nop {Commands:}
+#nop {  mapping            toggle recording of new rooms on / off}
+#nop {  goto <name|vnum>   walk to a landmark or room vnum from anywhere on the map}
+#nop {  goto stop          abandon the current walk (doors on the way are opened / picked)}
+#nop {  mapmark <name>     name the room you are in (a landmark) - goto uses it}
+#nop {  mapunmark <name>   remove a landmark}
+#nop {  mapmarks           list landmarks}
+#nop {  maproom            show what the map holds for the current room}
+#nop {  mapsave            write the map file now}
+
+#nop {Terrain weights are the server's own movement_loss[] table (consts.cpp):}
+#nop {the move cost of entering a room is proportional to this number, so a}
+#nop {path that minimises the sum of weights is the path that costs the fewest}
+#nop {moves - roads and city streets are preferred over forest and hills.}
+#nop {A terrain not in the table gets $mapweightdefault.}
+
+#nop {Doors: MSDP lists a closed door as a normal exit, so a route may run into}
+#nop {one. goto handles it from the server's own replies (act_move.cpp do_open,}
+#nop {ranger.cpp do_pick): "The <gate> seems to be closed." -> open <gate> <dir>}
+#nop {and retry the step; "It seems to be locked." -> pick <gate> <dir>, repeating}
+#nop {on "You failed to pick the lock." up to $mappickmax times, then open and}
+#nop {step on "The lock quickly yields to your skills.". Pickproof, lever and}
+#nop {broken doors end the walk with a message. The pick cap matters: a character}
+#nop {without the skill fails every attempt, forever.}
+
+#nop {Mounts: a room flagged NORIDE answers a mounted step with "Can not go}
+#nop {there mounted." (act_move.cpp do_move). goto then sends dismount, which}
+#nop {turns the mount into a follower (ranger.cpp do_dismount add_follower),}
+#nop {re-sends the step and walks on; after $mapridecount rooms on foot it}
+#nop {sends a bare "ride" (do_ride with no argument mounts the first following}
+#nop {mount in the room) and carries on. Arriving, stalling or stopping while}
+#nop {still on foot also sends ride, so a walk never leaves you dismounted.}
+
+#nop {Both commands need "<keyword> <direction>": a bare "open east" is taken as}
+#nop {an object called east ("Nothing here by that name."). The keyword is the}
+#nop {word the "seems to be closed" line names; a door with no keyword ("It seems}
+#nop {to be closed.") answers to "door" because find_door accepts any word for a}
+#nop {keyword-less exit when the direction is given.}
+
+#class {mapper} {open}
+
+#var {mapfile} {rots.map}
+#var {mapcapture} {0}
+#var {mapdirty} {0}
+#var {mapgoto} {}
+#var {mapvnum} {0}
+#var {mapweightdefault} {6}
+#var {mapweight} {
+	{Floor} {2}
+	{City} {3}
+	{Field} {4}
+	{Forest} {7}
+	{Hills} {10}
+	{Mountain} {11}
+	{Water} {10}
+	{Water_noswim} {12}
+	{Underwater} {12}
+	{Road} {3}
+	{Crack} {12}
+	{Dense_forest} {9}
+	{Swamp} {12}
+	}
+
+#nop {A fresh map, then the saved one on top if the file exists - #map read on a}
+#nop {missing file leaves the fresh map alone. nofollow: the map must NOT move}
+#nop {itself when a direction is typed, MSDP does that. static: walking into an}
+#nop {unmapped direction must not invent a room.}
+
+#map create 50000
+#line quiet {#map read {$mapfile}}
+#map flag nofollow on
+#map flag static on
+
+#nop {=== Map picture (drawn into the Info panel by global.tin's infodraw) ===}
+
+#nop {symbolgraphics draws one cell per room. A room with a symbol shows that}
+#nop {symbol in its own colour; a room without one (roads, streets, anything}
+#nop {not in $mapicon) shows the ASCII NESW LINE legend for its exits, which is}
+#nop {swapped here for box-drawing glyphs so roads read as connected lines.}
+#nop {NO EXITS (first LINE glyph) is the faint ring stub rooms get: dug as}
+#nop {neighbours, never visited, so they mark the unexplored edge. The room}
+#nop {you stand in is not left to any legend - mapdraw paints the marker over}
+#nop {it (see below); the USER colour only keeps the cell red underneath.}
+
+#var {mapicon} {
+	{City} {{sym} {⌂} {col} {<F404040>}}
+	{Floor} {{sym} {·} {col} {<F404040>}}
+	{Field} {{sym} {"} {col} {<F8A8A1E>}}
+	{Forest} {{sym} {♣} {col} {<F2E7D32>}}
+	{Dense_forest} {{sym} {♠} {col} {<F1B5E20>}}
+	{Hills} {{sym} {∩} {col} {<F8D6E63>}}
+	{Mountain} {{sym} {▲} {col} {<F5D4037>}}
+	{Water} {{sym} {≈} {col} {<F1565C0>}}
+	{Water_noswim} {{sym} {≋} {col} {<F0D47A1>}}
+	{Underwater} {{sym} {≋} {col} {<F0D47A1>}}
+	{Swamp} {{sym} {~} {col} {<F6D7A2E>}}
+	{Crack} {{sym} {×} {col} {<F5D4037>}}
+	}
+
+#map legend {ASCII NESW LINE} {∘ ╹ ╺ ┗ ╻ ┃ ┏ ┣ ╸ ┛ ━ ┻ ┓ ┫ ┳ ╋}
+#map color symbols <F505050>
+#map color user <FCC0000>
+#map flag symbolgraphics on
+
+#nop {mapstyle gives the CURRENT room its terrain's symbol and colour (needs}
+#nop {$mapterr); mapstyleall does it for every room of every known terrain,}
+#nop {run once per load so rooms recorded before icons existed get theirs.}
+
+#alias {mapstyle} {
+	#if {"$mapterr" != ""} {
+		#if {&mapicon[$mapterr] > 0} {
+			#map set roomsymbol {$mapicon[$mapterr][sym]};
+			#map set roomcolor {$mapicon[$mapterr][col]}
+			}
+		}
+	}
+
+#alias {mapstyleall} {
+	#line quiet {#map goto 1};
+	#foreach {*mapicon[]} {mapt} {
+		#var {maplist} {};
+		#map list {roomterrain} {$mapt} {variable} {maplist};
+		#foreach {*maplist[]} {mapv} {
+			#map at {$mapv} {#map set roomsymbol {$mapicon[$mapt][sym]};#map set roomcolor {$mapicon[$mapt][col]}}
+			}
+		};
+	#unvar {maplist}
+	}
+
+mapstyleall
+#var {mapdirty} {1}
+
+#nop {mapdraw {rows} {cols} {top row} {left col}: paints the map picture,}
+#nop {centred on the current room, at the given screen position. Nothing is}
+#nop {drawn while off the map ($mapvnum 0) - the caller has already blanked}
+#nop {the area. Each line carries its own colour codes and ends in a reset.}
+
+#nop {The player's cell is then overwritten with a red X: tintin draws the}
+#nop {current room from its own legends (an exit line or arrow on WinTin),}
+#nop {so the marker is painted over it rather than trusted to a legend. The}
+#nop {cell is at line (rows+1)/2, column cols/2 (0-based) - measured for even}
+#nop {and odd sizes from 3x9 up to 13x48.}
+
+#var {mapmark} {<FCC0000>X}
+
+#alias {mapdraw} {
+	#if {$mapvnum == 0} {#return};
+	#map map {%1} {%2} {list} {mapview};
+	#var {maprow} {%3};
+	#foreach {*mapview[]} {mapi} {
+		#line {ignore} {#showme {$mapview[$mapi]} {$maprow} {%4}};
+		#math {maprow} {$maprow + 1}
+		};
+	#math {maprow} {%3 + (%1 + 1) / 2 - 1};
+	#math {mapcol} {%4 + %2 / 2};
+	#line {ignore} {#showme {$mapmark} {$maprow} {$mapcol}}
+	}
+
+#nop {=== Position sync ===}
+
+#nop {The ROOM table arrives as %1 and is kept in $mapdata rather than read}
+#nop {back from $msdp[ROOM], so this does not depend on which of the two MSDP}
+#nop {events tintin fires first. ROOM_EXITS is flushed by the server BEFORE}
+#nop {ROOM, so $msdp[ROOM_EXITS] is already current when this runs.}
+
+#nop {Every ROOM update: jump the map to that vnum. If the room is unknown and}
+#nop {recording is on, create it (dig from wherever we are with a throwaway exit}
+#nop {name, then drop the exit) - if recording is off, we are simply off the map}
+#nop {until we reach a known room. Position must be established BEFORE the}
+#nop {room's data is written, because #map set only works on the current room.}
+
+#event {IAC SB MSDP ROOM} {#var {mapdata} {%1};mapsync}
+
+#alias {mapsync} {
+	#if {&mapdata[VNUM] == 0} {#return};
+	#var {mapwant} {$mapdata[VNUM]};
+	#line quiet {#map goto {$mapwant}};
+	#var {mapat} {0};
+	#line quiet {#map get roomvnum {mapat}};
+	#if {$mapat != $mapwant} {
+		#if {$mapcapture == 0} {
+			#var {mapvnum} {0};
+			#return
+			};
+		#if {$mapat == 0} {#line quiet {#map goto 1}};
+		#map dig {_} {$mapwant};
+		#map unlink {_};
+		#map goto {$mapwant}
+		};
+	#var {mapvnum} {$mapwant};
+	#if {$mapcapture == 1} {maprecord};
+	#if {"$mapgoto" != ""} {mapstep}
+	}
+
+#nop {Record the current room from the ROOM table: name, terrain, weight, and}
+#nop {one exit per entry - ROOM_EXITS holds the direction letters and the}
+#nop {ROOM table's EXITS array holds the destination vnums in the same order.}
+#nop {#map dig on an existing exit is a no-op and on an unknown destination}
+#nop {creates the room, so the neighbours exist before they are ever visited.}
+
+#alias {maprecord} {
+	#map set roomname {$mapdata[NAME]};
+	#var {mapterr} {};
+	#if {&mapdata[TERRAIN] > 0} {#var {mapterr} {$mapdata[TERRAIN]}};
+	#map set roomterrain {$mapterr};
+	#var {mapw} {$mapweightdefault};
+	#if {&mapweight[$mapterr] > 0} {#var {mapw} {$mapweight[$mapterr]}};
+	#map set roomweight {$mapw};
+	mapstyle;
+	#if {&msdp[ROOM_EXITS] > 0} {
+		#foreach {*msdp[ROOM_EXITS][]} {mapi} {
+			#if {&mapdata[EXITS][$mapi] > 0} {
+				#map dig {$msdp[ROOM_EXITS][$mapi]} {$mapdata[EXITS][$mapi]}
+				}
+			}
+		};
+	#var {mapdirty} {1}
+	}
+
+#nop {=== Recording toggle ===}
+
+#alias {mapping} {
+	#if {$mapcapture == 1} {
+		#var {mapcapture} {0};
+		mapsave;
+		#showme {${panelhead}Mapping OFF - rooms are no longer recorded.}
+		} {
+		#var {mapcapture} {1};
+		#showme {${panelhead}Mapping ON - new rooms are recorded as you enter them.};
+		mapsync
+		}
+	}
+
+#nop {=== goto ===}
+
+#nop {Resolving the target: #map goto accepts a vnum, a landmark or a room name,}
+#nop {and simply stays put when nothing matches - so the probe starts from room 1}
+#nop {(the empty origin room #map create made, which is never a real room) and a}
+#nop {result of 1 means "not found". The position is restored straight after.}
+
+#nop {One step at a time: find the path, send its first command, and let the}
+#nop {next ROOM update call mapstep again to re-plan from wherever we actually}
+#nop {are. A step that produces no ROOM update within $mapstall seconds (closed}
+#nop {door, no moves, a mob in the way) ends the walk with a report instead of}
+#nop {marching blindly on.}
+
+#var {mapstall} {5}
+#var {mappickmax} {20}
+#var {mapdir} {}
+#var {mapkey} {}
+#var {mapdoor} {0}
+#var {mappicks} {0}
+#var {mapdirname} {{n}{north}{e}{east}{s}{south}{w}{west}{u}{up}{d}{down}}
+#var {mapridecount} {5}
+#var {mapfoot} {0}
+#var {mapfootrooms} {0}
+
+#alias {goto} {
+	#if {"%1" == ""} {
+		#showme {${panelhead}goto <landmark|vnum> - landmarks:};
+		#map landmark;
+		#return
+		};
+	#if {"%1" == "stop"} {
+		mapstop;
+		#showme {${panelhead}goto stopped.};
+		#return
+		};
+	#if {$mapvnum == 0} {
+		#showme {${panelhead}goto: you are not on a mapped room - move to one first.};
+		#return
+		};
+	#map goto {1};
+	#line quiet {#map goto {%1}};
+	#map get roomvnum {maptarget};
+	#map goto {$mapvnum};
+	#if {$maptarget == 1} {
+		#showme {${panelhead}goto: no room or landmark called '%1'.};
+		#return
+		};
+	#if {$maptarget == $mapvnum} {
+		#showme {${panelhead}goto: already there.};
+		#return
+		};
+	#var {mapgoto} {$maptarget};
+	#var {mapfoot} {0};
+	mapstep
+	}
+
+#alias {mapstep} {
+	#undelay {mapwatch};
+	#if {$mapvnum == $mapgoto} {
+		#var {mapgoto} {};
+		mapride;
+		#showme {${panelhead}goto: arrived.};
+		#return
+		};
+	#if {$mapfoot == 1} {
+		#math {mapfootrooms} {$mapfootrooms + 1};
+		#if {$mapfootrooms >= $mapridecount} {mapride}
+		};
+	#line quiet {#map find {$mapgoto}};
+	#path get length {maplen};
+	#if {$maplen == 0} {
+		#var {mapgoto} {};
+		mapride;
+		#showme {${panelhead}goto: no known route from here.};
+		#return
+		};
+	#path save forward {maproute};
+	#var {mapdir} {};
+	#regexp {$maproute} {^{[^;]+}} {#var {mapdir} {&1}};
+	#if {&mapdirname[$mapdir] == 0} {#var {mapdir} {}};
+	#var {mapdoor} {0};
+	#path walk;
+	mapwatch
+	}
+
+#alias {mapwatch} {#delay {mapwatch} {mapstalled} {$mapstall}}
+
+#alias {mapstalled} {
+	#showme {${panelhead}goto: stalled in room $mapvnum - walk abandoned.};
+	#var {mapgoto} {};
+	mapride
+	}
+
+#alias {mapstop} {
+	#undelay {mapwatch};
+	#var {mapgoto} {};
+	#var {mapdoor} {0};
+	mapride
+	}
+
+#nop {=== Mounts met while walking ===}
+
+#nop {$mapfoot is 1 from the dismount until the next ride; $mapfootrooms counts}
+#nop {the ROOM updates walked on foot (mapstep adds one per room). mapride is}
+#nop {a no-op unless a dismount is outstanding, so every exit path of a walk}
+#nop {can call it without sending a stray ride.}
+
+#alias {mapride} {
+	#if {$mapfoot == 1} {
+		#var {mapfoot} {0};
+		#send {ride}
+		}
+	}
+
+#action {^Can not go there mounted.$} {
+	#if {"$mapgoto" == "" || "$mapdir" == ""} {#return};
+	#var {mapfoot} {1};
+	#var {mapfootrooms} {0};
+	#send {dismount};
+	#send {$mapdir};
+	mapwatch
+	} {5}
+
+#nop {=== Doors met while walking ===}
+
+#nop {$mapdir is the single-letter step just sent (empty when the step was a}
+#nop {custom exit command, in which case the door replies are left alone) and}
+#nop {$mapdoor is the state: 0 nothing tried, 1 open sent, 2 picking. The step}
+#nop {is re-sent right behind the open; if the door was locked, the open's}
+#nop {"locked" reply arrives first and the repeated "closed" reply is ignored}
+#nop {because the state is no longer 0. Every ROOM update resets the state.}
+
+#alias {mapdooropen} {
+	#var {mapdoor} {1};
+	#send {open $mapkey $mapdirname[$mapdir]};
+	#send {$mapdir};
+	mapwatch
+	}
+
+#alias {mapdoorfail} {
+	#showme {${panelhead}goto: %1 - walk abandoned in room $mapvnum.};
+	mapstop
+	}
+
+#alias {mapdoorclosed} {
+	#if {"$mapgoto" == "" || "$mapdir" == ""} {#return};
+	#if {$mapdoor != 0} {#return};
+	#var {mapkey} {%1};
+	#if {"$mapkey" == ""} {#var {mapkey} {door}};
+	mapdooropen
+	}
+
+#action {^The %1 seems to be closed.$} {mapdoorclosed {%1}} {5}
+#action {^It seems to be closed.$} {mapdoorclosed {}} {5}
+
+#action {^It seems to be locked.$} {
+	#if {"$mapgoto" == "" || $mapdoor != 1} {#return};
+	#var {mapdoor} {2};
+	#var {mappicks} {0};
+	#send {pick $mapkey $mapdirname[$mapdir]};
+	mapwatch
+	} {5}
+
+#action {^You failed to pick the lock.$} {
+	#if {"$mapgoto" == "" || $mapdoor != 2} {#return};
+	#math {mappicks} {$mappicks + 1};
+	#if {$mappicks >= $mappickmax} {mapdoorfail {gave up picking after $mappicks tries}} {
+		#send {pick $mapkey $mapdirname[$mapdir]};
+		mapwatch
+		}
+	} {5}
+
+#action {^The lock quickly yields to your skills.$} {
+	#if {"$mapgoto" == "" || $mapdoor != 2} {#return};
+	mapdooropen
+	} {5}
+
+#action {^You seem to be unable to pick this lock.$} {#if {"$mapgoto" != "" && $mapdoor == 2} {mapdoorfail {this lock cannot be picked}}} {5}
+#action {^It will not budge.$} {#if {"$mapgoto" != "" && $mapdoor == 1} {mapdoorfail {door will not budge (lever)}}} {5}
+#action {^It is broken.$} {#if {"$mapgoto" != "" && $mapdoor == 1} {mapdoorfail {door is broken}}} {5}
+
+#nop {=== Landmarks and inspection ===}
+
+#alias {mapmark} {
+	#if {"%1" == ""} {
+		#showme {${panelhead}mapmark <name> - names the room you are in.};
+		#return
+		};
+	#if {$mapvnum == 0} {
+		#showme {${panelhead}mapmark: this room is not on the map yet - turn mapping on.};
+		#return
+		};
+	#map landmark {%1} {$mapvnum};
+	#showme {${panelhead}Landmark '%1' = room $mapvnum.};
+	mapsave
+	}
+
+#alias {mapunmark} {
+	#map unlandmark {%1};
+	mapsave
+	}
+
+#alias {mapmarks} {#map landmark}
+
+#alias {maproom} {
+	#if {$mapvnum == 0} {
+		#showme {${panelhead}Not on a mapped room.};
+		#return
+		};
+	#map info
+	}
+
+#nop {=== Saving ===}
+
+#alias {mapsave} {
+	#map write {$mapfile} {force};
+	#var {mapdirty} {0}
+	}
+
+#ticker {mapautosave} {#if {$mapdirty == 1} {mapsave}} {60}
+
+#event {SESSION DISCONNECTED} {mapsave}
+
+#nop {Sync straight away if the server already told us where we are.}
+
+#var {mapdata} {}
+#if {&{msdp} > 0} {
+	#if {&msdp[ROOM] > 0} {
+		#var {mapdata} {$msdp[ROOM]};
+		mapsync
+		}
+	}
+
+#class {mapper} {close}

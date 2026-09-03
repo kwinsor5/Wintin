@@ -1,0 +1,68 @@
+#nop {Mystic - spell aliases shared by any character that reads this file.}
+#nop {The mystic twin of classes/whitie-mage.tin: same rules, different spells.}
+#nop {Load from a character file with #read {classes/mystic.tin}.}
+
+#nop {Written with the full word "cast" and the spell name in quotes on purpose.}
+#nop {The skill timer above the input works out the total from the command that}
+#nop {goes over the wire, so it needs the official spell name - an in-game alias}
+#nop {is expanded server side and never reaches the client. Mystic spells use}
+#nop {the same cast command as mage spells (spell_pa.cpp do_cast).}
+
+#nop {%0 passes on whatever is typed after the alias, so "cu orc" sends}
+#nop {cast 'curse' orc. Without it tintin silently drops the target.}
+
+#nop {HUD: add the willpower / spell save row - will is what mystic power runs}
+#nop {on. This is the mystic flag only: a character that also reads the mage}
+#nop {profile gets both rows, whatever the read order. loadchar resets the}
+#nop {flags before reading a character file, so it does not follow a switch.}
+
+#variable {hudmystic} {1}
+
+#nop {cs (cure self) and vs (vitalize self) are NOT here - they live in}
+#nop {global.tin, because every caster wants them, not just this role.}
+
+#nop {The list is the PROF_CLERIC rows of skills[] in RotS src/consts.cpp, in}
+#nop {level order. Spells a specialisation unlocks are marked; they simply say}
+#nop {"No such spell" for anyone else.}
+
+#alias {cu}  {cast 'curse' %0}
+#alias {rv}  {cast 'revive' %0}
+#alias {dm}  {cast 'detect magic' %0}
+#alias {dt}  {cast 'detect hidden' %0}
+#alias {ev}  {cast 'evasion' %0}
+#alias {rp}  {cast 'remove poison' %0}
+#alias {hu}  {cast 'hallucinate' %0}
+#alias {mb}  {cast 'mind block' %0}
+#alias {sat} {cast 'curing saturation' %0}
+#alias {hz}  {cast 'haze' %0}
+#alias {it} {cast 'insight' %0}
+#alias {pa}  {cast 'pragmatism' %0}
+#alias {rt}  {cast 'restlessness' %0}
+#alias {rm} {cast 'resist magic' %0}
+#alias {gu}  {cast 'guardian' %0}
+#alias {slow}  {cast 'slow digestion' %0}
+#alias {vit}  {cast 'vitality' %0}
+#alias {fe}  {cast 'fear' %0}
+#alias {dp} {cast 'dispel regeneration' %0}
+#alias {dv}  {cast 'divination' %0}
+#alias {po}  {cast 'poison' %0}
+#alias {rg}  {cast 'regeneration' %0}
+#alias {sa} {cast 'sanctuary' %0}
+#alias {if}  {cast 'infravision' %0}
+#alias {tr}  {cast 'terror' %0}
+#alias {ec}  {cast 'enchant weapon' %0}
+#alias {dw}  {cast 'death ward' %0}
+#alias {cf}  {cast 'confuse' %0}
+#alias {prot}  {cast 'protection' %0}
+
+#alias {h} {cas 'hallucinate' $target}
+#alias {hh} {cas 'hallucinate' 2.$target}
+#alias {z} {cas 'curse' $target}
+
+#nop {Specialisation-only (learn_type 65 / skill_spec): haze, fear, terror and}
+#nop {confuse need illusion; refresh all needs regeneration; death ward and}
+#nop {protection need protection.}
+
+#nop {Not a spell, but it belongs with the set.}
+
+#alias {b}   {bash %0}

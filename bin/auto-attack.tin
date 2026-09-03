@@ -1,0 +1,48 @@
+#nop {Auto-attack: one #action per mob long description, firing the matching}
+#nop {kill command as the mob's line scrolls past in a room description.}
+
+#nop {Turned on and off with the auto-attack-on / auto-attack-off aliases in}
+#nop {global.tin. They work by killing this class and re-reading this file, so}
+#nop {everything here MUST stay inside the class - an action defined outside it}
+#nop {would survive auto-attack-off and keep swinging. Re-reading is also what}
+#nop {makes auto-attack-on safe to run twice: the kill comes first, so the}
+#nop {triggers are replaced rather than doubled.}
+
+#nop {Priority 5 matches the socials and channel triggers, which is early}
+#nop {enough to beat the generic panel triggers without jumping the queue.}
+
+#nop {TO ADD A MOB: copy a line and use the mob's LONG description exactly as}
+#nop {it appears in the room, then the kill command. The level 15-22 sweep the}
+#nop {list was meant to have could not be built - the world files live under}
+#nop {lib/world in the RotS repo and that subtree is git-ignored, so the mob}
+#nop {descriptions are not in the checkout. If those files ever land, the list}
+#nop {below can be generated from them.}
+
+#class {autoattack} {open}
+
+#action {A hunched forest troll moves around here, arms dragging on the ground.}    {k troll} {5}
+#action {A cave troll is standing here, pounding his two huge fists together.}      {k troll} {5}
+#action {A large grey troll grumbles ominously here.}                               {k troll} {5}
+#action {A ferocious-looking troll stands vigil here.}                              {k troll} {5}
+#action {A massive mirkwolf stares at you through blood red eyes.}                  {k wolf} {5}
+#action {A huge mirkwolf tenses its massive frame in readiness.}                    {k wolf} {5}
+#action {A large white wolf stands here.}                                           {k wolf} {5}
+#action {A thin warg crouches here cautiously.}                                     {k thin} {5}
+#action {An evil, black warg paces around the clearing.}                            {k evil} {5}
+#action {A ferocious warg stands here, snarling maliciously.}                       {k ferocious} {5}
+#action {A trained warg waits here for an order from its masters.}                  {k trained} {5}
+#action {A large grizzly bear with golden fur stands here.}                         {k bear} {5}
+#action {A gigantic crystalline worm emerges from the dark soil.}                   {k worm} {5}
+#action {A massive crystalline crawler stalks around in search of food.}            {k crawler} {5}
+#action {A huge tiger beetle stands here drooling at the mouth.}                    {k tiger} {5}
+#action {A large black snake is coiled up here, gazing at you intently.}            {k snake} {5}
+#action {A large white scorpion carefully searches the area as it tracks its prey.} {k scorpion} {5}
+#action {A massive silvery toad stares at you with hunger in its eyes.}             {k toad} {5}
+#action {A malicious spider slides down its web with a look of hunger in its eyes.} {k spider} {5}
+#action {An ugly mountain troll stands here.}                                       {k troll} {5}
+#action {A brown, angry-looking bear is padding around here.}                       {k bear} {5}
+#action {A large silver snake lies coiled up upon the ground here.}                 {k snake} {5}
+#action {A large wild troll is here, green skinned and angry.}                      {k troll} {5}
+#action {A gigantic centipede with yellow legs searches relentlessly for prey.}     {k centipede} {5}
+
+#class {autoattack} {close}

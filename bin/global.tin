@@ -29,6 +29,16 @@
 #alias {jjj} {k 3.$target}
 #alias {q} {assist $leader}
 
+#nop {Self-heals, kept global rather than in classes/whitie-mage.tin because every}
+#nop {caster wants them. Full "cast" and the quoted spell name on purpose: the}
+#nop {skill timer works the total out from the command that goes over the wire,}
+#nop {and an in-game alias is expanded server side so it never reaches the}
+#nop {client. %0 passes the rest of the line through - without it tintin}
+#nop {silently drops anything typed after the alias.}
+
+#alias {cs} {cast 'cure self' %0}
+#alias {vs} {cast 'vitalize self' %0}
+
 #alias {autofleeon} {#action {PANIC!} {flee}}
 #alias {autofleeoff} {#unaction {PANIC!}}
 
@@ -109,13 +119,13 @@
 #nop {stuck with typing invisible, so each answer waits for its prompt.}
 
 #event {SESSION CONNECTED} {
-	#delay {1} {
+	#delay {.5} {
 		#send {kwinsor5@gmail.com}
 		};
-	#delay {2.5} {
+	#delay {1} {
 		#send {***REMOVED***}
 		};
-	#delay {4} {
+	#delay {1.5} {
 		#send {2}
 		}
 	}
@@ -123,9 +133,22 @@
 #nop {The server pushes MSDP CHARACTER_NAME once the character enters the game.}
 #nop {Killing the class first keeps one character's settings from leaking into another.}
 
-#alias {loadchar} {#class {character} {kill};#class {character} {read} {characters/%1.tin};#showme {<afa>Loaded profile: %1}}
+#nop {Role-dependent HUD options are reset to their defaults BEFORE the}
+#nop {character file is read, so a setting made by one character's profile}
+#nop {cannot leak into the next character logged in.}
 
-#event {IAC SB MSDP CHARACTER_NAME} {#showme {<afa>MSDP character: %1};loadchar %1}
+#alias {loadchar} {#class {character} {kill};#var {hudmage} {0};#var {hudmystic} {0};#class {character} {read} {characters/%1.tin};#showme {${panelhead}Loaded profile: %1}}
+
+#nop {The mapper is switched on at the same moment (map-on only if it is not}
+#nop {already loaded, so a repeat CHARACTER_NAME push cannot reset a walk or}
+#nop {the mapping toggle). map-off still turns it off for the session.}
+
+#event {IAC SB MSDP CHARACTER_NAME} {
+	#showme {${panelhead}MSDP character: %1};
+	loadchar %1;
+	#class {mapper} {size} {mapcount};
+	#if {$mapcount == 0} {map-on}
+	}
 
 #nop {=== In-game colours ===}
 
@@ -193,12 +216,12 @@
 
 #alias {copyon} {
 	#config {MOUSE} {OFF};
-	#showme {<afa>Mouse tracking off: drag to select, ctrl+ins to copy. copyoff restores panel scrolling.}
+	#showme {${panelhead}Mouse tracking off: drag to select, ctrl+ins to copy. copyoff restores panel scrolling.}
 	}
 
 #alias {copyoff} {
 	#config {MOUSE} {ON};
-	#showme {<afa>Mouse tracking on: panels scroll again; hold shift to select.}
+	#showme {${panelhead}Mouse tracking on: panels scroll again; hold shift to select.}
 	}
 
 #variable {socpanel} {1}
@@ -221,6 +244,86 @@
 #nop {art spanning several rows read as an X rather than as swords.}
 
 #variable {hudswords} {⚔}
+
+#nop {=== Experimental: hardware side margins ===}
+
+#nop {Tintin confines output to a column range in SOFTWARE - it only ever}
+#nop {emits DECSTBM row margins, never DECSLRM column margins - and to do}
+#nop {that it redraws the current line whenever it grows. That is what}
+#nop {smears the cast spinner, which arrives as bare \r|\r with no newline.}
+
+#nop {With hwmargins on, the scroll region is dropped and the TERMINAL is}
+#nop {asked to keep the scrolling inside the feed columns instead, via}
+#nop {DECLRMM (\e[?69h) and DECSLRM (\e[left;rights). Tintin then writes}
+#nop {incrementally the way it does with no region at all, so the spinner}
+#nop {animates - if mintty honours those sequences. Try marginson; if the}
+#nop {feed spills over the panels, marginsoff restores the software scroll}
+#nop {region.}
+
+#nop {THE TRADE: margin mode animates the spinner but gives up the reserved}
+#nop {input row, because it cannot use #split - split mode writes every line}
+#nop {at column 1 and ignores the left margin. Typing then happens inline in}
+#nop {the feed. Off by default for that reason; the panels and a proper}
+#nop {input line are worth more than the wheel. Turn the wheel off in game}
+#nop {with "set spinner" to keep the feed clean.}
+
+#variable {hwmargins} {0}
+
+#alias {marginson} {
+	#var {hwmargins} {1};
+	relayout;
+	#showme {${panelhead}Hardware margins on - the spinner should animate. marginsoff to revert.}
+	}
+
+#alias {marginsoff} {
+	#var {hwmargins} {0};
+	relayout;
+	#showme {${panelhead}Hardware margins off - back to the software scroll region.}
+	}
+
+#nop {Boss banner: a panel across the top of the feed, used instead of the left}
+#nop {column's Opponent box when the foe is above bossmin. bosspct is its share}
+#nop {of the feed width - 100 spans the feed edge to edge, anything less is}
+#nop {centred in it. bossrows is its total height including the border:}
+#nop {1 border, 2 bar, 1 name, 1 level, 1 border.}
+
+#variable {bosspanel} {1}
+#variable {bossmin} {25}
+#variable {bosspct} {100}
+#variable {bossrows} {6}
+#variable {bosson} {0}
+#variable {bosscolsw} {30}
+#variable {bossleft} {1}
+#variable {bossright} {1}
+#variable {bosswidth} {1}
+#variable {bossfmt} {%-1.1s}
+#variable {bossblank} {}
+#variable {bossfeedblank} {}
+#variable {bosschunkw} {12}
+#variable {bosscolx} {0}
+#variable {bossn} {0}
+#variable {bossk} {0}
+#variable {bossfullbar} {}
+#variable {bossemptybar} {}
+#variable {bossfullpre} {}
+#variable {bossemptypre} {}
+#variable {bossname} {}
+#variable {bosslvl} {0}
+#variable {bosshp} {0}
+#variable {bosswant} {0}
+#variable {bossfill} {0}
+#variable {bossrest} {0}
+#variable {bossrow} {0}
+#variable {bosscol} {0}
+#variable {bossbot} {0}
+#variable {bosspad} {0}
+#variable {bossclen} {0}
+#variable {bosspadstr} {}
+#variable {bosscentered} {}
+#variable {bosspcttext} {}
+#variable {bosspctcol} {0}
+#variable {bosspctcolor} {}
+#variable {bosstopr} {1}
 
 #variable {leftpanel} {1}
 #variable {leftcols} {50}
@@ -277,7 +380,37 @@
 #variable {hudtop} {2}
 #variable {opptop} {2}
 #variable {hudbase} {2}
+#nop {Class rows under OB/DB/PB. Each class profile switches on ITS OWN flag -}
+#nop {classes/whitie-mage.tin sets hudmage (spell power and penetration),}
+#nop {classes/mystic.tin sets hudmystic (willpower, spell save, spirit) - so a}
+#nop {character that reads both profiles gets both rows, in either read order.}
+#nop {With no flag set the row shows attack speed. One flag per class, never a}
+#nop {shared "mode" variable: that was overwritten by whichever file read last.}
+#nop {loadchar resets every flag before reading a character file.}
+
+#variable {hudmage} {0}
+#variable {hudmystic} {0}
+#variable {hudspow} {0}
+#variable {hudspen} {0}
+#variable {hudwill} {0}
+#variable {hudsave} {0}
+#variable {hudspirit} {0}
+
 #variable {hudbarw} {1}
+#variable {hudfullpre} {}
+#variable {hudemptypre} {}
+#variable {hudbw} {1}
+#variable {pctbtext} {}
+#variable {pctblen} {0}
+#variable {pctbpad} {0}
+#variable {pctbcol} {0}
+#variable {pctbcolor} {}
+#variable {hudsuf} {}
+#variable {hudsuflen} {0}
+#variable {hudk} {0}
+#variable {hudkw} {0}
+#variable {hudkf} {0}
+#variable {hudtnl} {0}
 #variable {hudfullbar} {}
 #variable {hudemptybar} {}
 
@@ -304,21 +437,76 @@
 		} {
 		#var {scrollright} {$laycols}
 		};
-	#screen {inputregion} {$layrows} {$scrollleft} {$layrows} {$scrollright};
 	#math {barlen} {$scrollright - $scrollleft + 1};
 	#var {barline} {};
 	#loop {1} {$barlen} {barloop} {#var {barline} {$barline─}};
-	#screen {scrollregion} {1} {$scrollleft} {$panbot} {$scrollright};
+	#nop {In margin mode the scroll region is dropped so tintin writes the};
+	#nop {way it does with no region at all - each line starting wherever};
+	#nop {the cursor lands, which the terminal's left margin then decides.};
+	#nop {It must NOT be a #split: split mode positions every line at column};
+	#nop {1 with \e[1G, which ignores the margin and buries the start of each};
+	#nop {line under the left panel. That also means margin mode cannot have};
+	#nop {a reserved input row - see the note above marginson.};
+	#nop {The banner is centred in the feed and its prefix tables are built the};
+	#nop {same way the HUD's are, for the same byte-truncation reason.};
+	#math {bosscolsw} {$barlen * $bosspct / 100};
+	#if {$bosscolsw < 30} {
+		#var {bosscolsw} {30}
+		};
+	#if {$bosscolsw > $barlen} {
+		#var {bosscolsw} {$barlen}
+		};
+	#math {bossleft} {$scrollleft + ($barlen - $bosscolsw) / 2};
+	#math {bossright} {$bossleft + $bosscolsw - 1};
+	#math {bosswidth} {$bosscolsw - 2};
+	#var {bossfmt} {%-${bosswidth}.${bosswidth}s};
+	#format {bossblank} {$bossfmt} { };
+	#format {bossfeedblank} {%-${barlen}.${barlen}s} { };
+	#var {bossfullbar} {};
+	#var {bossemptybar} {};
+	#var {bossfullpre} {};
+	#var {bossemptypre} {};
+	#var {bossfullpre[0]} {};
+	#var {bossemptypre[0]} {};
+	#loop {1} {$bosswidth} {bossloop} {
+		#var {bossfullbar} {$bossfullbar█};
+		#var {bossemptybar} {$bossemptybar░};
+		#var {bossfullpre[$bossloop]} {$bossfullbar};
+		#var {bossemptypre[$bossloop]} {$bossemptybar}
+		};
+	#nop {The screen is about to be cleared, so the banner starts hidden and};
+	#nop {bossdraw puts it back on the next MSDP update or panel repaint.};
+	#var {bosson} {0};
+	#if {$hwmargins == 1} {
+		#screen {scrollregion} {0} {0} {0} {0}
+		} {
+		bossregion
+		};
+	#screen {inputregion} {$layrows} {$scrollleft} {$layrows} {$scrollright};
+	#nop {Margins must be OFF for the clear, or it only reaches the feed and};
+	#nop {whatever was already on the panel columns is stranded there.};
+	#line {ignore} {#showme {\e[?69l}};
 	#screen {clear} {ALL};
 	#math {leftwidth} {$leftcols - 2};
 	#var {leftfmt} {%-${leftwidth}.${leftwidth}s};
 	#format {leftblank} {$leftfmt} { };
 	#var {hudbarw} {$leftwidth};
+	#nop {Every prefix of the bar is stored, not just the whole thing, because};
+	#nop {#format's %%.Ns truncates by BYTES. The block glyphs are three bytes};
+	#nop {each, so truncating a bar of them to N gave a third of the intended};
+	#nop {width and split the last glyph in half. Indexing a prefix is exact};
+	#nop {and costs nothing at draw time.};
 	#var {hudfullbar} {};
 	#var {hudemptybar} {};
+	#var {hudfullpre} {};
+	#var {hudemptypre} {};
+	#var {hudfullpre[0]} {};
+	#var {hudemptypre[0]} {};
 	#loop {1} {$hudbarw} {hudloop} {
 		#var {hudfullbar} {$hudfullbar█};
-		#var {hudemptybar} {$hudemptybar░}
+		#var {hudemptybar} {$hudemptybar░};
+		#var {hudfullpre[$hudloop]} {$hudfullbar};
+		#var {hudemptypre[$hudloop]} {$hudemptybar}
 		};
 	#math {pancol} {$panleft + 1};
 	#math {panwidth} {$pancols - 2};
@@ -362,6 +550,9 @@
 	#math {hudtop} {$leftmid2 + 2};
 	#var {socview} {0};
 	#var {msdpview} {0};
+	#if {$hwmargins == 1} {
+		#line {ignore} {#showme {\e[?69h\e[$scrollleft;${scrollright}s}}
+		};
 	pandraw
 	}
 
@@ -376,6 +567,71 @@
 
 #alias {inputpaint} {#line {ignore} {#showme {<F404040>─<F101040>} {$barrow} {$laycols}}}
 
+#nop {The border above the input doubles as the timer readout. pandraw calls}
+#nop {this rather than drawing the line itself, so a repaint cannot wipe the}
+#nop {figures mid-cast.}
+
+#nop {The game's own spinner, rebuilt rather than captured. The server picks}
+#nop {its glyph as wait_wheel[wait_value %% 8] (comm.cpp:377) from an array}
+#nop {whose second half repeats the first, so it is really wait_value %% 4:}
+#nop {0 is a bar, 1 a backslash, 2 a hyphen, 3 a slash. wait_value at the}
+#nop {moment of the tick is the beats REMAINING, which is casty - castx, so}
+#nop {the same figure that drives the count drives the glyph and the sequence}
+#nop {comes out identical to the wire. Verified: a 16 beat cast reproduces}
+#nop {/-\|/-\|/-\|/-\ exactly, matching what other clients print inline.}
+#nop {The backslash MUST be written doubled or tintin stores nothing.}
+
+#variable {castwheel[0]} {|}
+#variable {castwheel[1]} {\\}
+#variable {castwheel[2]} {-}
+#variable {castwheel[3]} {/}
+#variable {castspin} {}
+#variable {castwi} {0}
+#variable {castxs} {0}
+
+#alias {castdraw} {
+	#line {ignore} {#showme {<F404040>$barline} {$barrow} {$scrollleft}};
+	#if {$casty > 0} {
+		#nop {castx is the beat BEING served, counting from 1, so the figure};
+		#nop {starts on 1 the moment the command goes out and lands on the};
+		#nop {listed total on the last beat.};
+		#nop {No glyph on the last beat or during the hold: the server stops};
+		#nop {sending the wheel once no beats remain, and that stillness is the};
+		#nop {cue that the action is landing.};
+		#if {$castx < $casty && $castheld == 0} {
+			#math {castwi} {($casty - $castx) % 4};
+			#var {castspin} {$castwheel[$castwi]}
+			} {
+			#var {castspin} { }
+			};
+		#nop {Spinner first, then the count. The beat stays padded to two};
+		#nop {columns so "of N" does not shift right when the count crosses ten.};
+		#format {castxs} {%+2s} {$castx};
+		#format {casttext} { %s  %s of %s } {$castspin} {$castxs} {$casty};
+		#math {castcol} {$scrollleft + 2};
+		#line {ignore} {#showme {<F7A4B00>$casttext} {$barrow} {$castcol}}
+		}
+	}
+
+#nop {One colour for every panel frame AND its tab label, so the two can}
+#nop {never drift. 101040 is the navy #draw was already using for an}
+#nop {uncoloured box - passing it explicitly changes nothing on screen and}
+#nop {means the labels can be given the same tag rather than guessing at the}
+#nop {default. Retune this one value to recolour every panel edge and title.}
+
+#variable {paneledge} {<F101040>}
+
+#nop {The tab labels have their own colour again - a dark gold, chosen by}
+#nop {Kenny. Kept as its own variable rather than folded back into}
+#nop {$paneledge so the frame and the titles can be retuned separately.}
+
+#variable {panelhead} {<F806100>}
+
+#nop {Alias feedback lines ("Auto-attack ON", "Mapper ON" ...) print in the same}
+#nop {gold: every #showme that reports an alias's result starts with $panelhead,}
+#nop {here and in map.tin, so retuning the header colour retunes them too. The}
+#nop {old bright green (<afa>) was too loud on the light grey background.}
+
 #nop {pandraw repaints the borders and both halves without touching geometry.}
 #nop {The full-width line on $barrow (the row #split reserves above the input)}
 #nop {is the border separating the input from the main content; drawing it here}
@@ -384,20 +640,21 @@
 #nop {an explicit charcoal colour tag.}
 
 #alias {pandraw} {
-	#line {ignore} {#showme {<F404040>$barline} {$barrow} {$scrollleft}};
+	castdraw;
+	bossdraw;
 	leftdraw;
 	#if {$socpanel == 1} {
 		#var {socdrawbot} {$socboxbot};
 		#if {$msdppanel == 0} {
 			#var {socdrawbot} {-1}
 			};
-		#draw {box} {$socboxtop} {$panleft} {$socdrawbot} {$laycols};
-		#line {ignore} {#showme {<ffa>[ Socials ]} {$socboxtop} {$pancol}};
+		#draw {$paneledge} {box} {$socboxtop} {$panleft} {$socdrawbot} {$laycols};
+		#line {ignore} {#showme {${panelhead}[ Socials ]} {$socboxtop} {$pancol}};
 		socdraw
 		};
 	#if {$msdppanel == 1} {
-		#draw {box} {$msdpboxtop} {$panleft} {-1} {$laycols};
-		#line {ignore} {#showme {<ffa>[ MSDP ]} {$msdpboxtop} {$pancol}};
+		#draw {$paneledge} {box} {$msdpboxtop} {$panleft} {-1} {$laycols};
+		#line {ignore} {#showme {${panelhead}[ MSDP ]} {$msdpboxtop} {$pancol}};
 		msdpdraw
 		};
 	inputpaint
@@ -421,12 +678,11 @@
 #nop {The top half is an empty Info box for future use.}
 
 #nop {Top box: world time (WORLD_TIME, minus its dangling "on"), the weather}
-#nop {sentence (WEATHER) wrapped beneath it, and at the box bottom the room}
-#nop {as "Name    Exits are: N E" with "(#vnum) [ Terrain ]" on the line}
-#nop {beneath it.}
-#nop {Terrain comes from the ROOM table's TERRAIN key; ROOM_EXITS is an}
-#nop {array of lowercase letters, uppercased here. Interior is blanked each}
-#nop {redraw so shrinking text leaves no tails.}
+#nop {sentence (WEATHER) wrapped beneath it on rows 3-6, then the map picture}
+#nop {from row 7 down to the box edge (mapdraw in map.tin, only while the}
+#nop {mapper is loaded - $mapvnum exists - and on a mapped room). Room name,}
+#nop {vnum, terrain and exits are NOT shown here; the feed has them.}
+#nop {Interior is blanked each redraw so shrinking text leaves no tails.}
 
 #alias {infodraw} {
 	#if {$leftpanel == 1} {
@@ -455,36 +711,9 @@
 				#math {inforow} {$inforow + 1}
 				}
 			};
-		#if {&msdp[ROOM_NAME] > 0} {
-			#var {infoexits} {};
-			#if {&msdp[ROOM_EXITS] > 0} {
-				#foreach {*msdp[ROOM_EXITS][]} {infokey} {
-					#format {infodir} {%u} {$msdp[ROOM_EXITS][$infokey]};
-					#var {infoexits} {$infoexits $infodir}
-					}
-				};
-			#var {infoterr} {};
-			#if {&msdp[ROOM] > 0} {
-				#if {&msdp[ROOM][TERRAIN] > 0} {
-					#var {infoterr} {$msdp[ROOM][TERRAIN]}
-					}
-				};
-			#var {inforoom} {$msdp[ROOM_NAME]    Exits are:$infoexits};
-			#var {inforoom2} {(#$msdp[ROOM_VNUM]) [ $infoterr ]};
-			#format {infowrap} {%w} {{$inforoom}{$leftwidth}};
-			#math {inforows} {&infowrap[] + 1};
-			#math {inforow} {$leftmid1 - $inforows};
-			#foreach {$infowrap[]} {infopiece} {
-				#if {$inforow > 6 && $inforow < $leftmid1} {
-					#format {infopiece} {$leftfmt} {$infopiece};
-					#line {ignore} {#showme {<F005F5F>$infopiece} {$inforow} {$leftcol}}
-					};
-				#math {inforow} {$inforow + 1}
-				};
-			#if {$inforow > 6 && $inforow < $leftmid1} {
-				#format {infopiece} {$leftfmt} {$inforoom2};
-				#line {ignore} {#showme {<F005F5F>$infopiece} {$inforow} {$leftcol}}
-				}
+		#math {maprows} {$leftmid1 - 7};
+		#if {$maprows >= 3 && &{mapvnum} > 0} {
+			mapdraw {$maprows} {$leftwidth} {7} {$leftcol}
 			};
 		inputpaint
 		}
@@ -492,14 +721,14 @@
 
 #alias {leftdraw} {
 	#if {$leftpanel == 1} {
-		#draw {box} {1} {1} {$leftmid1} {$leftcols};
-		#line {ignore} {#showme {<ffa>[ Info ]} {1} {$leftcol}};
+		#draw {$paneledge} {box} {1} {1} {$leftmid1} {$leftcols};
+		#line {ignore} {#showme {${panelhead}[ Info ]} {1} {$leftcol}};
 		infodraw;
-		#draw {box} {$leftmid1} {1} {$leftmid2} {$leftcols};
-		#line {ignore} {#showme {<ffa>[ Opponent ]} {$leftmid1} {$leftcol}};
+		#draw {$paneledge} {box} {$leftmid1} {1} {$leftmid2} {$leftcols};
+		#line {ignore} {#showme {${panelhead}[ Opponent ]} {$leftmid1} {$leftcol}};
 		oppdraw;
-		#draw {box} {$leftmid2} {1} {-1} {$leftcols};
-		#line {ignore} {#showme {<ffa>[ HUD ]} {$leftmid2} {$leftcol}};
+		#draw {$paneledge} {box} {$leftmid2} {1} {-1} {$leftcols};
+		#line {ignore} {#showme {${panelhead}[ HUD ]} {$leftmid2} {$leftcol}};
 		huddraw
 		}
 	}
@@ -542,17 +771,120 @@
 		};
 	#math {hudfill} {$hudgw * $hudpct / 100};
 	#math {hudrest} {$hudgw - $hudfill};
-	#format {hudf} {%.${hudfill}s} {$hudfullbar};
-	#format {hudr} {%.${hudrest}s} {$hudemptybar};
+	#var {hudf} {$hudfullpre[$hudfill]};
+	#var {hudr} {$hudemptypre[$hudrest]};
 	#math {hudline} {$hudbase + %2};
 	#if {$hudline < $leftbot} {
 		#line {ignore} {#showme {%3$hudf<F909090>$hudr %3%4} {$hudline} {$leftcol}}
 		}
 	}
 
+#nop {pctinbar writes a percentage INTO a bar rather than beside it: %1 row,}
+#nop {%2 the bar's leftmost column, %3 its width in cells, %4 the percentage,}
+#nop {%5 the bar's fill colour as a bare hex triplet (no angle brackets).}
+#nop {Only the cells the text covers are written - a padded full width string}
+#nop {would blank the blocks either side of it - so this must run AFTER the bar}
+#nop {itself is drawn.}
+
+#nop {A terminal cell has no transparency: whatever the text is drawn over is}
+#nop {gone, and a cell with no background of its own falls back to the}
+#nop {terminal's, which reads as a grey hole punched through the bar. So the}
+#nop {figure is drawn ONE CHARACTER AT A TIME and each character carries the}
+#nop {background of the cell it lands on - the fill colour over the filled part}
+#nop {of the bar, the terminal default over the empty part, where it matches}
+#nop {its neighbours already. That is why this walks the string instead of}
+#nop {emitting it in one #showme.}
+
+#nop {White over the filled part, black once the bar is under half. The reason}
+#nop {is positional, not decorative: the text is centred, so below 50%% the}
+#nop {middle of the bar has fallen into the pale empty section and white would}
+#nop {disappear into it. Shared by the left panel's opponent gauge and the boss}
+#nop {banner so the two can never drift apart.}
+
+#nop {A literal per-cent is a SINGLE %% - tintin prints %%%% as two signs.}
+
+#nop {The empty half of a bar is a light shade block ░ drawn in <F909090> over}
+#nop {the terminal's own background, so its APPARENT colour is a blend, and a}
+#nop {digit dropped on it with no background of its own shows the unblended}
+#nop {terminal colour - a pale box sitting in the band. Measured off a}
+#nop {screenshot: the terminal background is C0C0C0 and mintty fills ░ at}
+#nop {0.243 coverage, which puts the band at 0.243*90 + 0.757*C0 = B4B4B4.}
+#nop {Retune this one value if the terminal theme changes; nothing else needs}
+#nop {to move.}
+
+#variable {pctbempty} {B4B4B4}
+
+#alias {pctinbar} {
+	#nop {No padding spaces around the figure: a space is drawn in the terminal};
+	#nop {background, so it punched a grey gap through the bar either side of};
+	#nop {the text. The digits sit straight on the blocks instead.};
+	#var {pctbtext} {%4%};
+	#format {pctblen} {%L} {$pctbtext};
+	#math {pctbpad} {(%3 - $pctblen) / 2};
+	#if {$pctbpad < 0} {
+		#var {pctbpad} {0}
+		};
+	#math {pctbcol} {%2 + $pctbpad};
+	#var {pctbfg} {<FFFFFFF>};
+	#if {%4 < 50} {
+		#var {pctbfg} {<F000000>}
+		};
+	#nop {Same fill arithmetic hudgauge and bossbox use, so the boundary the};
+	#nop {text is coloured against is the boundary actually drawn.};
+	#var {pctbbar} {%5};
+	#if {"$pctbbar" == ""} {
+		#var {pctbbar} {6B1111}
+		};
+	#var {pctbon} {<B$pctbbar>};
+	#var {pctboff} {<B$pctbempty>};
+	#math {pctbfill} {%3 * %4 / 100};
+	#if {$pctbfill > %3} {
+		#var {pctbfill} {%3}
+		};
+	#if {$pctbfill < 0} {
+		#var {pctbfill} {0}
+		};
+	#var {pctbrem} {$pctbtext};
+	#var {pctbi} {$pctbpad};
+	#var {pctbx} {$pctbcol};
+	#while {1 == 1} {
+		#regexp {$pctbrem} {^{.}{.*}$} {#var {pctbc} {&1};#var {pctbrem} {&2}} {#break};
+		#if {$pctbi < $pctbfill} {
+			#var {pctbbg} {$pctbon}
+			} {
+			#var {pctbbg} {$pctboff}
+			};
+		#nop {The trailing <099> is NOT optional: a positioned #showme emits the};
+		#nop {character and then a bare carriage return, with no SGR reset, so a};
+		#nop {background set here stays the terminal's active attribute and every};
+		#nop {later blank and erase paints in it - the whole screen went red.};
+		#line {ignore} {#showme {$pctbbg$pctbfg$pctbc<099>} {%1} {$pctbx}};
+		#math {pctbi} {$pctbi + 1};
+		#math {pctbx} {$pctbx + 1}
+		}
+	}
+
+#nop {hudk renders a count in thousands with one decimal: 7523 becomes 7.5k.}
+#nop {Tintin has integer maths only, so the decimal is the hundreds digit taken}
+#nop {separately - truncated, not rounded, which is what you want for a}
+#nop {"still to go" figure. Under a thousand it stays a plain number, because}
+#nop {"0.8k" reads worse than "812".}
+
+#alias {hudk} {
+	#if {%1 >= 1000} {
+		#math {hudkw} {%1 / 1000};
+		#math {hudkf} {(%1 %% 1000) / 100};
+		#var {hudk} {$hudkw.${hudkf}k}
+		} {
+		#var {hudk} {%1}
+		}
+	}
+
 #nop {hudbar draws one stat: the bar row, then "label cur/max" under it.}
 #nop {%1 label, %2 current, %3 max, %4 row offset in the box, %5 colour,}
-#nop {%6 optional regeneration per tick, appended as (+n).}
+#nop {%6 optional regeneration per tick, appended as (+n),}
+#nop {%7 optional text pinned to the RIGHT END of the bar row - the bar is}
+#nop {shortened to make room rather than the text being drawn over it.}
 #nop {("auto" = green/amber/red by percentage, or an explicit <F......> tag).}
 
 #alias {hudbar} {
@@ -576,10 +908,16 @@
 			#var {hudcolor} {<F992222>}
 			}
 		};
-	#math {hudfill} {$hudbarw * $hudpct / 100};
-	#math {hudrest} {$hudbarw - $hudfill};
-	#format {hudf} {%.${hudfill}s} {$hudfullbar};
-	#format {hudr} {%.${hudrest}s} {$hudemptybar};
+	#var {hudsuf} {%7};
+	#var {hudbw} {$hudbarw};
+	#if {"$hudsuf" != ""} {
+		#format {hudsuflen} {%L} {$hudsuf};
+		#math {hudbw} {$hudbarw - $hudsuflen - 1}
+		};
+	#math {hudfill} {$hudbw * $hudpct / 100};
+	#math {hudrest} {$hudbw - $hudfill};
+	#var {hudf} {$hudfullpre[$hudfill]};
+	#var {hudr} {$hudemptypre[$hudrest]};
 	#var {hudcap} {%2/%3};
 	#if {"%6" != ""} {
 		#var {hudcap} {%2/%3 (+%6)}
@@ -588,7 +926,11 @@
 	#format {hudtext} {$leftfmt} {$hudtext};
 	#math {hudline} {$hudbase + %4};
 	#if {$hudline < $leftbot} {
-		#line {ignore} {#showme {$hudcolor$hudf<F909090>$hudr} {$hudline} {$leftcol}}
+		#if {"$hudsuf" != ""} {
+			#line {ignore} {#showme {$hudcolor$hudf<F909090>$hudr<F404040> $hudsuf} {$hudline} {$leftcol}}
+			} {
+			#line {ignore} {#showme {$hudcolor$hudf<F909090>$hudr} {$hudline} {$leftcol}}
+			}
 		};
 	#math {hudline} {$hudline + 1};
 	#if {$hudline < $leftbot} {
@@ -611,6 +953,161 @@
 #nop {box simply empties itself. The interior is blanked on every redraw so}
 #nop {nothing is left behind when a fight finishes.}
 
+#nop {=== Boss banner ===}
+
+#nop {bossregion is the ONLY place the feed's scroll region is set outside}
+#nop {margin mode. The banner does not overlay the feed - it takes rows off the}
+#nop {top of it, so the region has to start below the banner while it is up and}
+#nop {back at row 1 when it comes down.}
+
+#alias {bossregion} {
+	#var {bosstopr} {1};
+	#if {$bosson == 1} {
+		#math {bosstopr} {1 + $bossrows}
+		};
+	#if {$hwmargins == 0} {
+		#screen {scrollregion} {$bosstopr} {$scrollleft} {$panbot} {$scrollright}
+		}
+	}
+
+#nop {Centre one line in the banner interior. Padding is built from a run of}
+#nop {SPACES, which are one byte each, so %%.Ns is safe here in a way it is not}
+#nop {for the block glyphs.}
+
+#alias {bosscenter} {
+	#format {bossclen} {%L} {%1};
+	#math {bosspad} {($bosswidth - $bossclen) / 2};
+	#if {$bosspad < 0} {
+		#var {bosspad} {0}
+		};
+	#format {bosspadstr} {%.${bosspad}s} {$bossblank};
+	#nop {BRACES REQUIRED: $bosspadstr%%1 parses as a variable NAMED};
+	#nop {"bosspadstr%%1", which does not exist, so tintin leaves the whole};
+	#nop {token as literal text. ${bosspadstr} ends the name explicitly.};
+	#format {bosscentered} {$bossfmt} {${bosspadstr}%1}
+	}
+
+#nop {Blank the rows the banner used, so the feed does not inherit its remains}
+#nop {when it comes down.}
+
+#alias {bosswipe} {
+	#var {bossrow} {1};
+	#while {$bossrow <= $bossrows} {
+		#line {ignore} {#showme {$bossfeedblank} {$bossrow} {$scrollleft}};
+		#math {bossrow} {$bossrow + 1}
+		}
+	}
+
+#nop {BYTE CLIP: a positioned #showme is cut to the columns remaining on the}
+#nop {line counted in BYTES, so a run of three-byte block glyphs is truncated}
+#nop {to a third of its length - at column 73 of a 210 column screen only 46 of}
+#nop {56 glyphs survived. The bar is therefore emitted in short runs, each}
+#nop {well inside the budget. #draw does NOT suffer this (its border is ASCII)}
+#nop {and it takes a colour as its first argument, which is how the frame gets}
+#nop {its gold without being hand-drawn.}
+
+#alias {bossrunfull} {
+	#var {bossn} {%2};
+	#while {$bossn > 0} {
+		#var {bossk} {$bosschunkw};
+		#if {$bossk > $bossn} {
+			#var {bossk} {$bossn}
+			};
+		#line {ignore} {#showme {<F6B1111>$bossfullpre[$bossk]} {%1} {$bosscolx}};
+		#math {bosscolx} {$bosscolx + $bossk};
+		#math {bossn} {$bossn - $bossk}
+		}
+	}
+
+#alias {bossrunempty} {
+	#var {bossn} {%2};
+	#while {$bossn > 0} {
+		#var {bossk} {$bosschunkw};
+		#if {$bossk > $bossn} {
+			#var {bossk} {$bossn}
+			};
+		#line {ignore} {#showme {<F909090>$bossemptypre[$bossk]} {%1} {$bosscolx}};
+		#math {bosscolx} {$bosscolx + $bossk};
+		#math {bossn} {$bossn - $bossk}
+		}
+	}
+
+#nop {The percentage is written INTO the bar rather than under it, so it is}
+#nop {drawn after the runs and only over the cells it occupies - a full width}
+#nop {padded string here would blank the blocks either side of it. It goes on}
+#nop {the upper bar row, leaving the lower one unbroken.}
+
+#nop {White over the filled part, black once the bar is under half: at that}
+#nop {point the middle of the bar has fallen into the pale empty section and}
+#nop {white would disappear into it.}
+
+#alias {bosspctdraw} {
+	pctinbar {2} {$bosscol} {$bosswidth} {$bosshp} {6B1111}
+	}
+
+#alias {bossbarrow} {
+	#var {bosscolx} {$bosscol};
+	bossrunfull {%1} {$bossfill};
+	bossrunempty {%1} {$bossrest}
+	}
+
+#nop {Two rows of bar rather than one - a cell cannot be made taller, so depth}
+#nop {is stacked rows. Name centred under it, level centred under that.}
+
+#alias {bossbox} {
+	#var {bossfill} {0};
+	#if {$bosshp > 0} {
+		#math {bossfill} {$bosswidth * $bosshp / 100}
+		};
+	#if {$bossfill > $bosswidth} {
+		#var {bossfill} {$bosswidth}
+		};
+	#math {bossrest} {$bosswidth - $bossfill};
+	#math {bosscol} {$bossleft + 1};
+	#draw {<FB8860B>} {box} {1} {$bossleft} {$bossrows} {$bossright};
+	bossbarrow {2};
+	bossbarrow {3};
+	bosspctdraw;
+	bosscenter {$bossname};
+	#line {ignore} {#showme {<F6B1111>$bosscentered} {4} {$bosscol}};
+	bosscenter {Level $bosslvl};
+	#line {ignore} {#showme {<F404040>$bosscentered} {5} {$bosscol}}
+	}
+
+#nop {Raising or lowering the banner changes the feed's height, so the region}
+#nop {is re-set ONLY on the transition, never on every redraw.}
+
+#alias {bossdraw} {
+	#var {bosswant} {0};
+	#if {$bosspanel == 1 && $hwmargins == 0} {
+		hudstr {OPPONENT_NAME};
+		#var {bossname} {$hudstr};
+		hudnum {OPPONENT_LEVEL};
+		#var {bosslvl} {$hudnum};
+		hudnum {OPPONENT_HEALTH};
+		#var {bosshp} {$hudnum};
+		#if {"$bossname" != "" && $bosslvl > $bossmin} {
+			#var {bosswant} {1}
+			}
+		};
+	#if {$bosswant != $bosson} {
+		#var {bosson} {$bosswant};
+		bossregion;
+		#if {$bosson == 0} {
+			bosswipe
+			}
+		};
+	#if {$bosson == 1} {
+		bossbox
+		}
+	}
+
+#nop {Named apart from the $bosson STATE variable on purpose - these are the}
+#nop {user-facing toggles, $bosson is whether the banner is currently up.}
+
+#alias {bossbaron}  {#var {bosspanel} {1};bossdraw}
+#alias {bossbaroff} {#var {bosspanel} {0};bossdraw}
+
 #alias {oppdraw} {
 	#if {$leftpanel == 1} {
 		#math {opprow} {$leftmid1 + 1};
@@ -620,6 +1117,11 @@
 			};
 		hudstr {OPPONENT_NAME};
 		#var {hudoppname} {$hudstr};
+		#nop {While the banner is up the foe is shown there instead, so this box};
+		#nop {is left blank rather than saying the same thing twice.};
+		#if {$bosson == 1} {
+			#var {hudoppname} {}
+			};
 		#if {"$hudoppname" != ""} {
 			hudstr {OPPONENT_LEVEL};
 			#var {hudopplvl} {$hudstr};
@@ -627,7 +1129,13 @@
 			#var {hudopphp} {$hudnum};
 			#var {hudbase} {$opptop};
 			hudgauge {$hudopphp} {0} {<F6B1111>} {$hudswords};
-			hudtextrow {1} {$hudoppname (lvl $hudopplvl)  $hudopphp%};
+			#nop {hudgauge leaves the drawn width in $hudgw - the swords marker};
+			#nop {costs it two cells - so centre the figure on that, not on the};
+			#nop {full panel width. Same text treatment as the boss banner; the};
+			#nop {thickness and the gold frame stay exclusive to the banner.};
+			#math {hudline} {$hudbase + 0};
+			pctinbar {$hudline} {$leftcol} {$hudgw} {$hudopphp} {6B1111};
+			hudtextrow {1} {$hudoppname (lvl $hudopplvl)};
 			#var {hudbase} {$hudtop}
 			};
 		inputpaint
@@ -637,6 +1145,11 @@
 #alias {huddraw} {
 	#if {$leftpanel == 1} {
 		#var {hudbase} {$hudtop};
+		#math {hudrow} {$leftmid2 + 1};
+		#while {$hudrow < $leftbot} {
+			#line {ignore} {#showme {$leftblank} {$hudrow} {$leftcol}};
+			#math {hudrow} {$hudrow + 1}
+			};
 		hudnum {HEALTH};
 		#var {hudhp} {$hudnum};
 		hudnum {HEALTH_MAX};
@@ -658,6 +1171,10 @@
 		hudnum {EXPERIENCE_MAX};
 		#var {hudxpm} {$hudnum};
 		hudnum {EXPERIENCE};
+		#nop {The server pushes EXPERIENCE as the xp still needed for the next};
+		#nop {level, so it IS the to-next-level figure - the bar's fill is the};
+		#nop {complement of it.};
+		#var {hudtnl} {$hudnum};
 		#math {hudxp} {$hudxpm - $hudnum};
 		#if {$hudxp < 0} {
 			#var {hudxp} {0}
@@ -672,17 +1189,44 @@
 		#var {hudpb} {$hudnum};
 		hudnum {ATTACK_SPEED};
 		#var {hudspd} {$hudnum};
+		hudnum {SPELL_POWER};
+		#var {hudspow} {$hudnum};
+		hudnum {SPELL_PEN};
+		#var {hudspen} {$hudnum};
+		hudnum {WILLPOWER};
+		#var {hudwill} {$hudnum};
+		hudnum {SPELL_SAVE};
+		#var {hudsave} {$hudnum};
+		hudnum {SPIRIT};
+		#var {hudspirit} {$hudnum};
 		hudbar {HP} {$hudhp} {$hudhpm} {0} {<F992222>} {$hudhpr};
 		hudbar {Stam} {$hudst} {$hudstm} {3} {<F2244AA>} {$hudstr2};
 		hudbar {Moves} {$hudmv} {$hudmvm} {6} {<F1E7A1E>} {$hudmvr};
 		hudtextrow {9} {OB: $hudob  DB: $huddb  PB: $hudpb};
-		hudtextrow {10} {Speed: $hudspd};
-		hudtextrow {11} {Tactics: $hudtac};
+		#nop {Quoted comparisons on purpose: if a character switch has removed};
+		#nop {a flag, tintin leaves it as literal text, which is simply not};
+		#nop {equal to "1" rather than blowing up a numeric test. $hudrow walks};
+		#nop {down one row per class so the rows stack instead of overwriting.};
+		#var {hudrow} {10};
+		#if {"$hudmage" == "1"} {
+			hudtextrow {$hudrow} {Spell Pow: $hudspow  Pen: $hudspen};
+			#math {hudrow} {$hudrow + 1}
+			};
+		#if {"$hudmystic" == "1"} {
+			hudtextrow {$hudrow} {Will: $hudwill  Save: $hudsave  Spirit: $hudspirit};
+			#math {hudrow} {$hudrow + 1}
+			};
+		#if {$hudrow == 10} {
+			hudtextrow {$hudrow} {Speed: $hudspd};
+			#math {hudrow} {$hudrow + 1}
+			};
+		hudtextrow {$hudrow} {Tactics: $hudtac};
 		#math {hudxpoff} {$leftbot - 2 - $hudtop};
 		#if {$hudxpoff < 13} {
 			#var {hudxpoff} {13}
 			};
-		hudbar {XP} {$hudxp} {$hudxpm} {$hudxpoff} {<F5B2D91>} {};
+		hudk {$hudtnl};
+		hudbar {XP} {$hudxp} {$hudxpm} {$hudxpoff} {<F5B2D91>} {} {$hudk TNL};
 		inputpaint
 		}
 	}
@@ -762,7 +1306,7 @@
 #nop {*msdp[] is the list of variable NAMES; $msdp[] would return the values.}
 #nop {#line ignore stops the panel's own output from being fed back into triggers.}
 
-#event {IAC SB MSDP} {#var {msdp[%0]} {%1};#if {$msdppanel == 1} {msdpdraw};#if {$leftpanel == 1} {huddraw;oppdraw;infodraw}}
+#event {IAC SB MSDP} {#var {msdp[%0]} {%1};bossdraw;#if {$msdppanel == 1} {msdpdraw};#if {$leftpanel == 1} {huddraw;oppdraw;infodraw}}
 
 #event {IAC WILL MSDP} {#showme {<ffa>MSDP: server offered WILL MSDP}}
 #event {IAC DO MSDP} {#showme {<ffa>MSDP: client replied DO MSDP}}
@@ -908,6 +1452,8 @@
 #nop {Verified against RotS src/act_comm.cpp: do_say, do_gsay, do_tell, do_whisper,}
 #nop {do_ask, do_page and do_gen_com (narrate / chat / yell / sing).}
 
+#action {You have been idle} {afk}
+
 #action {You say '%1}        {#var {soccolor} {<F005F5F>};#var {soctmp} {%0};socadd} {5}
 #action {%1 says '%2}        {#var {soccolor} {<F005F5F>};#var {soctmp} {%0};socadd} {5}
 
@@ -951,18 +1497,534 @@
 #alias {socialson} {
 	#class {socials} {kill};
 	#read {socials.tin};
-	#showme {<afa>Social capture on}
+	#showme {${panelhead}Social capture on}
 	}
 
 #alias {socialsoff} {
 	#class {socials} {kill};
-	#showme {<afa>Social capture off}
+	#showme {${panelhead}Social capture off}
+	}
+
+#nop {=== Skill / spell timer ===}
+
+#nop {There is no "you start" message for most timed actions - bash and}
+#nop {ambush simply go quiet - so the start is detected from the server's}
+#nop {own wait wheel instead. While a character waits, the server writes one}
+#nop {\r|\r packet per remaining beat (comm.cpp), and those arrive as raw}
+#nop {packets of length 1, which nothing else in the stream matches. Each}
+#nop {one is a beat actually elapsed on the server, so the count is real}
+#nop {rather than a local guess. The total comes from skills.tin, keyed on}
+#nop {the command just sent. Needs "set spinner" ON in game.}
+
+#read {skills.tin}
+
+#nop {The practice list is the authoritative source: it prints each skill with}
+#nop {the time THIS character actually takes, already divided down by casting}
+#nop {proficiency. Run "prac" once after login and every timed skill is known}
+#nop {exactly, with no guessing and nothing inferred from play.}
+
+#nop {A line looks like:}
+#nop {  bash                       (Mastered)  ( 12 time)}
+#nop {  magic missile              (Mastered)  (  5 time,     6 stamina)}
+#nop {Parentheses are not usable in an action pattern, so the action grabs}
+#nop {everything before " time" and the parser takes the name up to the first}
+#nop {bracket and the number off the end. A line with no trailing number - say}
+#nop {somebody asking what time it is - yields nothing and is ignored.}
+
+#variable {ptime} {}
+#variable {pracraw} {}
+#variable {pracname} {}
+#variable {practime} {}
+#variable {praccount} {0}
+
+#action {%1 time%2} {#var {pracraw} {%1};pracparse} {6}
+
+#alias {pracparse} {
+	#var {pracname} {};
+	#var {practime} {};
+	#nop {The character class ends on a letter, so the padding before the};
+	#nop {bracket is left out and no space stripping step is needed. A #format};
+	#nop {space strip was used here and had to go: escaped for use inside an};
+	#nop {alias it came through as literal text in the real client, and every};
+	#nop {skill was then filed under that one bogus key. Only NUMBERED};
+	#nop {arguments need escaping - format letters must not be escaped.};
+	#regexp {$pracraw} {^{([A-Za-z' -]*[A-Za-z])}} {#var {pracname} {&1}};
+	#regexp {$pracraw} {{(\d+)}$} {#var {practime} {&1}};
+	#if {"$pracname" != "" && "$practime" != ""} {
+		#var {ptime[$pracname]} {$practime};
+		#math {praccount} {$praccount + 1}
+		}
+	}
+
+#alias {practimes} {
+	#showme {${panelhead}Times learned from the practice list: &ptime[]};
+	#showme {*ptime[]}
+	}
+
+#nop {skills.tin holds the server's raw beats, which is exact for combat skills}
+#nop {but too high for spells - those are divided down by casting proficiency.}
+#nop {It is only a fallback; the practice list below is authoritative. Note that}
+#nop {either only works when the command carries the official skill name, so}
+#nop {client side aliases should expand to "bash $target", "cast 'fireball'"}
+#nop {and so on - an in-game alias is expanded server side and never reaches}
+#nop {the client. castinfo reports what a command resolved to.}
+
+#variable {castx} {0}
+#variable {casty} {0}
+#variable {castkey} {}
+#variable {castraw} {}
+#variable {castsent} {}
+#variable {castalt} {}
+#variable {castmatch} {}
+#variable {castfound} {0}
+#variable {castgen} {0}
+#variable {castarmed} {0}
+#variable {caststamp} {0}
+#variable {castnow} {0}
+#variable {castel} {0}
+#variable {aacount} {0}
+#variable {castplen} {0}
+#variable {castslen} {0}
+#variable {castalive} {0}
+#variable {castsaw} {0}
+#variable {castboundary} {1}
+#variable {castlasttext} {0}
+#variable {castgap} {0}
+#variable {castpend} {0}
+#variable {castheld} {0}
+#variable {castholdat} {0}
+#variable {castholdnow} {0}
+#variable {castholdel} {0}
+#variable {castqueue} {}
+
+#nop {Arm the total from the command being sent: a quoted spell name wins}
+#nop {over the first word, so "cas 'magic missile' orc" keys on the spell.}
+#nop {Captures from #regexp arrive in &1, not %1 - and inside an alias the}
+#nop {%1 in the PATTERN has to be written %%1 or the alias eats it first.}
+
+#alias {castlook} {
+	#if {"%1" != ""} {
+		#if {&ptime[%1] > 0} {
+			#var {castfound} {$ptime[%1]};
+			#var {castmatch} {%1}
+			} {
+			#if {&beats[%1] > 0} {
+				#var {castfound} {$beats[%1]};
+				#var {castmatch} {%1}
+				}
+			}
+		}
+	}
+
+#alias {castarm} {
+	#nop {A blank line ends a cast: process_input calls break_spell the moment};
+	#nop {it sees an empty line from a character with AFF_WAITWHEEL set};
+	#nop {(comm.cpp ~1887). That is a client side certainty, so the readout};
+	#nop {goes at once rather than waiting to notice the silence.};
+	#format {castslen} {%L} {$castraw};
+	#if {$castslen == 0} {
+		#if {$casty > 0} {
+			castclear
+			};
+		#return
+		};
+	#var {castsent} {$castraw};
+	#var {castkey} {};
+	#var {castalt} {};
+	#var {castmatch} {};
+	#nop {Braced patterns are raw regular expressions. They matter here because};
+	#nop {the sent line carries a carriage return - a plain %%1 swallows it and};
+	#nop {the key never matches the table, which is why one word commands like};
+	#nop {hide silently showed no total.};
+	#regexp {$castsent} {^{[a-zA-Z]+}} {#var {castkey} {&1}};
+	#regexp {$castsent} {^{[a-zA-Z ]+}} {#var {castalt} {&1}};
+	#regexp {$castsent} {'{[^']+}'} {#var {castkey} {&1};#var {castalt} {}};
+	#var {castfound} {0};
+	castlook {$castkey};
+	#if {$castfound == 0} {
+		castlook {$castalt}
+		};
+	#if {"$castmatch" == ""} {
+		#var {castmatch} {$castkey}
+		};
+	#if {$castfound == 0} {
+		#return
+		};
+	#nop {A command sent while a wait is already running does not interrupt it -};
+	#nop {the server queues the input and serves it when the current action};
+	#nop {finishes, so the readout queues it too and gives it its own count};
+	#nop {rather than letting the figures run on past the first total.};
+	#nop {castheld means the readout is only holding a finished total, so the};
+	#nop {action itself is over and the new one starts at once. A genuinely};
+	#nop {running action queues instead, the way the server queues the input.};
+	#if {($casty > 0 && $castheld == 0) || $castpend > 0} {
+		#if {&castqueue[] < 5} {
+			#list {castqueue} {add} {$castfound}
+			};
+		#return
+		};
+	caststart {$castfound}
+	}
+
+#nop {The count is driven by the clock, not by the spinner packets. The server}
+#nop {serves waits on its 4 Hz pulse (OPT_USEC 250000 in comm.cpp), so a beat}
+#nop {is a flat quarter second and an N beat action takes N of them. Counting}
+#nop {spinner packets instead loses beats whenever the server coalesces a tick}
+#nop {with other output - someone walking into the room - because the packet is}
+#nop {then no longer one character wide.}
+
+#nop {castgen invalidates the ticks still in flight from an earlier action:}
+#nop {every scheduled tick carries the generation it was issued under and}
+#nop {returns quietly if that no longer matches. Unnamed delays are used on}
+#nop {purpose - #undelay on a named one behaves differently between builds.}
+
+#nop {The count is anchored to the server, not to the moment of typing. Between}
+#nop {the two there is a whole pulse of alignment - the wait loop runs BEFORE the}
+#nop {input loop, so the first decrement is the pulse AFTER the one that read the}
+#nop {command - plus the round trip, which measured about three quarters of a}
+#nop {second in total. Counting from the keystroke spent that time and the figure}
+#nop {hit the total a full second before the cast finished.}
+
+#nop {The anchor is the first packet back after the command. For a spell that is}
+#nop {"You start to concentrate.", flushed by process_output on the very pulse}
+#nop {the server read the command, so completion falls exactly N beats later. For}
+#nop {a skill with no start message it is the first spinner tick instead - the}
+#nop {prompt is suppressed while AFF_WAITWHEEL is set (comm.cpp ~line 1067) -}
+#nop {which is one pulse later, so those land a quarter second late rather than}
+#nop {a second early. castbegin is a one shot latch, so the ticks that follow do}
+#nop {not re-anchor it, and a fallback fires it anyway if nothing comes back at}
+#nop {all - with the spinner off a skill would otherwise sit on 1 forever.}
+
+#alias {caststart} {
+	#math {castgen} {$castgen + 1};
+	#var {casty} {%1};
+	#var {castx} {1};
+	#var {castheld} {0};
+	#var {castarmed} {0};
+	#var {castplen} {0};
+	#var {castpend} {0};
+	#var {castalive} {0};
+	#var {castsaw} {0};
+	#var {castboundary} {1};
+	castdraw;
+	#delay {0.75} {castbegin {0}}
+	}
+
+#nop {%%1 is 1 when the anchor is a bare spinner tick. The server sends the}
+#nop {first tick a whole pulse AFTER the one that read the command, so that}
+#nop {stamp is back dated by a beat. 0 is the start message, which is flushed}
+#nop {on the pulse that read the command and needs no correction.}
+
+#alias {castbegin} {
+	#if {$castarmed == 1} {
+		#return
+		};
+	#if {$casty == 0 && $castpend == 0} {
+		#return
+		};
+	#var {castarmed} {1};
+	#format {caststamp} {%U};
+	#if {%1 == 1} {
+		#math {caststamp} {$caststamp - 250000}
+		};
+	#nop {A chained action waits here rather than starting on a timer, so it};
+	#nop {takes over only once the server has actually begun it.};
+	#if {$castpend > 0} {
+		#math {castgen} {$castgen + 1};
+		#var {casty} {$castpend};
+		#var {castpend} {0}
+		};
+	#var {castheld} {0};
+	#var {castx} {1};
+	castdraw;
+	#delay {0.1} {casttick {$castgen}}
+	}
+
+#nop {The two real anchors. A spell announces itself - spell_pa.cpp:756 is the}
+#nop {only place that line is sent - and a skill with no start message betrays}
+#nop {its first beat as a bare one character spinner packet. Nothing else arms}
+#nop {the count, so the completion burst of the PREVIOUS action in a chain}
+#nop {cannot be mistaken for the start of the next one.}
+
+#nop {A one character packet is a spinner tick. It anchors a count that is}
+#nop {still waiting for one, and for a count already running it is the}
+#nop {HEARTBEAT: break_spell (comm.cpp:1756) just zeroes the wait and prints}
+#nop {nothing at all, so the only evidence a cast was cut short is that the}
+#nop {ticks stop. This costs a #format per packet while a cast is running and}
+#nop {nothing the rest of the time.}
+
+#event {RECEIVED OUTPUT} {
+	#if {$casty > 0 || $castpend > 0} {
+		#format {castplen} {%L} {%0};
+		#nop {ANY packet counts as a sign of life, not just a bare tick. The};
+		#nop {server writes the wheel unbuffered and then flushes whatever else};
+		#nop {the pulse produced, so the moment a fight starts talking - a hit};
+		#nop {message, an msdp update - the client reads them as ONE packet and};
+		#nop {the tick stops being one character wide. Watching only for bare};
+		#nop {ticks meant the readout was wiped 0.6 s into any noisy cast.};
+		#format {castalive} {%U};
+		#if {$castplen == 1} {
+			#nop {A bare tick is still what ARMS the watchdog, so a character};
+			#nop {with the in-game spinner off is never cancelled by silence};
+			#nop {that was never going to be broken.};
+			#var {castsaw} {1};
+			#if {$castarmed == 0 && $castboundary == 1} {
+				castbegin {1}
+				}
+			} {
+			#format {castlasttext} {%U};
+			#var {castboundary} {1}
+			}
+		}
+	}
+
+#nop {The server sends this only on the pulse it reads a cast command, so if}
+#nop {it arrives while a count is still running with another action queued,}
+#nop {that count's action has just ended THIS instant. Finishing the segment}
+#nop {here rather than when the clock says so both shows its total at the real}
+#nop {completion and hands the next segment a true anchor, whichever side of}
+#nop {the completion the client's own count happened to fall on.}
+
+#action {You start to concentrate} {castconc}
+
+#alias {castconc} {
+	#if {$castarmed == 1 && $casty > 0 && &castqueue[] > 0} {
+		#var {castx} {$casty};
+		castdraw;
+		castsegdone {$castgen}
+		};
+	#if {$castarmed == 0} {
+		castbegin {0}
+		}
+	}
+
+#nop {The figure is read off the anchor stamp rather than added up hop by hop.}
+#nop {Each #delay fires a few milliseconds late and over fifteen hops that came}
+#nop {to a tenth of a second, enough to miss the completion it is meant to land}
+#nop {on. Polling faster than a beat and only redrawing when the figure actually}
+#nop {changes keeps the screen work at the same four draws a second.}
+
+#alias {casttick} {
+	#if {%1 != $castgen || $castarmed == 0 || $casty == 0} {
+		#return
+		};
+	#format {castnow} {%U};
+	#nop {Two beats of silence with the wheel running means the wait is gone -};
+	#nop {damaged, interrupted, whatever. castalive is only consulted once a};
+	#nop {tick has actually been seen, so with the in game spinner switched off};
+	#nop {the count simply runs to its total as before instead of being killed};
+	#nop {by a heartbeat that was never going to arrive.};
+	#if {$castsaw == 1} {
+		#math {castgap} {$castnow - $castalive};
+		#if {$castgap > 600000} {
+			castclear;
+			#return
+			}
+		};
+	#math {castel} {($castnow - $caststamp) / 250000};
+	#if {$castel < 1} {
+		#var {castel} {1}
+		};
+	#if {$castel > $casty} {
+		#var {castel} {$casty}
+		};
+	#nop {Redrawn on EVERY poll, not only when the figure changes. The readout};
+	#nop {sits on the row #split reserves and tintin repaints that row itself};
+	#nop {whenever it prints a line - a mob walking in, a social, anything - so};
+	#nop {without this the figure and the spinner vanish until the next beat.};
+	#nop {Doing it from the count's own poll keeps it OUT of the received line};
+	#nop {events, which is where an earlier attempt at this broke up-arrow.};
+	#var {castx} {$castel};
+	castdraw;
+	#if {$castx >= $casty} {
+		castsegdone {$castgen}
+		} {
+		#delay {0.1} {casttick {$castgen}}
+		}
+	}
+
+#nop {The count reaches the total on the LAST beat, which the server then spends}
+#nop {actually completing the action - and the command only reached the server}
+#nop {part way into a pulse, plus the round trip. So the figure legitimately}
+#nop {lands on the total a moment before the cast finishes, and clearing it}
+#nop {straight away made the readout vanish while the cast was still running.}
+#nop {The total is HELD instead, until the next action starts or the hold times}
+#nop {out. castheld also tells castarm the readout is idle, so a command typed}
+#nop {during the hold starts at once rather than queueing behind nothing.}
+
+#alias {castsegdone} {
+	#if {%1 != $castgen} {
+		#return
+		};
+	#math {castgen} {$castgen + 1};
+	#nop {The total that was just reached is held either way. If something is};
+	#nop {queued it is armed for its OWN anchor rather than started from this};
+	#nop {moment: this moment is only the client's PREDICTION of the end, and};
+	#nop {chaining off a prediction compounds its error down the chain. Server};
+	#nop {pulses can run long but never short - timediff clamps an overrun to a};
+	#nop {zero sleep and never makes one up - so that error is one directional};
+	#nop {and each link finishes a little further ahead of the real cast.};
+	#var {castheld} {1};
+	#format {castholdat} {%U};
+	#if {&castqueue[] > 0} {
+		#var {castpend} {$castqueue[1]};
+		#list {castqueue} {delete} {1};
+		#var {castarmed} {0};
+		#var {castplen} {0};
+		#nop {Whether the previous action's completion has ALREADY been seen};
+		#nop {decides whether a tick may anchor the new segment. If the last};
+		#nop {thing in was real text, the boundary is behind us and the next};
+		#nop {tick belongs to the new action. If the last thing in was a tick,};
+		#nop {the completion has not landed yet and the trailing tick of the};
+		#nop {OLD action is still to come - accepting it would anchor the new};
+		#nop {segment half a second early, and that error feeds the next};
+		#nop {handover, which is what made a chain drift further ahead with};
+		#nop {every cast.};
+		#if {$castlasttext > $castalive} {
+			#var {castboundary} {1}
+			} {
+			#var {castboundary} {0}
+			};
+		#var {castalive} {0};
+		#var {castsaw} {0}
+		};
+	#delay {0.1} {castlinger}
+	}
+
+#nop {The hold is timed off its own stamp rather than trusted to the delay that}
+#nop {scheduled it: #delay substitutes variables when it FIRES, so a leftover}
+#nop {linger from an earlier action would otherwise wipe a newer total.}
+
+#nop {The hold repaints on the same cadence as the count, because the}
+#nop {completion message lands at exactly the moment the total is being shown}
+#nop {and would otherwise wipe it off the row straight away.}
+
+#alias {castlinger} {
+	#if {$castheld == 1} {
+		castdraw;
+		#format {castholdnow} {%U};
+		#math {castholdel} {$castholdnow - $castholdat};
+		#if {$castholdel >= 1100000} {
+			castclear
+			} {
+			#delay {0.1} {castlinger}
+			}
+		}
+	}
+
+#alias {castclear} {
+	#math {castgen} {$castgen + 1};
+	#list {castqueue} {clear};
+	#var {castheld} {0};
+	#var {castarmed} {0};
+	#var {castpend} {0};
+	#var {castx} {0};
+	#var {casty} {0};
+	castdraw
 	}
 
 #nop {Telnet debug prints raw negotiation to the main screen; keep it opt-in.}
 
+#alias {castinfo} {
+	#showme {${panelhead}sent=[$castsent] key=[$castkey] alt=[$castalt] matched=[$castmatch]};
+	#showme {${panelhead}total=[$casty] beat=[$castx] held=[$castheld] queued=[$castqueue[%*]] practice=[&ptime[]] table=[&beats[]]}
+	}
+
+#nop {=== Auto-attack ===}
+
+#nop {The mob triggers live in auto-attack.tin, wrapped in the autoattack}
+#nop {class. Switching it off is a class kill, switching it on re-reads the}
+#nop {file after killing it - so turning it on twice replaces the triggers}
+#nop {rather than doubling them, and turning it off leaves nothing behind.}
+#nop {Off by default: nothing reads auto-attack.tin at startup.}
+
+#alias {aa-on} {
+	#class {autoattack} {kill};
+	#read {auto-attack.tin};
+	#class {autoattack} {size} {aacount};
+	#showme {${panelhead}Auto-attack ON - $aacount mobs armed.}
+	}
+
+#alias {aa-off} {
+	#class {autoattack} {kill};
+	#showme {${panelhead}Auto-attack OFF.}
+	}
+
+#alias {auto-attack} {
+	#class {autoattack} {size} {aacount};
+	#if {$aacount > 0} {
+		#showme {${panelhead}Auto-attack is ON - $aacount mobs armed.};
+		#class {autoattack} {list}
+		} {
+		#showme {${panelhead}Auto-attack is OFF.}
+		}
+	}
+
+#nop {=== Mapper ===}
+
+#nop {The mapper lives in map.tin, wrapped in the mapper class, on the same}
+#nop {pattern as auto-attack: map-on kills the class then reads the file (so it}
+#nop {is safe to run twice), map-off saves the map and kills the class. Reading}
+#nop {the file loads bin/rots.map; the commands (mapping, goto, mapmark ...)}
+#nop {only exist while it is on. Switched on automatically by the CHARACTER_NAME}
+#nop {login event above; map-off turns it off until the next login.}
+
+#alias {map-on} {
+	#class {mapper} {kill};
+	#read {map.tin};
+	#showme {${panelhead}Mapper ON - 'mapping' toggles recording, 'goto <landmark>' walks.}
+	}
+
+#alias {map-off} {
+	#class {mapper} {size} {mapcount};
+	#if {$mapcount > 0} {mapsave};
+	#class {mapper} {kill};
+	#showme {${panelhead}Mapper OFF.}
+	}
+
+#alias {mapper} {
+	#class {mapper} {size} {mapcount};
+	#if {$mapcount > 0} {
+		#showme {${panelhead}Mapper is ON - recording is $mapcapture (1 = on), room $mapvnum.};
+		#map info
+		} {
+		#showme {${panelhead}Mapper is OFF.}
+		}
+	}
+
 #alias {telnetdebugon} {#config {DEBUG TELNET} {ON}}
 #alias {telnetdebugoff} {#config {DEBUG TELNET} {OFF}}
+
+#nop {=== Command history ===}
+
+#nop {Keep one-letter commands out of the up-arrow history - j, x, b and the}
+#nop {rest are quicker to retype than to scroll past. histmin is the shortest}
+#nop {command worth remembering; raise it to 3 to drop two-letter ones too.}
+
+#nop {RECEIVED INPUT is the only event that sees the RAW TYPED LINE: it fires}
+#nop {before alias expansion, so typing "cs" reports "cs" rather than the}
+#nop {cast command it turns into. SENT OUTPUT reports the expansion and is}
+#nop {therefore no use for this.}
+
+#nop {The #delay is NOT optional. RECEIVED INPUT fires BEFORE the line is}
+#nop {stored, so deleting straight away removes the PREVIOUS entry - measured,}
+#nop {it ate "look north" while keeping "j". Deferring by one pass puts the}
+#nop {delete after the store. The one case this gets wrong is several lines}
+#nop {arriving in a single read - a pasted block - where the deletes land}
+#nop {together and take the newest entries instead.}
+
+#variable {histmin} {2}
+#variable {histlen} {0}
+
+#event {RECEIVED INPUT} {
+	#format {histlen} {%L} {%0};
+	#nop {A bare enter is stored too, and it is what cancels a cast, so it};
+	#nop {would otherwise fill the history with blanks. Zero is shorter than};
+	#nop {histmin, so the same test covers it.};
+	#if {$histlen < $histmin} {
+		#delay {0} {#history {delete}}
+		}
+	}
 
 #nop {=== Input line keys ===}
 
@@ -1035,10 +2097,17 @@
 
 #variable {cmdecho} {1}
 
-#event {SENT OUTPUT} {#if {$cmdecho == 1} {#regexp {%0} {^\w} {#showme {<F404040>%0}}};inputpaint}
+#nop {The sent line carries its CARRIAGE RETURN. Echoing %0 whole printed it}
+#nop {too, and the CR plus #showme's own line ending came out as TWO line}
+#nop {terminators - "sc\r\r\n" then "\r\n" on the wire - which is what put a}
+#nop {blank line under every command typed. The braced capture takes the}
+#nop {command up to but not including the CR. The leading \w still skips}
+#nop {telnet negotiation, which is binary and starts with IAC (0xFF).}
 
-#alias {echoon} {#var {cmdecho} {1};#showme {<afa>Command echo on}}
-#alias {echooff} {#var {cmdecho} {0};#showme {<afa>Command echo off}}
+#event {SENT OUTPUT} {#if {$cmdecho == 1} {#regexp {%0} {^{\w[^\r]*}} {#showme {<F404040>&1}}};#var {castraw} {%0};castarm;inputpaint}
+
+#alias {echoon} {#var {cmdecho} {1};#showme {${panelhead}Command echo on}}
+#alias {echooff} {#var {cmdecho} {0};#showme {${panelhead}Command echo off}}
 
 #nop {Apply the panel layout once everything above is defined. The delayed second}
 #nop {pass catches the resize that follows #screen maximize in main.tin.}

@@ -1,14 +1,23 @@
 #nop {Tinwe - converted from jmc3714/tinwe.set}
 
+#nop {The shared mage spell set. Read here rather than repeated per}
+#nop {character; loadchar kills the character class first, so these come}
+#nop {and go with the profile and cannot leak into the next character.}
+
+#read {classes/whitie-mage.tin}
+
 #variable {food} {way}
 #variable {foodsource} {all}
 #variable {drink} {flask}
 #variable {leader} {Chiller}
 #variable {target} {drake}
 
-#alias {a} {cas 'chill ray' $target}
-#alias {aa} {cas 'chill ray' $target}
-#alias {m} {cas 'magic missile' $target}
+#nop {Spelled out as "cast" with the name quoted so the skill timer can find}
+#nop {the spell's time - see classes/whitie-mage.tin.}
+
+#alias {a} {cast 'chill ray' $target}
+#alias {aa} {cast 'chill ray' $target}
+#alias {m} {cast 'magic missile' $target}
 #alias {cotton} {rem all.obs;wear grey}
 #alias {metal} {wear all.obs}
 #alias {kb} {k bear}
@@ -19,4 +28,4 @@
 
 #nop {TAB attacks the current target, as in JMC; it replaces tab completion.}
 
-#macro {\t} {cas 'lightning bolt' $target}
+#macro {\t} {cast 'lightning bolt' $target}

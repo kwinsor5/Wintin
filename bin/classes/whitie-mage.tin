@@ -1,0 +1,46 @@
+#nop {Whitie mage - spell aliases shared by any character that reads this file.}
+#nop {Load from a character file with #read {classes/whitie-mage.tin}.}
+
+#nop {Written with the full word "cast" and the spell name in quotes on purpose.}
+#nop {The skill timer above the input works out the total from the command that}
+#nop {goes over the wire, so it needs the official spell name: an abbreviation}
+#nop {like "cas" is fine for the game but an IN-GAME alias is expanded server}
+#nop {side and never reaches the client at all, which is why those never showed}
+#nop {a total. These aliases are client side, so the full name is sent.}
+
+#nop {%0 passes on whatever is typed after the alias, so "lb orc" sends}
+#nop {cast 'lightning bolt' orc. Without it tintin silently drops the target.}
+
+#nop {HUD: add the spell power / penetration row. This is the mage flag only -}
+#nop {a character that also reads another class profile gets that class's row}
+#nop {as well, whatever the read order. loadchar resets the flags before}
+#nop {reading a character file, so it does not follow a character switch.}
+
+#variable {hudmage} {1}
+
+#nop {cs (cure self) and vs (vitalize self) are NOT here - they live in}
+#nop {global.tin, because every caster wants them, not just this role.}
+
+#alias {fi} {cast 'firebolt' %0}
+#alias {x}  {cast 'expose elements' %0}
+#alias {lb} {cast 'lightning bolt' %0}
+#alias {dt} {cast 'detect hidden' %0}
+#alias {rp} {cast 'resist poison' %0}
+#alias {pa} {cast 'pragmatism' %0}
+#alias {ps} {prep 'lightning strike' %0}
+#alias {ls} {cast 'lightning strike' %0}
+#alias {su} {cast 'summon' %0}
+#alias {bl} {cast 'blink' %0}
+#alias {id} {cast 'identify' %0}
+#alias {fl} {cast 'flash' %0}
+#alias {ll} {cast 'locate living' %0}
+#alias {rl} {cast 'reveal life' %0}
+#alias {ce} {cast 'create light' %0}
+#alias {re} {cast 'relocate' %0}
+#alias {ea} {cast 'earthquake' %0}
+#alias {fb} {cast 'fireball' %0}
+#alias {cc} {cast 'cone of cold' %0}
+
+#nop {Not a spell, but it belongs with the set.}
+
+#alias {b}  {bash %0}

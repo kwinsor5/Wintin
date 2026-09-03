@@ -1,0 +1,106 @@
+#nop {Generated from RotS src/consts.cpp: skills[MAX_SKILLS], field 'beats',}
+#nop {the heartbeats a skill or spell occupies. The game loop runs 4 passes}
+#nop {per second (comm.cpp OPT_USEC 250000), so a beat is a quarter second.}
+
+#nop {Combat skills use beats directly (WAIT_STATE_FULL(ch, skills[X].beats)),}
+#nop {while spells scale it down with proficiency - CASTING_TIME in spells.h is}
+#nop {(beats * 30) / (30 + prof level) - so for a practised caster the real}
+#nop {total is shorter than the figure here and the counter simply clears}
+#nop {early. The client cannot know proficiency; MSDP does not carry it.}
+
+#class {skillbeats} {open}
+
+#variable {beats[bash]} {12}
+#variable {beats[hide]} {4}
+#variable {beats[ambush]} {20}
+#variable {beats[track]} {8}
+#variable {beats[gather herbs]} {10}
+#variable {beats[tame]} {60}
+#variable {beats[calm]} {6}
+#variable {beats[whistle]} {6}
+#variable {beats[stalking]} {6}
+#variable {beats[detect hidden]} {10}
+#variable {beats[evasion]} {10}
+#variable {beats[poison]} {19}
+#variable {beats[resist poison]} {25}
+#variable {beats[curing saturation]} {13}
+#variable {beats[restlessness]} {13}
+#variable {beats[resist magic]} {10}
+#variable {beats[slow digestion]} {9}
+#variable {beats[dispel regeneration]} {23}
+#variable {beats[insight]} {12}
+#variable {beats[pragmatism]} {12}
+#variable {beats[haze]} {16}
+#variable {beats[fear]} {12}
+#variable {beats[divination]} {24}
+#variable {beats[sanctuary]} {36}
+#variable {beats[vitality]} {12}
+#variable {beats[terror]} {15}
+#variable {beats[refresh all]} {24}
+#variable {beats[enchant weapon]} {72}
+#variable {beats[summon]} {36}
+#variable {beats[hallucinate]} {10}
+#variable {beats[regeneration]} {15}
+#variable {beats[guardian]} {55}
+#variable {beats[infravision]} {15}
+#variable {beats[curse]} {12}
+#variable {beats[revive]} {12}
+#variable {beats[detect magic]} {10}
+#variable {beats[shift]} {36}
+#variable {beats[magic missile]} {11}
+#variable {beats[reveal life]} {3}
+#variable {beats[locate living]} {19}
+#variable {beats[cure self]} {36}
+#variable {beats[chill ray]} {15}
+#variable {beats[blink]} {13}
+#variable {beats[freeze]} {37}
+#variable {beats[lightning bolt]} {17}
+#variable {beats[vitalize self]} {36}
+#variable {beats[flash]} {7}
+#variable {beats[earthquake]} {21}
+#variable {beats[create light]} {10}
+#variable {beats[death ward]} {72}
+#variable {beats[dark bolt]} {17}
+#variable {beats[mist of baazunga]} {72}
+#variable {beats[mind block]} {15}
+#variable {beats[remove poison]} {25}
+#variable {beats[beacon]} {48}
+#variable {beats[protection]} {21}
+#variable {beats[blaze]} {21}
+#variable {beats[firebolt]} {23}
+#variable {beats[relocate]} {72}
+#variable {beats[cone of cold]} {21}
+#variable {beats[identify]} {50}
+#variable {beats[bend time]} {6}
+#variable {beats[fireball]} {31}
+#variable {beats[locate life]} {16}
+#variable {beats[searing darkness]} {31}
+#variable {beats[lightning strike]} {27}
+#variable {beats[word of pain]} {11}
+#variable {beats[word of sight]} {3}
+#variable {beats[word of agony]} {21}
+#variable {beats[shout of pain]} {21}
+#variable {beats[word of shock]} {7}
+#variable {beats[spear of darkness]} {29}
+#variable {beats[leach]} {15}
+#variable {beats[black arrow]} {23}
+#variable {beats[shield]} {9}
+#variable {beats[detect evil]} {12}
+#variable {beats[blind]} {10}
+#variable {beats[confuse]} {28}
+#variable {beats[expose elements]} {5}
+#variable {beats[asphyxiation]} {2}
+#variable {beats[Power of Arda]} {2}
+#variable {beats[activity]} {2}
+#variable {beats[rage]} {2}
+#variable {beats[anger]} {2}
+#variable {beats[trash]} {2}
+#variable {beats[trash]} {2}
+#variable {beats[nothing]} {2}
+#variable {beats[wind blast]} {12}
+#variable {beats[Fame War]} {2}
+#variable {beats[mass regeneration]} {15}
+#variable {beats[mass vitality]} {12}
+#variable {beats[mass insight]} {12}
+
+#class {skillbeats} {close}

@@ -6,8 +6,8 @@
 #variable {leader} {Dev}
 #variable {target} {goblin}
 
-#alias {h} {cas 'hallucinate' $target}
-#alias {hh} {cas 'hallucinate' 2.$target}
+#read {classes/mystic.tin}
+
 #alias {qq} {cas 'poison' $target}
 #alias {z} {cas 'curse' $target}
 #alias {cotton} {rem all.chain;wear all.cotton;wear fillet;wear 2.boots}
