@@ -44,5 +44,6 @@
 #action {A large silver snake lies coiled up upon the ground here.}                 {k snake} {5}
 #action {A large wild troll is here, green skinned and angry.}                      {k troll} {5}
 #action {A gigantic centipede with yellow legs searches relentlessly for prey.}     {k centipede} {5}
+#action {A massive scorpion raises it's tail intimidatingly.}                       {k scorpion} {5}
 
 #class {autoattack} {close}

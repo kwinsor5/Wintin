@@ -17,6 +17,8 @@
 #nop {  mapmarks           list landmarks}
 #nop {  maproom            show what the map holds for the current room}
 #nop {  mapsave            write the map file now}
+#nop {  maplinks           toggle the Info panel map between the links view}
+#nop {                     (rooms joined by exits) and the one-cell overview}
 
 #nop {Terrain weights are the server's own movement_loss[] table (consts.cpp):}
 #nop {the move cost of entering a room is proportional to this number, so a}
@@ -83,19 +85,30 @@
 
 #nop {=== Map picture (drawn into the Info panel by global.tin's infodraw) ===}
 
-#nop {symbolgraphics draws one cell per room. A room with a symbol shows that}
-#nop {symbol in its own colour; a room without one (roads, streets, anything}
-#nop {not in $mapicon) shows the ASCII NESW LINE legend for its exits, which is}
-#nop {swapped here for box-drawing glyphs so roads read as connected lines.}
-#nop {NO EXITS (first LINE glyph) is the faint ring stub rooms get: dug as}
-#nop {neighbours, never visited, so they mark the unexplored edge. The room}
-#nop {you stand in is not left to any legend - mapdraw paints the marker over}
-#nop {it (see below); the USER colour only keeps the cell red underneath.}
+#nop {Two views, toggled with `maplinks`:}
+#nop {  links (default, $maplinks 1): tintin's unicodegraphics - rooms three}
+#nop {    rows by five columns apart, joined to their neighbours by lines,}
+#nop {    one-way exits by arrows, up/down as + and - beside the room. Each}
+#nop {    room is drawn as its terrain icon; the room you are in is [X].}
+#nop {  overview ($maplinks 0): symbolgraphics - one cell per room, no lines;}
+#nop {    a visited room of a terrain with no icon shows its exits as a box}
+#nop {    glyph instead.}
+#nop {A room's icon is its roomsymbol. WinTin's renderer draws a room as}
+#nop {[icon] with the icon one cell wide; the room-box brackets are blanked}
+#nop {in the legend below so only the icon shows, which is why a room with}
+#nop {no terrain (a stub dug as a neighbour, never visited) is stamped with}
+#nop {a faint ∘ - with no symbol at all it would be invisible. The same ∘ is}
+#nop {the NO EXITS glyph of the overview. The room you stand in is not left}
+#nop {to any legend - mapdraw paints the marker over it (see below); the}
+#nop {USER colour only keeps the cell red underneath.}
+#nop {(The stock Linux tt++ 2.02.20 miscounts multibyte symbols in this view}
+#nop {and squeezes the row - the sandbox cannot preview it; WinTin is right.)}
 
 #var {mapicon} {
 	{City} {{sym} {⌂} {col} {<F404040>}}
-	{Floor} {{sym} {·} {col} {<F404040>}}
-	{Field} {{sym} {"} {col} {<F8A8A1E>}}
+	{Road} {{sym} {═} {col} {<F505050>}}
+	{Floor} {{sym} {∙} {col} {<F404040>}}
+	{Field} {{sym} {″} {col} {<F8A8A1E>}}
 	{Forest} {{sym} {♣} {col} {<F2E7D32>}}
 	{Dense_forest} {{sym} {♠} {col} {<F1B5E20>}}
 	{Hills} {{sym} {∩} {col} {<F8D6E63>}}
@@ -103,26 +116,48 @@
 	{Water} {{sym} {≈} {col} {<F1565C0>}}
 	{Water_noswim} {{sym} {≋} {col} {<F0D47A1>}}
 	{Underwater} {{sym} {≋} {col} {<F0D47A1>}}
-	{Swamp} {{sym} {~} {col} {<F6D7A2E>}}
-	{Crack} {{sym} {×} {col} {<F5D4037>}}
+	{Swamp} {{sym} {∼} {col} {<F6D7A2E>}}
+	{Crack} {{sym} {✕} {col} {<F5D4037>}}
 	}
 
+#var {maplinks} {1}
+
 #map legend {ASCII NESW LINE} {∘ ╹ ╺ ┗ ╻ ┃ ┏ ┣ ╸ ┛ ━ ┻ ┓ ┫ ┳ ╋}
+#nop {The links view's own legend: the one-way E / W arrows change (the stock}
+#nop {ones are double-width glyphs that push the row out of line) and the}
+#nop {room brackets [ ] ( ) become spaces so a room is just its icon.}
+#map legend {UNICODE GRAPHICS} {{} {⸌} {⸝} {>} {⸍} {⸌⸍} {／} {>⸍} {⸜} {＼} {⸝⸜} {>⸜} {<} {⸌<} {⸝<} {><} {-} {↑} {↓} {│} {+} {→} {←} {─} { } { } { } { }}
 #map color symbols <F505050>
 #map color user <FCC0000>
-#map flag symbolgraphics on
 
-#nop {mapstyle gives the CURRENT room its terrain's symbol and colour (needs}
+#nop {mapstyle gives the CURRENT room its terrain's icon and colour (needs}
 #nop {$mapterr); mapstyleall does it for every room of every known terrain,}
 #nop {run once per load so rooms recorded before icons existed get theirs.}
+#nop {The colour code is stored INSIDE the roomsymbol ("<F2E7D32>♣"): the}
+#nop {links renderer paints every symbol in the global symbols colour and}
+#nop {only leaves it alone when the symbol carries its own colour (mapper.c}
+#nop {draw_room, is_color_code), whereas roomcolor only tints the brackets -}
+#nop {which are blank here. The overview honours it the same way, so both}
+#nop {views show the same colours. roomcolor is still set for #map's own}
+#nop {displays.}
 
 #alias {mapstyle} {
 	#if {"$mapterr" != ""} {
 		#if {&mapicon[$mapterr] > 0} {
-			#map set roomsymbol {$mapicon[$mapterr][sym]};
+			#map set roomsymbol {$mapicon[$mapterr][col]$mapicon[$mapterr][sym]};
 			#map set roomcolor {$mapicon[$mapterr][col]}
 			}
 		}
+	}
+
+#var {mapstubsym} {∘}
+
+#nop {mapstub: give the room #map is currently at the stub glyph if it has}
+#nop {no symbol yet (the file stores an empty symbol as a single space).}
+
+#alias {mapstub} {
+	#map get roomsymbol {mapsym};
+	#if {"$mapsym" == "" || "$mapsym" == " "} {#map set roomsymbol {$mapstubsym}}
 	}
 
 #alias {mapstyleall} {
@@ -131,12 +166,42 @@
 		#var {maplist} {};
 		#map list {roomterrain} {$mapt} {variable} {maplist};
 		#foreach {*maplist[]} {mapv} {
-			#map at {$mapv} {#map set roomsymbol {$mapicon[$mapt][sym]};#map set roomcolor {$mapicon[$mapt][col]}}
+			#map at {$mapv} {#map set roomsymbol {$mapicon[$mapt][col]$mapicon[$mapt][sym]};#map set roomcolor {$mapicon[$mapt][col]}}
 			}
+		};
+	#var {maplist} {};
+	#map list {roomname} {%*} {variable} {maplist};
+	#foreach {*maplist[]} {mapv} {
+		#map at {$mapv} {mapstub}
 		};
 	#unvar {maplist}
 	}
 
+#nop {The graphics flags are one exclusive setting: turning symbolgraphics}
+#nop {off also clears unicodegraphics, so the unwanted one goes off first.}
+
+#alias {mapviewflags} {
+	#if {$maplinks == 1} {
+		#map flag symbolgraphics off;
+		#map flag unicodegraphics on
+		} {
+		#map flag unicodegraphics off;
+		#map flag symbolgraphics on
+		}
+	}
+
+#alias {maplinks} {
+	#math {maplinks} {1 - $maplinks};
+	mapviewflags;
+	#if {$maplinks == 1} {
+		#showme {${panelhead}Map: links view - rooms joined by their exits.}
+		} {
+		#showme {${panelhead}Map: overview - one cell per room.}
+		};
+	infodraw
+	}
+
+mapviewflags
 mapstyleall
 #var {mapdirty} {1}
 
@@ -144,25 +209,50 @@ mapstyleall
 #nop {centred on the current room, at the given screen position. Nothing is}
 #nop {drawn while off the map ($mapvnum 0) - the caller has already blanked}
 #nop {the area. Each line carries its own colour codes and ends in a reset.}
-
 #nop {The player's cell is then overwritten with a red X: tintin draws the}
 #nop {current room from its own legends (an exit line or arrow on WinTin),}
-#nop {so the marker is painted over it rather than trusted to a legend. The}
-#nop {cell is at line (rows+1)/2, column cols/2 (0-based) - measured for even}
-#nop {and odd sizes from 3x9 up to 13x48.}
+#nop {so the marker is painted over it rather than trusted to a legend.}
+#nop {Overview: the cell is line (rows+1)/2, column cols/2 (0-based).}
+#nop {Links: rooms sit on a 5-column grid, so the drawing is really}
+#nop {((cols-2)/5)*5+2 cells wide; the renderer clips by byte and can leave}
+#nop {a broken half-glyph in the second-to-last cell, so the last two cells}
+#nop {are blanked. The marker is at line 2*((rows-1)/4)+2, column}
+#nop {5*((cols-17)/10)+8. All of it measured, rows 3-15 and columns 20-57,}
+#nop {and checked against mapper.c displaygrid_build for odd heights.}
 
 #var {mapmark} {<FCC0000>X}
 
 #alias {mapdraw} {
 	#if {$mapvnum == 0} {#return};
-	#map map {%1} {%2} {list} {mapview};
 	#var {maprow} {%3};
-	#foreach {*mapview[]} {mapi} {
-		#line {ignore} {#showme {$mapview[$mapi]} {$maprow} {%4}};
-		#math {maprow} {$maprow + 1}
+	#if {$maplinks == 1} {
+		#nop {Odd height only: current tintin draws rows+1 lines for an even};
+		#nop {height in this view (mapper.c: (rows+2)/2 room rows, two lines};
+		#nop {each), which ran the picture over the Opponent box. The line};
+		#nop {loop is capped as well, so nothing below the box can be touched.};
+		#math {maplines} {((%1 - 1) / 2) * 2 + 1};
+		#map map {$maplines} {%2} {list} {mapview};
+		#math {mapcells} {((%2 - 2) / 5) * 5 + 2};
+		#math {mapedge} {%4 + $mapcells - 2};
+		#math {maplast} {%3 + $maplines - 1};
+		#foreach {*mapview[]} {mapi} {
+			#if {$maprow <= $maplast} {
+				#line {ignore} {#showme {$mapview[$mapi]} {$maprow} {%4}};
+				#line {ignore} {#showme {  } {$maprow} {$mapedge}};
+				#math {maprow} {$maprow + 1}
+				}
+			};
+		#math {maprow} {%3 + 2 * (($maplines - 1) / 4) + 1};
+		#math {mapcol} {%4 + 5 * ((%2 - 17) / 10) + 8}
+		} {
+		#map map {%1} {%2} {list} {mapview};
+		#foreach {*mapview[]} {mapi} {
+			#line {ignore} {#showme {$mapview[$mapi]} {$maprow} {%4}};
+			#math {maprow} {$maprow + 1}
+			};
+		#math {maprow} {%3 + (%1 + 1) / 2 - 1};
+		#math {mapcol} {%4 + %2 / 2}
 		};
-	#math {maprow} {%3 + (%1 + 1) / 2 - 1};
-	#math {mapcol} {%4 + %2 / 2};
 	#line {ignore} {#showme {$mapmark} {$maprow} {$mapcol}}
 	}
 
@@ -220,7 +310,8 @@ mapstyleall
 	#if {&msdp[ROOM_EXITS] > 0} {
 		#foreach {*msdp[ROOM_EXITS][]} {mapi} {
 			#if {&mapdata[EXITS][$mapi] > 0} {
-				#map dig {$msdp[ROOM_EXITS][$mapi]} {$mapdata[EXITS][$mapi]}
+				#map dig {$msdp[ROOM_EXITS][$mapi]} {$mapdata[EXITS][$mapi]};
+				#map at {$mapdata[EXITS][$mapi]} {mapstub}
 				}
 			}
 		};

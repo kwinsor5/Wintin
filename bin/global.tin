@@ -57,14 +57,101 @@
 #alias {valeon} {#substitute {Accursed Vale} {Accursed Vale    Exits are: N E - Entrance: nwsew};#substitute {Dim Vale} {Dim Vale    Exits are: S W - Entrance: snnw};#substitute {Entrance to the Hidden Vale} {Entrance to the Hidden Vale    Exits are: E W - Entrance: };#substitute {Leaving the Hidden Vale} {Leaving the Hidden Vale    Exits are: E W - Entrance: wnnnnww}}
 #alias {valeoff} {#unsubstitute {Accursed Vale};#unsubstitute {Dim Vale};#unsubstitute {Entrance to the Hidden Vale};#unsubstitute {Leaving the Hidden Vale}}
 
+#nop {=== Theme ===}
+
+#nop {One palette table drives every colour in this file: channel highlights,}
+#nop {HUD bars, panel frames, the input line, the in-game colour slots and the}
+#nop {terminal itself. Entries are bare RRGGBB so one value serves as a <F...>}
+#nop {tag, as the mintty OSC 10/11/12 escape and as "color <slot> fg hex".}
+#nop {"theme light" / "theme dark" swap the table and repaint; "themetoggle"}
+#nop {flips. $theme is the startup default - it is applied at the end of the file.}
+
+#nop {Light: dark, muted tones for the light grey mintty background with dark}
+#nop {blue default text - violet tells, teal says, amber chats. Dark: the same}
+#nop {hues lifted for a warm near-black background with off-white text.}
+
+#variable {theme} {light}
+
+#alias {theme} {
+	#if {"%1" == "dark"} {
+		#var {theme} {dark};
+		#var {pal} {
+			{bg} {1F1E1D} {fg} {E8E6DC} {cursor} {B0B0B0}
+			{tell} {B48BE8} {say} {3FBFBF} {chat} {E0A040} {gsay} {E06060}
+			{narr} {D86ED8} {whis} {6FCF6F} {page} {E080B0}
+			{hp} {E05050} {st} {6C8CF0} {mv} {4FC04F}
+			{boss} {FF6B6B} {bossedge} {E8B830}
+			{head} {E0B040} {ink} {A8B8F0} {mute} {A0A0A0} {empty} {4A4A4A}
+			{pctfill} {FFFFFF} {pctempty} {E8E6DC} {band} {292928}
+			{char} {5AD65A} {hit} {4CBF4C}
+			}
+		} {
+		#var {theme} {light};
+		#var {pal} {
+			{bg} {C0C0C0} {fg} {0000A0} {cursor} {7F7F7F}
+			{tell} {5B2D91} {say} {005F5F} {chat} {7A4B00} {gsay} {992222}
+			{narr} {8B2E8B} {whis} {1E5E1E} {page} {993366}
+			{hp} {992222} {st} {2244AA} {mv} {1E7A1E}
+			{boss} {6B1111} {bossedge} {B8860B}
+			{head} {806100} {ink} {101040} {mute} {404040} {empty} {909090}
+			{pctfill} {FFFFFF} {pctempty} {000000} {band} {B4B4B4}
+			{char} {228B22} {hit} {1F751F}
+			}
+		};
+	themeapply
+	}
+
+#alias {themetoggle} {
+	#if {"$theme" == "dark"} {
+		theme light
+		} {
+		theme dark
+		}
+	}
+
+#nop {Everything that bakes a colour in at definition time is redone here. The}
+#nop {OSC 11/10/12 escapes recolour mintty's background, text and cursor. They}
+#nop {only reach the terminal while no scroll region is set - inside one tintin}
+#nop {redraws #showme output itself and drops the escapes - so the region is}
+#nop {dropped first and relayout (which clears the screen) puts it back.}
+
+#alias {themeapply} {
+	#var {paneledge} {<F$pal[ink]>};
+	#var {panelhead} {<F$pal[head]>};
+	#config {COMMAND COLOR} {<F$pal[ink]>};
+	themehighlights;
+	#screen {scrollregion} {0} {0} {0} {0};
+	#showme {\e]11;#$pal[bg]\a\e]10;#$pal[fg]\a\e]12;#$pal[cursor]\a};
+	relayout;
+	#showme {${panelhead}Theme: $theme}
+	}
+
+#nop {%%1 keeps the %1 wildcards out of the alias's own argument substitution.}
+#nop {The socials panel actions below use the same entries so both views match.}
+
+#alias {themehighlights} {
+	#highlight {HP: %%1/%%2 } {<F$pal[hp]>};
+	#highlight {S: %%1/%%2 } {<F$pal[st]>};
+	#highlight {MV: %%1/%%2]} {<F$pal[mv]>};
+	#highlight {You tell %%1} {<F$pal[tell]>};
+	#highlight {%%1 tells you '%%2} {<F$pal[tell]>};
+	#highlight {You narrate '%%1} {<F$pal[narr]>};
+	#highlight {%%1 narrates '%%2} {<F$pal[narr]>};
+	#highlight {You chat '%%1} {<F$pal[chat]>};
+	#highlight {%%1 chats '%%2} {<F$pal[chat]>};
+	#highlight {You say '%%1} {<F$pal[say]>};
+	#highlight {%%1 says '%%2} {<F$pal[say]>};
+	#highlight {You group-say '%%1} {<F$pal[gsay]>};
+	#highlight {%%1 group-says '%%2} {<F$pal[gsay]>};
+	#highlight {You yell '%%1} {<F$pal[tell]>};
+	#highlight {%%1 yells '%%2} {<F$pal[tell]>}
+	}
+
 #nop {=== Highlights ===}
 
-#nop {JMC black backgrounds are dropped; the terminal background is grey.}
-#nop {The three prompt fields carry the same hex colours as their HUD bars.}
-
-#highlight {HP: %1/%2 } {<F992222>}
-#highlight {S: %1/%2 } {<F2244AA>}
-#highlight {MV: %1/%2]} {<F1E7A1E>}
+#nop {JMC black backgrounds are dropped. The prompt-field and channel}
+#nop {highlights live in themehighlights (Theme section) so the toggle can}
+#nop {redefine them; the prompt fields carry the same colours as their HUD bars.}
 
 #highlight {%1 appears to be confused!} {magenta}
 #highlight {%1 nervously glances around in confusion!} {green}
@@ -93,24 +180,6 @@
 
 #nop {Channel colouring, replacing the JMC #woutput windows.}
 
-#nop {Dark, muted tones chosen for the light grey background with dark blue}
-#nop {default text: violet tells, teal says, amber chats - each distinct from}
-#nop {the blue body text and dark enough to read without glare. The socials}
-#nop {panel below uses the same values so both views match.}
-
-#highlight {You tell %1} {<F5B2D91>}
-#highlight {%1 tells you '%2} {<F5B2D91>}
-#highlight {You narrate '%1} {<F8B2E8B>}
-#highlight {%1 narrates '%2} {<F8B2E8B>}
-#highlight {You chat '%1} {<F7A4B00>}
-#highlight {%1 chats '%2} {<F7A4B00>}
-#highlight {You say '%1} {<F005F5F>}
-#highlight {%1 says '%2} {<F005F5F>}
-#highlight {You group-say '%1} {<F992222>}
-#highlight {%1 group-says '%2} {<F992222>}
-#highlight {You yell '%1} {<F5B2D91>}
-#highlight {%1 yells '%2} {<F5B2D91>}
-
 #nop {=== Events ===}
 
 #nop {Paced like human typing: the server hides input at the password prompt}
@@ -118,12 +187,18 @@
 #nop {three answers at once races that negotiation and can leave the client}
 #nop {stuck with typing invisible, so each answer waits for its prompt.}
 
+#nop {$rots_account and $rots_password are NOT defined in any .tin file. The}
+#nop {launcher (bin/wintin.ps1) decrypts bin/credentials.asc with gpg into the}
+#nop {ROTS_ACCOUNT / ROTS_PASSWORD environment variables and passes them to}
+#nop {tt++ with -e "#variable ..." before main.tin is read, so the startup}
+#nop {session already holds them and the game session inherits them.}
+
 #event {SESSION CONNECTED} {
 	#delay {.5} {
-		#send {kwinsor5@gmail.com}
+		#send {$rots_account}
 		};
 	#delay {1} {
-		#send {***REMOVED***}
+		#send {$rots_password}
 		};
 	#delay {1.5} {
 		#send {2}
@@ -156,30 +231,31 @@
 #nop {color <slot> fg hex RRGGBB. colorsync pushes the client palette into the}
 #nop {game so server-coloured text matches the highlights above. Channel slots}
 #nop {get their exact channel colours; the rest map their stock ANSI family to}
-#nop {a dark equivalent (cyan->teal 005F5F, red->992222, yellow->amber 7A4B00,}
-#nop {magenta->8B2E8B, bright white->charcoal 404040); character gets a brighter}
-#nop {green 228B22 with hit a step dimmer at 1F751F, description the dark green.}
+#nop {the palette's equivalent (cyan->say, red->hp, yellow->chat, magenta->narr,}
+#nop {bright white->mute); character gets its own brighter green with hit a}
+#nop {step dimmer, description the whisper green. Values come from $pal, so}
+#nop {the game palette follows whichever theme is active when this runs.}
 #nop {Settings persist server-side per character, so run colorsync by hand once}
-#nop {per character (and again after changing the palette). Deliberately not}
+#nop {per character (and again after switching theme). Deliberately not}
 #nop {automated: login/reconnect text triggers also matched logout output.}
 
 #alias {colorsync} {
 	color on;
-	color say fg hex 005F5F;
-	color tell fg hex 5B2D91;
-	color yell fg hex 5B2D91;
-	color narrate fg hex 8B2E8B;
-	color chat fg hex 7A4B00;
-	color group fg hex 992222;
-	color roomname fg hex 005F5F;
-	color hit fg hex 1F751F;
-	color damage fg hex 992222;
-	color character fg hex 228B22;
-	color object fg hex 005F5F;
-	color enemy fg hex 404040;
-	color description fg hex 1E5E1E;
-	color magic fg hex 8B2E8B;
-	color weather fg hex 005F5F
+	color say fg hex $pal[say];
+	color tell fg hex $pal[tell];
+	color yell fg hex $pal[tell];
+	color narrate fg hex $pal[narr];
+	color chat fg hex $pal[chat];
+	color group fg hex $pal[gsay];
+	color roomname fg hex $pal[say];
+	color hit fg hex $pal[hit];
+	color damage fg hex $pal[hp];
+	color character fg hex $pal[char];
+	color object fg hex $pal[say];
+	color enemy fg hex $pal[mute];
+	color description fg hex $pal[whis];
+	color magic fg hex $pal[narr];
+	color weather fg hex $pal[say]
 	}
 
 #nop {=== Panels ===}
@@ -565,7 +641,7 @@
 #nop {draw and every received line/prompt, so whatever painted last, typing is}
 #nop {always navy.}
 
-#alias {inputpaint} {#line {ignore} {#showme {<F404040>─<F101040>} {$barrow} {$laycols}}}
+#alias {inputpaint} {#line {ignore} {#showme {<F$pal[mute]>─<F$pal[ink]>} {$barrow} {$laycols}}}
 
 #nop {The border above the input doubles as the timer readout. pandraw calls}
 #nop {this rather than drawing the line itself, so a repaint cannot wipe the}
@@ -590,7 +666,7 @@
 #variable {castxs} {0}
 
 #alias {castdraw} {
-	#line {ignore} {#showme {<F404040>$barline} {$barrow} {$scrollleft}};
+	#line {ignore} {#showme {<F$pal[mute]>$barline} {$barrow} {$scrollleft}};
 	#if {$casty > 0} {
 		#nop {castx is the beat BEING served, counting from 1, so the figure};
 		#nop {starts on 1 the moment the command goes out and lands on the};
@@ -609,7 +685,7 @@
 		#format {castxs} {%+2s} {$castx};
 		#format {casttext} { %s  %s of %s } {$castspin} {$castxs} {$casty};
 		#math {castcol} {$scrollleft + 2};
-		#line {ignore} {#showme {<F7A4B00>$casttext} {$barrow} {$castcol}}
+		#line {ignore} {#showme {<F$pal[chat]>$casttext} {$barrow} {$castcol}}
 		}
 	}
 
@@ -617,13 +693,14 @@
 #nop {never drift. 101040 is the navy #draw was already using for an}
 #nop {uncoloured box - passing it explicitly changes nothing on screen and}
 #nop {means the labels can be given the same tag rather than guessing at the}
-#nop {default. Retune this one value to recolour every panel edge and title.}
+#nop {default. Retune the palette's "ink" entry to recolour every panel edge.}
 
 #variable {paneledge} {<F101040>}
 
 #nop {The tab labels have their own colour again - a dark gold, chosen by}
 #nop {Kenny. Kept as its own variable rather than folded back into}
 #nop {$paneledge so the frame and the titles can be retuned separately.}
+#nop {Both are reset from $pal by themeapply; these are the pre-theme values.}
 
 #variable {panelhead} {<F806100>}
 
@@ -697,7 +774,7 @@
 			#replace {infotime} { on } {}
 			};
 		#format {infotime} {$leftfmt} {$infotime};
-		#line {ignore} {#showme {<F404040>$infotime} {2} {$leftcol}};
+		#line {ignore} {#showme {<F$pal[mute]>$infotime} {2} {$leftcol}};
 		#var {infoweather} {};
 		#if {&msdp[WEATHER] > 0} {
 			#var {infoweather} {$msdp[WEATHER]}
@@ -707,7 +784,7 @@
 		#foreach {$infowrap[]} {infopiece} {
 			#if {$inforow < 7} {
 				#format {infopiece} {$leftfmt} {$infopiece};
-				#line {ignore} {#showme {<F005F5F>$infopiece} {$inforow} {$leftcol}};
+				#line {ignore} {#showme {<F$pal[say]>$infopiece} {$inforow} {$leftcol}};
 				#math {inforow} {$inforow + 1}
 				}
 			};
@@ -775,7 +852,7 @@
 	#var {hudr} {$hudemptypre[$hudrest]};
 	#math {hudline} {$hudbase + %2};
 	#if {$hudline < $leftbot} {
-		#line {ignore} {#showme {%3$hudf<F909090>$hudr %3%4} {$hudline} {$leftcol}}
+		#line {ignore} {#showme {%3$hudf<F$pal[empty]>$hudr %3%4} {$hudline} {$leftcol}}
 		}
 	}
 
@@ -795,24 +872,23 @@
 #nop {its neighbours already. That is why this walks the string instead of}
 #nop {emitting it in one #showme.}
 
-#nop {White over the filled part, black once the bar is under half. The reason}
-#nop {is positional, not decorative: the text is centred, so below 50%% the}
-#nop {middle of the bar has fallen into the pale empty section and white would}
-#nop {disappear into it. Shared by the left panel's opponent gauge and the boss}
-#nop {banner so the two can never drift apart.}
+#nop {pctfill over the filled part, pctempty once the bar is under half. The}
+#nop {reason is positional, not decorative: the text is centred, so below 50%%}
+#nop {the middle of the bar has fallen into the empty band and the fill colour}
+#nop {would disappear into it. Light: white on the bar, black on the pale band.}
+#nop {Dark: white on the bar too (user request), off-white on the dark band.}
+#nop {Shared by the left panel's opponent gauge and the boss banner so the two}
+#nop {can never drift apart.}
 
 #nop {A literal per-cent is a SINGLE %% - tintin prints %%%% as two signs.}
 
-#nop {The empty half of a bar is a light shade block ░ drawn in <F909090> over}
-#nop {the terminal's own background, so its APPARENT colour is a blend, and a}
-#nop {digit dropped on it with no background of its own shows the unblended}
-#nop {terminal colour - a pale box sitting in the band. Measured off a}
-#nop {screenshot: the terminal background is C0C0C0 and mintty fills ░ at}
-#nop {0.243 coverage, which puts the band at 0.243*90 + 0.757*C0 = B4B4B4.}
-#nop {Retune this one value if the terminal theme changes; nothing else needs}
-#nop {to move.}
-
-#variable {pctbempty} {B4B4B4}
+#nop {The empty half of a bar is a light shade block ░ drawn in $pal[empty]}
+#nop {over the terminal's own background, so its APPARENT colour is a blend,}
+#nop {and a digit dropped on it with no background of its own shows the}
+#nop {unblended terminal colour - a pale box sitting in the band. Measured off}
+#nop {a screenshot: mintty fills ░ at 0.243 coverage, so the band is}
+#nop {0.243*empty + 0.757*bg - B4B4B4 on the light theme, 292928 on the dark.}
+#nop {That blend is the palette's "band" entry; retune it if empty or bg move.}
 
 #alias {pctinbar} {
 	#nop {No padding spaces around the figure: a space is drawn in the terminal};
@@ -825,18 +901,18 @@
 		#var {pctbpad} {0}
 		};
 	#math {pctbcol} {%2 + $pctbpad};
-	#var {pctbfg} {<FFFFFFF>};
+	#var {pctbfg} {<F$pal[pctfill]>};
 	#if {%4 < 50} {
-		#var {pctbfg} {<F000000>}
+		#var {pctbfg} {<F$pal[pctempty]>}
 		};
 	#nop {Same fill arithmetic hudgauge and bossbox use, so the boundary the};
 	#nop {text is coloured against is the boundary actually drawn.};
 	#var {pctbbar} {%5};
 	#if {"$pctbbar" == ""} {
-		#var {pctbbar} {6B1111}
+		#var {pctbbar} {$pal[boss]}
 		};
 	#var {pctbon} {<B$pctbbar>};
-	#var {pctboff} {<B$pctbempty>};
+	#var {pctboff} {<B$pal[band]>};
 	#math {pctbfill} {%3 * %4 / 100};
 	#if {$pctbfill > %3} {
 		#var {pctbfill} {%3}
@@ -900,12 +976,12 @@
 		};
 	#var {hudcolor} {%5};
 	#if {"%5" == "auto"} {
-		#var {hudcolor} {<F1E7A1E>};
+		#var {hudcolor} {<F$pal[mv]>};
 		#if {$hudpct < 66} {
-			#var {hudcolor} {<F7A4B00>}
+			#var {hudcolor} {<F$pal[chat]>}
 			};
 		#if {$hudpct < 33} {
-			#var {hudcolor} {<F992222>}
+			#var {hudcolor} {<F$pal[hp]>}
 			}
 		};
 	#var {hudsuf} {%7};
@@ -927,14 +1003,14 @@
 	#math {hudline} {$hudbase + %4};
 	#if {$hudline < $leftbot} {
 		#if {"$hudsuf" != ""} {
-			#line {ignore} {#showme {$hudcolor$hudf<F909090>$hudr<F404040> $hudsuf} {$hudline} {$leftcol}}
+			#line {ignore} {#showme {$hudcolor$hudf<F$pal[empty]>$hudr<F$pal[mute]> $hudsuf} {$hudline} {$leftcol}}
 			} {
-			#line {ignore} {#showme {$hudcolor$hudf<F909090>$hudr} {$hudline} {$leftcol}}
+			#line {ignore} {#showme {$hudcolor$hudf<F$pal[empty]>$hudr} {$hudline} {$leftcol}}
 			}
 		};
 	#math {hudline} {$hudline + 1};
 	#if {$hudline < $leftbot} {
-		#line {ignore} {#showme {<F404040>$hudtext} {$hudline} {$leftcol}}
+		#line {ignore} {#showme {<F$pal[mute]>$hudtext} {$hudline} {$leftcol}}
 		}
 	}
 
@@ -944,7 +1020,7 @@
 	#format {hudtext} {$leftfmt} {%2};
 	#math {hudline} {$hudbase + %1};
 	#if {$hudline < $leftbot} {
-		#line {ignore} {#showme {<F404040>$hudtext} {$hudline} {$leftcol}}
+		#line {ignore} {#showme {<F$pal[mute]>$hudtext} {$hudline} {$leftcol}}
 		}
 	}
 
@@ -1013,7 +1089,7 @@
 		#if {$bossk > $bossn} {
 			#var {bossk} {$bossn}
 			};
-		#line {ignore} {#showme {<F6B1111>$bossfullpre[$bossk]} {%1} {$bosscolx}};
+		#line {ignore} {#showme {<F$pal[boss]>$bossfullpre[$bossk]} {%1} {$bosscolx}};
 		#math {bosscolx} {$bosscolx + $bossk};
 		#math {bossn} {$bossn - $bossk}
 		}
@@ -1026,7 +1102,7 @@
 		#if {$bossk > $bossn} {
 			#var {bossk} {$bossn}
 			};
-		#line {ignore} {#showme {<F909090>$bossemptypre[$bossk]} {%1} {$bosscolx}};
+		#line {ignore} {#showme {<F$pal[empty]>$bossemptypre[$bossk]} {%1} {$bosscolx}};
 		#math {bosscolx} {$bosscolx + $bossk};
 		#math {bossn} {$bossn - $bossk}
 		}
@@ -1042,7 +1118,7 @@
 #nop {white would disappear into it.}
 
 #alias {bosspctdraw} {
-	pctinbar {2} {$bosscol} {$bosswidth} {$bosshp} {6B1111}
+	pctinbar {2} {$bosscol} {$bosswidth} {$bosshp} {$pal[boss]}
 	}
 
 #alias {bossbarrow} {
@@ -1064,14 +1140,14 @@
 		};
 	#math {bossrest} {$bosswidth - $bossfill};
 	#math {bosscol} {$bossleft + 1};
-	#draw {<FB8860B>} {box} {1} {$bossleft} {$bossrows} {$bossright};
+	#draw {<F$pal[bossedge]>} {box} {1} {$bossleft} {$bossrows} {$bossright};
 	bossbarrow {2};
 	bossbarrow {3};
 	bosspctdraw;
 	bosscenter {$bossname};
-	#line {ignore} {#showme {<F6B1111>$bosscentered} {4} {$bosscol}};
+	#line {ignore} {#showme {<F$pal[boss]>$bosscentered} {4} {$bosscol}};
 	bosscenter {Level $bosslvl};
-	#line {ignore} {#showme {<F404040>$bosscentered} {5} {$bosscol}}
+	#line {ignore} {#showme {<F$pal[mute]>$bosscentered} {5} {$bosscol}}
 	}
 
 #nop {Raising or lowering the banner changes the feed's height, so the region}
@@ -1128,13 +1204,13 @@
 			hudnum {OPPONENT_HEALTH};
 			#var {hudopphp} {$hudnum};
 			#var {hudbase} {$opptop};
-			hudgauge {$hudopphp} {0} {<F6B1111>} {$hudswords};
+			hudgauge {$hudopphp} {0} {<F$pal[boss]>} {$hudswords};
 			#nop {hudgauge leaves the drawn width in $hudgw - the swords marker};
 			#nop {costs it two cells - so centre the figure on that, not on the};
 			#nop {full panel width. Same text treatment as the boss banner; the};
 			#nop {thickness and the gold frame stay exclusive to the banner.};
 			#math {hudline} {$hudbase + 0};
-			pctinbar {$hudline} {$leftcol} {$hudgw} {$hudopphp} {6B1111};
+			pctinbar {$hudline} {$leftcol} {$hudgw} {$hudopphp} {$pal[boss]};
 			hudtextrow {1} {$hudoppname (lvl $hudopplvl)};
 			#var {hudbase} {$hudtop}
 			};
@@ -1199,9 +1275,9 @@
 		#var {hudsave} {$hudnum};
 		hudnum {SPIRIT};
 		#var {hudspirit} {$hudnum};
-		hudbar {HP} {$hudhp} {$hudhpm} {0} {<F992222>} {$hudhpr};
-		hudbar {Stam} {$hudst} {$hudstm} {3} {<F2244AA>} {$hudstr2};
-		hudbar {Moves} {$hudmv} {$hudmvm} {6} {<F1E7A1E>} {$hudmvr};
+		hudbar {HP} {$hudhp} {$hudhpm} {0} {<F$pal[hp]>} {$hudhpr};
+		hudbar {Stam} {$hudst} {$hudstm} {3} {<F$pal[st]>} {$hudstr2};
+		hudbar {Moves} {$hudmv} {$hudmvm} {6} {<F$pal[mv]>} {$hudmvr};
 		hudtextrow {9} {OB: $hudob  DB: $huddb  PB: $hudpb};
 		#nop {Quoted comparisons on purpose: if a character switch has removed};
 		#nop {a flag, tintin leaves it as literal text, which is simply not};
@@ -1226,7 +1302,7 @@
 			#var {hudxpoff} {13}
 			};
 		hudk {$hudtnl};
-		hudbar {XP} {$hudxp} {$hudxpm} {$hudxpoff} {<F5B2D91>} {} {$hudk TNL};
+		hudbar {XP} {$hudxp} {$hudxpm} {$hudxpoff} {<F$pal[tell]>} {} {$hudk TNL};
 		inputpaint
 		}
 	}
@@ -1454,33 +1530,33 @@
 
 #action {You have been idle} {afk}
 
-#action {You say '%1}        {#var {soccolor} {<F005F5F>};#var {soctmp} {%0};socadd} {5}
-#action {%1 says '%2}        {#var {soccolor} {<F005F5F>};#var {soctmp} {%0};socadd} {5}
+#action {You say '%1}        {#var {soccolor} {<F$pal[say]>};#var {soctmp} {%0};socadd} {5}
+#action {%1 says '%2}        {#var {soccolor} {<F$pal[say]>};#var {soctmp} {%0};socadd} {5}
 
-#action {You tell %1 '%2}    {#var {soccolor} {<F5B2D91>};#var {soctmp} {%0};socadd} {5}
-#action {%1 tells you '%2}   {#var {soccolor} {<F5B2D91>};#var {soctmp} {%0};socadd} {5}
+#action {You tell %1 '%2}    {#var {soccolor} {<F$pal[tell]>};#var {soctmp} {%0};socadd} {5}
+#action {%1 tells you '%2}   {#var {soccolor} {<F$pal[tell]>};#var {soctmp} {%0};socadd} {5}
 
-#action {You group-say '%1}  {#var {soccolor} {<F992222>};#var {soctmp} {%0};socadd} {5}
-#action {%1 group-says '%2}  {#var {soccolor} {<F992222>};#var {soctmp} {%0};socadd} {5}
+#action {You group-say '%1}  {#var {soccolor} {<F$pal[gsay]>};#var {soctmp} {%0};socadd} {5}
+#action {%1 group-says '%2}  {#var {soccolor} {<F$pal[gsay]>};#var {soctmp} {%0};socadd} {5}
 
-#action {You narrate '%1}    {#var {soccolor} {<F8B2E8B>};#var {soctmp} {%0};socadd} {5}
-#action {%1 narrates '%2}    {#var {soccolor} {<F8B2E8B>};#var {soctmp} {%0};socadd} {5}
+#action {You narrate '%1}    {#var {soccolor} {<F$pal[narr]>};#var {soctmp} {%0};socadd} {5}
+#action {%1 narrates '%2}    {#var {soccolor} {<F$pal[narr]>};#var {soctmp} {%0};socadd} {5}
 
-#action {You chat '%1}       {#var {soccolor} {<F7A4B00>};#var {soctmp} {%0};socadd} {5}
-#action {%1 chats '%2}       {#var {soccolor} {<F7A4B00>};#var {soctmp} {%0};socadd} {5}
+#action {You chat '%1}       {#var {soccolor} {<F$pal[chat]>};#var {soctmp} {%0};socadd} {5}
+#action {%1 chats '%2}       {#var {soccolor} {<F$pal[chat]>};#var {soctmp} {%0};socadd} {5}
 
-#action {You yell '%1}       {#var {soccolor} {<F5B2D91>};#var {soctmp} {%0};socadd} {5}
-#action {%1 yells '%2}       {#var {soccolor} {<F5B2D91>};#var {soctmp} {%0};socadd} {5}
+#action {You yell '%1}       {#var {soccolor} {<F$pal[tell]>};#var {soctmp} {%0};socadd} {5}
+#action {%1 yells '%2}       {#var {soccolor} {<F$pal[tell]>};#var {soctmp} {%0};socadd} {5}
 
-#action {You sing '%1}       {#var {soccolor} {<F7A4B00>};#var {soctmp} {%0};socadd} {5}
-#action {%1 sings '%2}       {#var {soccolor} {<F7A4B00>};#var {soctmp} {%0};socadd} {5}
+#action {You sing '%1}       {#var {soccolor} {<F$pal[chat]>};#var {soctmp} {%0};socadd} {5}
+#action {%1 sings '%2}       {#var {soccolor} {<F$pal[chat]>};#var {soctmp} {%0};socadd} {5}
 
-#action {%1 whispers to you, '%2} {#var {soccolor} {<F1E5E1E>};#var {soctmp} {%0};socadd} {5}
-#action {%1 asks you '%2}         {#var {soccolor} {<F1E5E1E>};#var {soctmp} {%0};socadd} {5}
+#action {%1 whispers to you, '%2} {#var {soccolor} {<F$pal[whis]>};#var {soctmp} {%0};socadd} {5}
+#action {%1 asks you '%2}         {#var {soccolor} {<F$pal[whis]>};#var {soctmp} {%0};socadd} {5}
 
-#action {You page %1 with '%2}    {#var {soccolor} {<F993366>};#var {soctmp} {%0};socadd} {5}
-#action {*%1* pages, '%2}         {#var {soccolor} {<F993366>};#var {soctmp} {%0};socadd} {5}
-#action {*%1* beeps you!}         {#var {soccolor} {<F993366>};#var {soctmp} {%0};socadd} {5}
+#action {You page %1 with '%2}    {#var {soccolor} {<F$pal[page]>};#var {soctmp} {%0};socadd} {5}
+#action {*%1* pages, '%2}         {#var {soccolor} {<F$pal[page]>};#var {soctmp} {%0};socadd} {5}
+#action {*%1* beeps you!}         {#var {soccolor} {<F$pal[page]>};#var {soctmp} {%0};socadd} {5}
 
 #nop {=== Socials ===}
 
@@ -2029,12 +2105,11 @@
 #nop {=== Input line keys ===}
 
 #nop {The input line is redrawn by tintin in COMMAND COLOR, which defaults to}
-#nop {bright green. Set twice on purpose: plain "blue" first as a safe fallback,}
-#nop {then the very dark navy truecolour value - if a tintin build rejects the}
-#nop {truecolour form, the input stays a sane dark blue instead of green.}
+#nop {bright green. Plain "blue" here is a safe fallback; themeapply then sets}
+#nop {the theme's truecolour ink - if a tintin build rejects the truecolour}
+#nop {form, the input stays a sane dark blue instead of green.}
 
 #config {COMMAND COLOR} {blue}
-#config {COMMAND COLOR} {<F101040>}
 
 #nop {COLOR PATCH repairs server lines that do not reset their colour. It is}
 #nop {not sufficient on its own - the panel repaints also leave colours active -}
@@ -2104,14 +2179,15 @@
 #nop {command up to but not including the CR. The leading \w still skips}
 #nop {telnet negotiation, which is binary and starts with IAC (0xFF).}
 
-#event {SENT OUTPUT} {#if {$cmdecho == 1} {#regexp {%0} {^{\w[^\r]*}} {#showme {<F404040>&1}}};#var {castraw} {%0};castarm;inputpaint}
+#event {SENT OUTPUT} {#if {$cmdecho == 1} {#regexp {%0} {^{\w[^\r]*}} {#showme {<F$pal[mute]>&1}}};#var {castraw} {%0};castarm;inputpaint}
 
 #alias {echoon} {#var {cmdecho} {1};#showme {${panelhead}Command echo on}}
 #alias {echooff} {#var {cmdecho} {0};#showme {${panelhead}Command echo off}}
 
-#nop {Apply the panel layout once everything above is defined. The delayed second}
-#nop {pass catches the resize that follows #screen maximize in main.tin.}
+#nop {Apply the theme (which ends with relayout) once everything above is}
+#nop {defined. The delayed second pass catches the resize that follows}
+#nop {#screen maximize in main.tin.}
 
-relayout
+theme $theme
 
 #delay {0.5} {relayout}
