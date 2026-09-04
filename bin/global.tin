@@ -39,13 +39,13 @@
 #alias {cs} {cast 'cure self' %0}
 #alias {vs} {cast 'vitalize self' %0}
 
-#alias {autofleeon} {#action {PANIC!} {flee}}
-#alias {autofleeoff} {#unaction {PANIC!}}
+#alias {autoflee-on} {#action {PANIC!} {flee}}
+#alias {autoflee-off} {#unaction {PANIC!}}
 
-#alias {rescueon} {#action {turns to fight %1!} {rescue %1}}
-#alias {rescueoff} {#unaction {turns to fight %1!}}
-#alias {rescon} {rescueon}
-#alias {rescoff} {rescueoff}
+#alias {rescue-on} {#action {turns to fight %1!} {rescue %1}}
+#alias {rescue-off} {#unaction {turns to fight %1!}}
+#alias {resc-on} {rescue-on}
+#alias {resc-off} {rescue-off}
 
 #nop {=== Substitutions ===}
 
