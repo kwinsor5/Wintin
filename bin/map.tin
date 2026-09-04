@@ -16,6 +16,9 @@
 #nop {  mapunmark <name>   remove a landmark}
 #nop {  mapmarks           list landmarks}
 #nop {  maproom            show what the map holds for the current room}
+#nop {  mapdoor            show door details for every exit of the current room}
+#nop {  mapdoor <dir> <name|hidden|locked|pickable|key|rideable> <value>}
+#nop {                     edit one door property on the exit in that direction}
 #nop {  mapsave            write the map file now}
 #nop {  maplinks           toggle the Info panel map between the links view}
 #nop {                     (rooms joined by exits) and the one-cell overview}
@@ -27,13 +30,22 @@
 #nop {A terrain not in the table gets $mapweightdefault.}
 
 #nop {Doors: MSDP lists a closed door as a normal exit, so a route may run into}
-#nop {one. goto handles it from the server's own replies (act_move.cpp do_open,}
-#nop {ranger.cpp do_pick): "The <gate> seems to be closed." -> open <gate> <dir>}
-#nop {and retry the step; "It seems to be locked." -> pick <gate> <dir>, repeating}
-#nop {on "You failed to pick the lock." up to $mappickmax times, then open and}
-#nop {step on "The lock quickly yields to your skills.". Pickproof, lever and}
-#nop {broken doors end the walk with a message. The pick cap matters: a character}
-#nop {without the skill fails every attempt, forever.}
+#nop {one. Any door goto has already mapped (mapdoor, or learned automatically -}
+#nop {see below) is handled proactively: before the step is sent, its exit's}
+#nop {door is looked up, and if it is marked locked "pick" goes out instead of}
+#nop {the step, or if not "open" goes out immediately followed by the step,}
+#nop {rather than waiting to be told the door is in the way. An unmapped door is}
+#nop {still handled reactively, from the server's own replies (act_move.cpp}
+#nop {do_open, ranger.cpp do_pick): "The <gate> seems to be closed." -> open}
+#nop {<gate> <dir> and retry the step; "It seems to be locked." -> pick <gate>}
+#nop {<dir>, repeating on "You failed to pick the lock." up to $mappickmax times,}
+#nop {then open and step on "The lock quickly yields to your skills.". Either}
+#nop {way, once a door is confirmed to exist (and whether it is locked), it is}
+#nop {recorded onto that exit's own data field (#map exit <dir> setdata - saved}
+#nop {and loaded automatically with the rest of the map, no separate storage}
+#nop {needed) so the next walk across that exit is proactive. Pickproof, lever}
+#nop {and broken doors end the walk with a message. The pick cap matters: a}
+#nop {character without the skill fails every attempt, forever.}
 
 #nop {Mounts: a room flagged NORIDE answers a mounted step with "Can not go}
 #nop {there mounted." (act_move.cpp do_move). goto then sends dismount, which}
@@ -413,7 +425,9 @@ mapstyleall
 	#regexp {$maproute} {^{[^;]+}} {#var {mapdir} {&1}};
 	#if {&mapdirname[$mapdir] == 0} {#var {mapdir} {}};
 	#var {mapdoor} {0};
-	#path walk;
+	#var {mapkey} {};
+	mapdoorlookup;
+	#if {$mapdoor == 0} {#path walk};
 	mapwatch
 	}
 
@@ -455,6 +469,93 @@ mapstyleall
 	mapwatch
 	} {5}
 
+#nop {=== Door metadata ===}
+
+#nop {tintin has no built-in concept of a door, but every exit already carries}
+#nop {a generic data string (exit->data, #map exit <dir> setdata/getdata) that}
+#nop {is saved and loaded automatically as part of the ordinary E record by}
+#nop {#map write/#map read - no separate file or format needed. Door details}
+#nop {(name, isHidden, isLocked, isPickable, key, isRideable) are stored there}
+#nop {as an ordinary nested tintin value, exactly like any other #var - it just}
+#nop {happens to live inside the exit instead of a top-level variable. An exit}
+#nop {with no door data getdatas back "" and reads as mapdoordefault.}
+
+#var {mapdoordefault} {
+	{name} {}
+	{isHidden} {0}
+	{isLocked} {0}
+	{isPickable} {1}
+	{key} {}
+	{isRideable} {1}
+	}
+
+#nop {mapdoorget {dir}: loads $mapdoorinfo from the exit in that direction FROM}
+#nop {THE CURRENT ROOM (#map's position, which mapsync keeps in step with}
+#nop {$mapvnum) - or the defaults if it has never been edited/learned.}
+
+#alias {mapdoorget} {
+	#var {mapdoorraw} {};
+	#map exit {%1} getdata {mapdoorraw};
+	#if {"$mapdoorraw" == ""} {
+		#var {mapdoorinfo} {$mapdoordefault}
+		} {
+		#var {mapdoorinfo} {$mapdoorraw}
+		}
+	}
+
+#nop {mapdoorset {dir}: writes the (already populated/edited) $mapdoorinfo back}
+#nop {onto that exit's data field and marks the map dirty to be autosaved.}
+
+#alias {mapdoorset} {
+	#map exit {%1} setdata {$mapdoorinfo};
+	#var {mapdirty} {1}
+	}
+
+#alias {mapdoornorm} {
+	#var {mapdoornormresult} {0};
+	#if {"%1" == "on" || "%1" == "1" || "%1" == "true" || "%1" == "yes"} {#var {mapdoornormresult} {1}}
+	}
+
+#alias {mapdoor} {
+	#if {$mapvnum == 0} {
+		#showme {${panelhead}mapdoor: you are not on a mapped room.};
+		#return
+		};
+	#if {"%1" == ""} {
+		#var {mapdoorlist} {};
+		#map get roomexits {mapdoorlist};
+		#if {&mapdoorlist[] == 0} {
+			#showme {${panelhead}mapdoor: this room has no exits.};
+			#return
+			};
+		#var {mapdi} {1};
+		#while {$mapdi <= &mapdoorlist[]} {
+			mapdoorget {$mapdoorlist[$mapdi]};
+			#showme {${panelhead}$mapdoorlist[$mapdi]: name={$mapdoorinfo[name]} hidden=$mapdoorinfo[isHidden] locked=$mapdoorinfo[isLocked] pickable=$mapdoorinfo[isPickable] key={$mapdoorinfo[key]} rideable=$mapdoorinfo[isRideable]};
+			#math {mapdi} {$mapdi + 2}
+			};
+		#return
+		};
+	#if {"%2" == "" || "%3" == ""} {
+		#showme {${panelhead}mapdoor <direction> {name|hidden|locked|pickable|key|rideable} <value> - edits the door on that exit.};
+		#return
+		};
+	mapdoorget {%1};
+	#var {mapdoorhandled} {0};
+	#if {"%2" == "name"} {#var {mapdoorinfo[name]} {%3};#var {mapdoorhandled} {1}};
+	#if {"%2" == "key"} {#var {mapdoorinfo[key]} {%3};#var {mapdoorhandled} {1}};
+	#if {"%2" == "hidden"} {mapdoornorm {%3};#var {mapdoorinfo[isHidden]} {$mapdoornormresult};#var {mapdoorhandled} {1}};
+	#if {"%2" == "locked"} {mapdoornorm {%3};#var {mapdoorinfo[isLocked]} {$mapdoornormresult};#var {mapdoorhandled} {1}};
+	#if {"%2" == "pickable"} {mapdoornorm {%3};#var {mapdoorinfo[isPickable]} {$mapdoornormresult};#var {mapdoorhandled} {1}};
+	#if {"%2" == "rideable"} {mapdoornorm {%3};#var {mapdoorinfo[isRideable]} {$mapdoornormresult};#var {mapdoorhandled} {1}};
+	#if {$mapdoorhandled == 0} {
+		#showme {${panelhead}mapdoor: unknown property '%2' - use name, hidden, locked, pickable, key or rideable.};
+		#return
+		};
+	mapdoorset {%1};
+	#showme {${panelhead}mapdoor: %1 %2 set to {%3}.}
+	}
+
 #nop {=== Doors met while walking ===}
 
 #nop {$mapdir is the single-letter step just sent (empty when the step was a}
@@ -463,6 +564,32 @@ mapstyleall
 #nop {is re-sent right behind the open; if the door was locked, the open's}
 #nop {"locked" reply arrives first and the repeated "closed" reply is ignored}
 #nop {because the state is no longer 0. Every ROOM update resets the state.}
+
+#nop {mapdoorlookup: called from mapstep before the step is sent. A mapped}
+#nop {door's exit sends "pick" or "open" (+ the step right behind it, same as}
+#nop {mapdooropen) immediately, in $mapdoor state 1 or 2 exactly as the reactive}
+#nop {replies below would have left it - so "It seems to be locked.", "The lock}
+#nop {quickly yields...", etc. all still fire correctly whether the door was}
+#nop {known in advance or discovered here. This does not call mapdooropen/}
+#nop {mapwatch itself (mapstep's own #undelay/mapwatch pair already covers it)}
+#nop {to avoid arming the stall timer twice. An unmapped exit leaves $mapdoor 0,}
+#nop {so mapstep falls back to a plain step and the fully reactive path below.}
+
+#alias {mapdoorlookup} {
+	#if {"$mapdir" == ""} {#return};
+	mapdoorget {$mapdir};
+	#if {"$mapdoorinfo[name]" == ""} {#return};
+	#var {mapkey} {$mapdoorinfo[name]};
+	#if {$mapdoorinfo[isLocked] == 1} {
+		#var {mapdoor} {2};
+		#var {mappicks} {0};
+		#send {pick $mapkey $mapdirname[$mapdir]}
+		} {
+		#var {mapdoor} {1};
+		#send {open $mapkey $mapdirname[$mapdir]};
+		#send {$mapdir}
+		}
+	}
 
 #alias {mapdooropen} {
 	#var {mapdoor} {1};
@@ -476,11 +603,25 @@ mapstyleall
 	mapstop
 	}
 
+#nop {mapdoorlearn {name} {locked}: records (or updates) the door on the exit}
+#nop {$mapdir of the current room, preserving whatever isHidden/isPickable/key/}
+#nop {isRideable mapdoor may already have set on it. Called the moment a door}
+#nop {is confirmed to exist (closed) or confirmed locked, so the next walk}
+#nop {across it is proactive via mapdoorlookup instead of waiting on the server.}
+
+#alias {mapdoorlearn} {
+	mapdoorget {$mapdir};
+	#var {mapdoorinfo[name]} {%1};
+	#if {%2 == 1} {#var {mapdoorinfo[isLocked]} {1}};
+	mapdoorset {$mapdir}
+	}
+
 #alias {mapdoorclosed} {
 	#if {"$mapgoto" == "" || "$mapdir" == ""} {#return};
 	#if {$mapdoor != 0} {#return};
 	#var {mapkey} {%1};
 	#if {"$mapkey" == ""} {#var {mapkey} {door}};
+	mapdoorlearn {$mapkey} {0};
 	mapdooropen
 	}
 
@@ -491,6 +632,7 @@ mapstyleall
 	#if {"$mapgoto" == "" || $mapdoor != 1} {#return};
 	#var {mapdoor} {2};
 	#var {mappicks} {0};
+	mapdoorlearn {$mapkey} {1};
 	#send {pick $mapkey $mapdirname[$mapdir]};
 	mapwatch
 	} {5}
