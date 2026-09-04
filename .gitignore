@@ -4,3 +4,5 @@
 *.dll
 *.ico
 *.exe.stackdump
+bin/credentials.asc
+bin/credentials.enc
