@@ -64,13 +64,21 @@
 #nop {terminal itself. Entries are bare RRGGBB so one value serves as a <F...>}
 #nop {tag, as the mintty OSC 10/11/12 escape and as "color <slot> fg hex".}
 #nop {"theme light" / "theme dark" swap the table and repaint; "themetoggle"}
-#nop {flips. $theme is the startup default - it is applied at the end of the file.}
+#nop {flips. $theme is the startup default (dark, Kenny 2026-09-04) - it is}
+#nop {applied at the end of the file.}
 
 #nop {Light: dark, muted tones for the light grey mintty background with dark}
 #nop {blue default text - violet tells, teal says, amber chats. Dark: the same}
-#nop {hues lifted for a warm near-black background with off-white text.}
+#nop {hues lifted for a warm near-black background with off-white text, silver}
+#nop {frames, and plain panel text in the same off-white as the main feed.}
 
-#variable {theme} {light}
+#nop {Keys: edge = panel frames, baredge = the border row above the input,}
+#nop {ink = typed text, text = plain panel text (time, HUD captions, banner}
+#nop {level line), mute = command echo / enemy slot, empty = the ░ half of a}
+#nop {bar, band = the blended colour that ░ shows, pctbg = 1 to paint the}
+#nop {in-bar percentage over a matching background (0 = none: leaves a gap).}
+
+#variable {theme} {dark}
 
 #alias {theme} {
 	#if {"%1" == "dark"} {
@@ -81,8 +89,9 @@
 			{narr} {D86ED8} {whis} {6FCF6F} {page} {E080B0}
 			{hp} {E05050} {st} {6C8CF0} {mv} {4FC04F}
 			{boss} {FF6B6B} {bossedge} {E8B830}
-			{head} {E0B040} {ink} {A8B8F0} {mute} {A0A0A0} {empty} {4A4A4A}
-			{pctfill} {FFFFFF} {pctempty} {E8E6DC} {band} {292928}
+			{head} {E0B040} {edge} {C0C0C0} {baredge} {C0C0C0}
+			{ink} {A8B8F0} {text} {E8E6DC} {mute} {A0A0A0} {empty} {4A4A4A}
+			{pctfill} {FFFFFF} {pctempty} {E8E6DC} {band} {292928} {pctbg} {1}
 			{char} {5AD65A} {hit} {4CBF4C}
 			}
 		} {
@@ -93,8 +102,9 @@
 			{narr} {8B2E8B} {whis} {1E5E1E} {page} {993366}
 			{hp} {992222} {st} {2244AA} {mv} {1E7A1E}
 			{boss} {6B1111} {bossedge} {B8860B}
-			{head} {806100} {ink} {101040} {mute} {404040} {empty} {909090}
-			{pctfill} {FFFFFF} {pctempty} {000000} {band} {B4B4B4}
+			{head} {806100} {edge} {101040} {baredge} {404040}
+			{ink} {101040} {text} {404040} {mute} {404040} {empty} {909090}
+			{pctfill} {FFFFFF} {pctempty} {000000} {band} {B4B4B4} {pctbg} {1}
 			{char} {228B22} {hit} {1F751F}
 			}
 		};
@@ -116,7 +126,7 @@
 #nop {dropped first and relayout (which clears the screen) puts it back.}
 
 #alias {themeapply} {
-	#var {paneledge} {<F$pal[ink]>};
+	#var {paneledge} {<F$pal[edge]>};
 	#var {panelhead} {<F$pal[head]>};
 	#config {COMMAND COLOR} {<F$pal[ink]>};
 	themehighlights;
@@ -361,12 +371,12 @@
 #nop {column's Opponent box when the foe is above bossmin. bosspct is its share}
 #nop {of the feed width - 100 spans the feed edge to edge, anything less is}
 #nop {centred in it. bossrows is its total height including the border:}
-#nop {1 border, 2 bar, 1 name, 1 level, 1 border.}
+#nop {1 border, 3 bar (percentage on the middle row), 1 name, 1 level, 1 border.}
 
 #variable {bosspanel} {1}
 #variable {bossmin} {25}
 #variable {bosspct} {100}
-#variable {bossrows} {6}
+#variable {bossrows} {7}
 #variable {bosson} {0}
 #variable {bosscolsw} {30}
 #variable {bossleft} {1}
@@ -641,7 +651,7 @@
 #nop {draw and every received line/prompt, so whatever painted last, typing is}
 #nop {always navy.}
 
-#alias {inputpaint} {#line {ignore} {#showme {<F$pal[mute]>─<F$pal[ink]>} {$barrow} {$laycols}}}
+#alias {inputpaint} {#line {ignore} {#showme {<F$pal[baredge]>─<F$pal[ink]>} {$barrow} {$laycols}}}
 
 #nop {The border above the input doubles as the timer readout. pandraw calls}
 #nop {this rather than drawing the line itself, so a repaint cannot wipe the}
@@ -666,7 +676,7 @@
 #variable {castxs} {0}
 
 #alias {castdraw} {
-	#line {ignore} {#showme {<F$pal[mute]>$barline} {$barrow} {$scrollleft}};
+	#line {ignore} {#showme {<F$pal[baredge]>$barline} {$barrow} {$scrollleft}};
 	#if {$casty > 0} {
 		#nop {castx is the beat BEING served, counting from 1, so the figure};
 		#nop {starts on 1 the moment the command goes out and lands on the};
@@ -693,7 +703,7 @@
 #nop {never drift. 101040 is the navy #draw was already using for an}
 #nop {uncoloured box - passing it explicitly changes nothing on screen and}
 #nop {means the labels can be given the same tag rather than guessing at the}
-#nop {default. Retune the palette's "ink" entry to recolour every panel edge.}
+#nop {default. Retune the palette's "edge" entry to recolour every panel edge.}
 
 #variable {paneledge} {<F101040>}
 
@@ -774,7 +784,7 @@
 			#replace {infotime} { on } {}
 			};
 		#format {infotime} {$leftfmt} {$infotime};
-		#line {ignore} {#showme {<F$pal[mute]>$infotime} {2} {$leftcol}};
+		#line {ignore} {#showme {<F$pal[text]>$infotime} {2} {$leftcol}};
 		#var {infoweather} {};
 		#if {&msdp[WEATHER] > 0} {
 			#var {infoweather} {$msdp[WEATHER]}
@@ -911,8 +921,17 @@
 	#if {"$pctbbar" == ""} {
 		#var {pctbbar} {$pal[boss]}
 		};
-	#var {pctbon} {<B$pctbbar>};
-	#var {pctboff} {<B$pal[band]>};
+	#nop {pctbg 0 would drop the background tag entirely, but a terminal cell};
+	#nop {has no transparency: the digits then show the terminal colour as a};
+	#nop {gap through the bar (seen on the dark theme 2026-09-04), so both};
+	#nop {themes paint the matching bar / band colour behind the text.};
+	#if {$pal[pctbg] == 1} {
+		#var {pctbon} {<B$pctbbar>};
+		#var {pctboff} {<B$pal[band]>}
+		} {
+		#var {pctbon} {};
+		#var {pctboff} {}
+		};
 	#math {pctbfill} {%3 * %4 / 100};
 	#if {$pctbfill > %3} {
 		#var {pctbfill} {%3}
@@ -1003,14 +1022,14 @@
 	#math {hudline} {$hudbase + %4};
 	#if {$hudline < $leftbot} {
 		#if {"$hudsuf" != ""} {
-			#line {ignore} {#showme {$hudcolor$hudf<F$pal[empty]>$hudr<F$pal[mute]> $hudsuf} {$hudline} {$leftcol}}
+			#line {ignore} {#showme {$hudcolor$hudf<F$pal[empty]>$hudr<F$pal[text]> $hudsuf} {$hudline} {$leftcol}}
 			} {
 			#line {ignore} {#showme {$hudcolor$hudf<F$pal[empty]>$hudr} {$hudline} {$leftcol}}
 			}
 		};
 	#math {hudline} {$hudline + 1};
 	#if {$hudline < $leftbot} {
-		#line {ignore} {#showme {<F$pal[mute]>$hudtext} {$hudline} {$leftcol}}
+		#line {ignore} {#showme {<F$pal[text]>$hudtext} {$hudline} {$leftcol}}
 		}
 	}
 
@@ -1020,7 +1039,7 @@
 	#format {hudtext} {$leftfmt} {%2};
 	#math {hudline} {$hudbase + %1};
 	#if {$hudline < $leftbot} {
-		#line {ignore} {#showme {<F$pal[mute]>$hudtext} {$hudline} {$leftcol}}
+		#line {ignore} {#showme {<F$pal[text]>$hudtext} {$hudline} {$leftcol}}
 		}
 	}
 
@@ -1118,7 +1137,7 @@
 #nop {white would disappear into it.}
 
 #alias {bosspctdraw} {
-	pctinbar {2} {$bosscol} {$bosswidth} {$bosshp} {$pal[boss]}
+	pctinbar {3} {$bosscol} {$bosswidth} {$bosshp} {$pal[boss]}
 	}
 
 #alias {bossbarrow} {
@@ -1143,11 +1162,12 @@
 	#draw {<F$pal[bossedge]>} {box} {1} {$bossleft} {$bossrows} {$bossright};
 	bossbarrow {2};
 	bossbarrow {3};
+	bossbarrow {4};
 	bosspctdraw;
 	bosscenter {$bossname};
-	#line {ignore} {#showme {<F$pal[boss]>$bosscentered} {4} {$bosscol}};
+	#line {ignore} {#showme {<F$pal[boss]>$bosscentered} {5} {$bosscol}};
 	bosscenter {Level $bosslvl};
-	#line {ignore} {#showme {<F$pal[mute]>$bosscentered} {5} {$bosscol}}
+	#line {ignore} {#showme {<F$pal[text]>$bosscentered} {6} {$bosscol}}
 	}
 
 #nop {Raising or lowering the banner changes the feed's height, so the region}
