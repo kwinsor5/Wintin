@@ -12,6 +12,7 @@ Create and maintain a robust character profile setup, including aliases, trigger
 - Global configuration must load for every TinTin++ session.
 - Character-specific aliases, triggers, highlights, variables, and scripts must load only after connecting to the game and selecting the active character.
 - Prefer reusable global behavior over duplicated per-character definitions.
+- Prefer class-based or race-based global behavior over duplicated per-character definitions.
 - Keep character profiles isolated so behavior, state, and automation for one character cannot leak into another.
 
 ## Return of the Shadow Connection
